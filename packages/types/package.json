@@ -1,0 +1,33 @@
+{
+  "name": "@awesome-org/types",
+  "version": "0.0.1",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "types/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "rimraf dist && rollup -c",
+    "watch": "rimraf dist && rollup -cw"
+  },
+  "devDependencies": {
+    "rollup": "^3.7.5",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^4.9.4"
+  },
+  "files": [
+    "dist",
+    "src",
+    "prisma",
+    "types"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
