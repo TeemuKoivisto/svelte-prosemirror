@@ -1,1 +1,1 @@
-# @awesome-org/types
+# @my-org/types

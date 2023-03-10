@@ -1,5 +1,5 @@
 {
-  "name": "@awesome-org/client",
+  "name": "@my-org/client",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -31,10 +31,18 @@
     "vite": "^4.0.3"
   },
   "dependencies": {
-    "@awesome-org/types": "workspace:*",
+    "@my-org/core": "workspace:*",
+    "@my-org/editor": "workspace:*",
+    "@my-org/ext-figure": "workspace:*",
+    "@my-org/ext-paragraph": "workspace:*",
+    "@my-org/types": "workspace:*",
     "@iconify/svelte": "^3.0.1",
     "autoprefixer": "^10.4.13",
     "lodash.debounce": "^4.0.8",
+    "prosemirror-commands": "^1.5.0",
+    "prosemirror-example-setup": "^1.2.1",
+    "prosemirror-model": "^1.19.0",
+    "prosemirror-state": "^1.4.2",
     "tailwindcss": "^3.2.4"
   }
 }
