@@ -1,14 +1,14 @@
 {
   "name": "@my-org/ext-paragraph",
   "version": "0.0.1",
-  "main": "packages/index.js",
-  "module": "package/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "svelte": "package/index.js",
   "type": "module",
   "types": "package/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./package/index.js"
+    ".": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -16,25 +16,21 @@
   ],
   "scripts": {
     "install": "svelte-kit sync || true",
-    "build": "svelte-package",
+    "build:pkg": "svelte-package",
     "watch": "svelte-package --watch",
-    "buildr": "rimraf dist && rollup -c",
-    "watchr": "rimraf dist && rollup -cw"
+    "build": "vite build"
   },
   "devDependencies": {
     "@my-org/core": "workspace:*",
     "@my-org/editor": "workspace:*",
     "@sveltejs/kit": "^1.9.3",
     "@sveltejs/package": "^1.0.2",
-    "@rollup/plugin-commonjs": "^24.0.1",
     "prosemirror-commands": "^1.5.0",
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-model": "^1.19.0",
     "prosemirror-state": "^1.4.2",
     "prosemirror-transform": "^1.7.1",
     "prosemirror-view": "^1.30.0",
-    "rollup": "^3.12.0",
-    "rollup-plugin-typescript2": "^0.34.1",
     "svelte": "^3.55.1",
     "svelte-check": "^3.0.3",
     "svelte-preprocess": "^5.0.1",

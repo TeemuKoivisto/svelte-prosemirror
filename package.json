@@ -13,6 +13,7 @@
     "pnpm": "^7.0.0"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
     "concurrently": "^7.6.0",
@@ -27,6 +28,8 @@
     "eslint-plugin-svelte3": "^4.0.0",
     "prettier": "^2.8.1",
     "prettier-plugin-svelte": "^2.9.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "vite": "^4.0.3",
+    "vite-tsconfig-paths": "^4.0.3"
   }
  }
