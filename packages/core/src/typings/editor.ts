@@ -8,6 +8,7 @@ import type { CreateExtension } from './extension'
 export interface EditorProps {
   extensions: CreateExtension[]
   schema: Schema
+  defaultDocTopNode?: boolean
   onEditorReady?: (ctx: EditorContext) => void
   onEdit?: (state: EditorState) => void
 }

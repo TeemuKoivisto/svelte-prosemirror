@@ -7,7 +7,7 @@ import type { EditorProps, EditorContext } from './typings'
 
 export function createEditorState(schema: Schema, ctx: EditorContext) {
   return EditorState.create({
-    schema,
+    schema: get(ctx.extProvider.schema),
     plugins: get(ctx.extProvider.plugins)
   })
 }

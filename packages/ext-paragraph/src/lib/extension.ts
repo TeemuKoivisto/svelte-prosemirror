@@ -1,10 +1,15 @@
 import type { CreateExtension, EditorContext } from '@my-org/core'
-import Paragraph from './Paragraph.svelte'
+import Paragraph, { schema } from './Paragraph.svelte'
 
 export const paragraphExtension = () => (ctx: EditorContext) => {
   return {
     name: 'paragraph' as const,
-    component: Paragraph
+    nodes: {
+      paragraph: {
+        schema
+        // component: Paragraph
+      }
+    }
   }
 }
 

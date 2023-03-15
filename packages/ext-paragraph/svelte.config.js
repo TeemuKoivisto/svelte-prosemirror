@@ -9,7 +9,7 @@ export default {
   preprocess: autoPreprocess(preprocessOptions),
   preprocessOptions,
   compilerOptions: {
-    customElement: true
+    // customElement: true
   },
   kit: {}
 }

@@ -9,6 +9,7 @@ import type { Commands, EditorProps } from '../typings/editor'
 import type { CreateExtension, Extension, Extensions } from '../typings/extension'
 import { SvelteComponentTyped } from 'svelte'
 import { BaseNodeView } from '../BaseNodeView'
+import { NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
 
 export class ExtensionProvider {
   #props: EditorProps
@@ -16,6 +17,7 @@ export class ExtensionProvider {
   extensions = writable<Extension[]>([])
   plugins = writable<Plugin[]>([])
   commands = writable<Commands>({})
+  schema = writable<Schema>()
 
   constructor(props: EditorProps) {
     this.#props = props
@@ -47,22 +49,63 @@ export class ExtensionProvider {
       keymap(keymaps),
       ...created.reduce((acc, ext) => [...acc, ...(ext.plugins || [])], [] as Plugin[])
     ]
-    const components = created.reduce((acc, ext) => [...acc, ext.component], [] as any[])
-    // @TODO here
-    // const nodeViews = components.map(c => BaseNodeView.fromComponent(ctx, c))
-    // components.map(c => {
-    //   console.log('>>> ', c)
-    //   const {
-    //     js,
-    //     css,
-    //     ast,
-    //     warnings,
-    //     vars,
-    //     stats
-    //   } = compile(c);
-    //   console.log(js)
-    // })
+    const nodes = created.reduce((acc, ext) => {
+      if (ext.nodes) {
+        Object.keys(ext.nodes).forEach(name => {
+          if (name in acc) {
+            throw Error(`@my-org/core: duplicate nodes provided from extension: ${name}`)
+          }
+          // @ts-ignore
+          acc[name] = ext.nodes[name]
+        })
+      }
+      return acc
+    }, {} as { [name: string]: any })
+    console.log('nodes', nodes)
+
+    const defaultSchema = {
+      nodes: {
+        doc: {
+          content: 'block+'
+        },
+        text: {
+          group: 'inline'
+        }
+      }
+    }
+
+    const schemaNodes = Object.entries(nodes).reduce((acc, [name, value]) => {
+      acc[name] = {
+        ...value.schema,
+        ...(value.component && {
+          toDOM(node) {
+            const div = document.createElement('div')
+            const comp = new value.component({
+              target: div,
+              props: {
+                node,
+                attrs: node.attrs
+              }
+            })
+            const el = comp.$$.root.firstChild as HTMLElement
+            return el
+          }
+        })
+      }
+      return acc
+    }, {} as { [name: string]: NodeSpec })
+
+    const schema = {
+      nodes: {
+        ...defaultSchema.nodes,
+        ...schemaNodes
+      }
+    }
+    console.log('nodes 2', schemaNodes)
+    console.log('schema', schema)
+
     this.plugins.set(plugins)
+    this.schema.set(new Schema(schema))
   }
 
   getExtension<K extends keyof Extensions>(name: K) {
