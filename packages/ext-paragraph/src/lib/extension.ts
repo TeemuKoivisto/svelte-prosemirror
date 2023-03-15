@@ -6,8 +6,8 @@ export const paragraphExtension = () => (ctx: EditorContext) => {
     name: 'paragraph' as const,
     nodes: {
       paragraph: {
-        schema
-        // component: Paragraph
+        schema,
+        component: Paragraph
       }
     }
   }

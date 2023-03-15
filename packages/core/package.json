@@ -13,6 +13,8 @@
     "dist"
   ],
   "scripts": {
+    "buildv": "vite build",
+    "watchv": "rimraf dist && vite build --watch",
     "build": "rimraf dist && rollup -c",
     "watch": "rimraf dist && rollup -cw"
   },

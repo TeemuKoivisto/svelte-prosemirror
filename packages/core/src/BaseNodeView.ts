@@ -19,6 +19,7 @@ export class BaseNodeView implements NodeView {
   innerDecorations: DecorationSource
   ctx: EditorContext
   component?: SvelteComponentTyped<{}>
+  #mounted?: SvelteComponentTyped
 
   constructor(
     node: PMNode,
@@ -48,11 +49,18 @@ export class BaseNodeView implements NodeView {
    * Override this
    */
   init = (): this => {
+    // if (this.component) {
+    //   this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
+    //   // @ts-ignore
+    //   this.#mounted = new this.component({ target: this.dom, props: { node: this.node, attrs: this.node.attrs } })
+    // }
     const toDOM = this.node.type.spec.toDOM
     if (toDOM) {
       const { dom, contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.node))
       this._dom = dom as HTMLElement
       this.contentDOM = contentDOM
+      console.log('dom', dom)
+      console.log('contentDOM', contentDOM)
     }
     return this
   }

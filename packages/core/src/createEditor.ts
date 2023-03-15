@@ -5,7 +5,7 @@ import { get } from 'svelte/store'
 
 import type { EditorProps, EditorContext } from './typings'
 
-export function createEditorState(schema: Schema, ctx: EditorContext) {
+export function createEditorState(ctx: EditorContext, schema?: Schema) {
   return EditorState.create({
     schema: get(ctx.extProvider.schema),
     plugins: get(ctx.extProvider.plugins)
@@ -22,6 +22,7 @@ export function createEditorView(
     { mount: element },
     {
       state,
+      nodeViews: get(ctx.extProvider.nodeViews),
       dispatchTransaction(tr: Transaction) {
         const oldEditorState = this.state
         const { state: newState } = oldEditorState.applyTransaction(tr)
@@ -38,7 +39,7 @@ export function init(
   props: EditorProps,
   oldView?: EditorView
 ) {
-  const state = createEditorState(props.schema, ctx)
+  const state = createEditorState(ctx, props.schema)
   const view = oldView || createEditorView(element, state, ctx, props)
   if (oldView) {
     view.setProps({

@@ -1,9 +1,29 @@
 <script lang="ts" context="module">
   import type { NodeSpec } from 'prosemirror-model'
+
+  export interface Attrs {
+    indent: number
+  }
+
   export const schema: NodeSpec = {
+    attrs: {
+      indent: { default: 0 }
+    },
     content: 'inline*',
     group: 'block',
-    parseDOM: [{ tag: 'p' }],
+    parseDOM: [
+      {
+        tag: 'p',
+        getAttrs(dom: HTMLElement | string) {
+          if (dom instanceof HTMLElement) {
+            return {
+              indent: dom.getAttribute('data-indent')
+            }
+          }
+          return null
+        }
+      }
+    ],
     toDOM() {
       return ['p', 0]
     }
@@ -13,18 +33,14 @@
 <script lang="ts">
   import type { Node as PMNode } from 'prosemirror-model'
 
-  interface Attrs {
-    indent: number
-  }
-
   export let node: PMNode, attrs: Attrs
 </script>
 
 <!-- <svelte:options tag="my-paragraph" /> -->
 <p data-indent={attrs.indent} data-hole>
-  {#if attrs.indent === 0}
+  <!-- {#if attrs.indent === 0}
     <span> poop </span>
-  {/if}
+  {/if} -->
 </p>
 
 <style lang="scss" global>

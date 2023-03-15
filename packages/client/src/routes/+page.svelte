@@ -3,7 +3,7 @@
 
   import { paragraphExtension, Paragraph, svelte, schema as pSchema } from '@my-org/ext-paragraph'
 
-  import { schema } from './schema'
+  // import { schema } from './schema'
 
   import type { EditorContext } from '@my-org/core'
   import { onMount } from 'svelte'
@@ -60,7 +60,7 @@
         <input bind:value={documentId} id="documentId" />
       </div>
     </fieldset>
-    <Context {extensions} {schema} onEditorReady={handleEditorReady}>
+    <Context {extensions} onEditorReady={handleEditorReady}>
       <Editor />
     </Context>
   </main>

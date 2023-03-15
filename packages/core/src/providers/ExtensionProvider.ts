@@ -10,6 +10,8 @@ import type { CreateExtension, Extension, Extensions } from '../typings/extensio
 import { SvelteComponentTyped } from 'svelte'
 import { BaseNodeView } from '../BaseNodeView'
 import { NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
+import { NodeViewConstructor } from 'prosemirror-view'
+import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
 
 export class ExtensionProvider {
   #props: EditorProps
@@ -18,6 +20,7 @@ export class ExtensionProvider {
   plugins = writable<Plugin[]>([])
   commands = writable<Commands>({})
   schema = writable<Schema>()
+  nodeViews = writable<{ [node: string]: NodeViewConstructor }>({})
 
   constructor(props: EditorProps) {
     this.#props = props
@@ -53,7 +56,7 @@ export class ExtensionProvider {
       if (ext.nodes) {
         Object.keys(ext.nodes).forEach(name => {
           if (name in acc) {
-            throw Error(`@my-org/core: duplicate nodes provided from extension: ${name}`)
+            throw Error(`@my-org/core: duplicate nodes provided from extensions: ${name}`)
           }
           // @ts-ignore
           acc[name] = ext.nodes[name]
@@ -74,6 +77,7 @@ export class ExtensionProvider {
       }
     }
 
+    const nodeViews = {} as { [node: string]: NodeViewConstructor }
     const schemaNodes = Object.entries(nodes).reduce((acc, [name, value]) => {
       acc[name] = {
         ...value.schema,
@@ -87,10 +91,21 @@ export class ExtensionProvider {
                 attrs: node.attrs
               }
             })
-            const el = comp.$$.root.firstChild as HTMLElement
-            return el
+            const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+            console.log('spec', spec)
+            return spec
+            // const html = comp.$$.root.innerHTML
+            // div.removeChild(comp.$$.root.firstChild)
+            // div.innerHTML = html
+            // console.log('html', html)
+            // console.log('div', div)
+            // return comp.$$.root.firstChild as HTMLElement
+            // return { dom: comp.$$.root.firstChild as HTMLElement }
           }
         })
+      }
+      if (value.component) {
+        // nodeViews[name] = BaseNodeView.fromComponent(ctx, value.component)
       }
       return acc
     }, {} as { [name: string]: NodeSpec })
@@ -101,11 +116,13 @@ export class ExtensionProvider {
         ...schemaNodes
       }
     }
+
     console.log('nodes 2', schemaNodes)
     console.log('schema', schema)
 
     this.plugins.set(plugins)
     this.schema.set(new Schema(schema))
+    this.nodeViews.set(nodeViews)
   }
 
   getExtension<K extends keyof Extensions>(name: K) {
