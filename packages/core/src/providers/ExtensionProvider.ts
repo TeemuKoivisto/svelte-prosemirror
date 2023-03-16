@@ -1,13 +1,17 @@
 import { chainCommands } from 'prosemirror-commands'
 import { keymap } from 'prosemirror-keymap'
-import { get, writable } from 'svelte/store'
-import { compile, parse } from 'svelte/compiler'
 import type { Command, Plugin } from 'prosemirror-state'
-
-import type { EditorContext } from '../typings/context'
-import type { Commands, EditorProps } from '../typings/editor'
-import type { CreateExtension, Extension, Extensions } from '../typings/extension'
 import { SvelteComponentTyped } from 'svelte'
+import { get, writable } from 'svelte/store'
+
+import type {
+  Commands,
+  EditorContext,
+  EditorProps,
+  CreateExtension,
+  Extension,
+  Extensions
+} from '../typings'
 import { BaseNodeView } from '../BaseNodeView'
 import { NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
 import { NodeViewConstructor } from 'prosemirror-view'
@@ -32,26 +36,32 @@ export class ExtensionProvider {
     this.commands.set(
       created.reduce((acc, ext) => Object.assign(acc, ext.commands), {} as Commands)
     )
+
     const sortedKeymaps = created.reduce((acc, cur) => {
       Object.keys(cur.keymaps || {}).forEach(key => {
         const val = cur.keymaps![key]
         const cmd = Array.isArray(val) ? val : [{ cmd: val, priority: 0 }]
         if (key in acc) {
+          // @ts-ignore
           acc[key] = [...acc[key], ...cmd].sort((a, b) => b.priority - a.priority)
         } else {
+          // @ts-ignore
           acc[key] = cmd.sort((a, b) => b.priority - a.priority)
         }
       })
       return acc
     }, {} as { [key: string]: { cmd: Command; priority: number }[] })
+
     const keymaps = Object.keys(sortedKeymaps).reduce((acc, key) => {
       acc[key] = sortedKeymaps[key][0].cmd
       return acc
     }, {} as { [key: string]: Command })
+
     const plugins = [
       keymap(keymaps),
       ...created.reduce((acc, ext) => [...acc, ...(ext.plugins || [])], [] as Plugin[])
     ]
+
     const nodes = created.reduce((acc, ext) => {
       if (ext.nodes) {
         Object.keys(ext.nodes).forEach(name => {

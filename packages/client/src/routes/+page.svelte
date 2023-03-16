@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Context, Editor } from '@my-org/editor'
 
-  import { paragraphExtension, Paragraph, svelte, schema as pSchema } from '@my-org/ext-paragraph'
+  import { paragraphExtension, Paragraph, svelte } from '@my-org/ext-paragraph'
+  import { figureExtension, Figure } from '@my-org/ext-figure'
 
   // import { schema } from './schema'
 
@@ -11,7 +12,7 @@
   let documentId = 'abcd1234'
 
   // const extensions = []
-  const extensions = [paragraphExtension()]
+  const extensions = [paragraphExtension(), figureExtension()]
 
   onMount(() => {
     const div = document.createElement('div')
@@ -39,10 +40,27 @@
     // console.log('div', div)
     console.log('el', el)
     console.log('p', el.$$.root.firstChild)
-    console.log('schema', pSchema)
   })
 
-  function handleEditorReady(ctx: EditorContext) {}
+  function handleEditorReady(ctx: EditorContext) {
+    // const json = `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Like this one!"}]},{"type":"figure","attrs":{"src":"https://i.imgur.com/vu37jQt.gif","alt":"Programmer at work","caption":"Do work with a meaning"}}]}`
+    // ctx.viewProvider.setState(json)
+    ctx.viewProvider.execCommand((state, dispatch) => {
+      const tr = state.tr
+      tr.insert(
+        1,
+        state.schema.nodes.figure.createAndFill(
+          {
+            src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
+            alt: 'Bob Ross in front of painting',
+            caption: 'Happy trees :)'
+          },
+          state.schema.text('Happy trees :)')
+        ) as any
+      )
+      dispatch && dispatch(tr)
+    })
+  }
 </script>
 
 <section class="p-4 h-full m-auto lg:container md:p-16 md:pt-8 xs:p-8 rounded-2xl">

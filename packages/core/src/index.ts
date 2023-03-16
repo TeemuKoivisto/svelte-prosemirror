@@ -1,5 +1,5 @@
 import type { EditorView } from 'prosemirror-view'
-import type { Commands } from './typings/editor'
+import type { Commands } from './typings'
 
 declare global {
   interface Window {

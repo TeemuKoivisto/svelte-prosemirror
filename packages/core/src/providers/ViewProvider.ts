@@ -1,8 +1,8 @@
 import type { EditorView } from 'prosemirror-view'
-import { Command, EditorState, PluginKey } from 'prosemirror-state'
+import { EditorState } from 'prosemirror-state'
 import { get, writable } from 'svelte/store'
 
-import type { JSONEditorState } from '../typings/editor'
+import type { Command, JSONEditorState } from '../typings'
 
 export class ViewProvider {
   editorView = writable<EditorView | undefined>()
@@ -34,9 +34,27 @@ export class ViewProvider {
     return s
   }
 
-  updateState(newState: EditorState) {
-    this.view.updateState(newState)
-    this.state.set(newState)
+  setState(value: EditorState | Record<string, unknown>) {
+    if (!(value instanceof EditorState)) {
+      const view = this.view
+      value = EditorState.fromJSON(
+        {
+          schema: view.state.schema,
+          plugins: view.state.plugins
+        },
+        value
+      )
+    }
+    this.view.updateState(value)
+    this.state.set(value)
+  }
+
+  stateToJSON() {
+    return { ...this.getState().toJSON(), plugins: [] } as unknown as JSONEditorState
+  }
+
+  docToJSON() {
+    return this.getState().doc.toJSON()
   }
 
   execCommand(cmd: Command) {
@@ -55,21 +73,5 @@ export class ViewProvider {
     view.focus()
     view.dispatch(state.tr.scrollIntoView())
     return true
-  }
-
-  stateToJSON() {
-    return { ...this.getState().toJSON(), plugins: [] } as unknown as JSONEditorState
-  }
-
-  hydrateStateFromJSON(rawValue: Record<string, unknown>) {
-    const view = this.view
-    const state = EditorState.fromJSON(
-      {
-        schema: view.state.schema,
-        plugins: view.state.plugins
-      },
-      rawValue
-    )
-    this.updateState(state)
   }
 }

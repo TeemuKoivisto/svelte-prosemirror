@@ -26,7 +26,7 @@ export function createEditorView(
       dispatchTransaction(tr: Transaction) {
         const oldEditorState = this.state
         const { state: newState } = oldEditorState.applyTransaction(tr)
-        ctx.viewProvider.updateState(newState)
+        ctx.viewProvider.setState(newState)
         props.onEdit && props.onEdit(newState)
       }
     }
@@ -48,7 +48,7 @@ export function init(
         if (!this.state) return
         const oldEditorState = this.state
         const newState = oldEditorState.apply(tr)
-        ctx.viewProvider.updateState(newState)
+        ctx.viewProvider.setState(newState)
         props.onEdit && props.onEdit(newState)
       }
     })
