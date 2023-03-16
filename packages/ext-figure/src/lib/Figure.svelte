@@ -12,7 +12,7 @@
     id: undefined,
     title: '',
     src: '',
-    alt: '',
+    alt: ''
   }
 
   // const attrs = {
@@ -60,7 +60,7 @@
 </script>
 
 <figure {id}>
-  <figcaption data-hole></figcaption>
+  <figcaption data-hole />
   <img {src} {alt} {title} />
 </figure>
 

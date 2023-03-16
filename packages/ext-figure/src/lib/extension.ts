@@ -6,8 +6,8 @@ export const figureExtension = () => (ctx: EditorContext) => {
     name: 'figure' as const,
     nodes: {
       figure: {
-        schema
-        // component: Figure
+        schema,
+        component: Figure
       }
     }
   }
