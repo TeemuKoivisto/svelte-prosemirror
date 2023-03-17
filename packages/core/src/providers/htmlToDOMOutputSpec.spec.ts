@@ -11,12 +11,14 @@ describe('htmlToDOMOutputSpec', () => {
   })
 
   it('should generate more complicated figure spec (1)', async () => {
-    const figure = `<figure id>
-                      <img src="https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg" alt>
-                      <figcaption data-hole></figcaption>
-                    </figure>`
+    const figure = `
+<figure id>
+  <img src="https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg" alt>
+  <figcaption data-hole></figcaption>
+</figure>`
+
     const el = document.createElement('div')
-    el.innerHTML = figure
+    el.innerHTML = figure.trim()
     const spec = htmlToDOMOutputSpec(el.firstChild as HTMLElement)
     expect(spec).toEqual([
       'figure',
@@ -33,12 +35,14 @@ describe('htmlToDOMOutputSpec', () => {
   })
 
   it('should generate more complicated figure spec (2)', async () => {
-    const figure = `<figure class="svelte-lu7br9">
-                      <figcaption data-hole="" class="svelte-lu7br9"></figcaption>
-                      <img src="https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg" alt="Bob Ross in front of painting" title="">
-                    </figure>`
+    const figure = `
+<figure class="svelte-lu7br9">
+  <figcaption data-hole="" class="svelte-lu7br9"></figcaption>
+  <img src="https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg" alt="Bob Ross in front of painting" title="">
+</figure>`
+
     const el = document.createElement('div')
-    el.innerHTML = figure
+    el.innerHTML = figure.trim()
     const spec = htmlToDOMOutputSpec(el.firstChild as HTMLElement)
     expect(spec).toEqual([
       'figure',

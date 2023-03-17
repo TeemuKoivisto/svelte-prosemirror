@@ -1,50 +1,16 @@
 <script lang="ts">
   import { Context, Editor } from '@my-org/editor'
 
-  import { paragraphExtension, Paragraph, svelte } from '@my-org/ext-paragraph'
-  import { figureExtension, Figure } from '@my-org/ext-figure'
-
-  // import { schema } from './schema'
+  import { paragraphExtension } from '@my-org/ext-paragraph'
+  import { figureExtension } from '@my-org/ext-figure'
 
   import type { EditorContext } from '@my-org/core'
-  import { onMount } from 'svelte'
 
   let documentId = 'abcd1234'
 
-  // const extensions = []
   const extensions = [paragraphExtension(), figureExtension()]
 
-  onMount(() => {
-    const div = document.createElement('div')
-    const span = document.createElement('span')
-    span.textContent = 'poop'
-    const el = new Paragraph({
-      target: div,
-      props: {
-        node: 'a' as any,
-        attrs: { indent: 1 }
-      }
-      // @ts-ignore
-      // props: { indent: 1, $$slots: { hole: span } },
-      // slot: { hole: span }
-    })
-    // const el = new Paragraph({ target: div, slots: { hole: span } })
-    // const frag = svelte.create_fragment([])
-    // console.log(frag)
-    // console.log(frag.c())
-    // console.log(frag.h())
-    // console.log(frag)
-    // console.log(span)
-    // svelte.add_css(span)
-    // console.log(span)
-    // console.log('div', div)
-    console.log('el', el)
-    console.log('p', el.$$.root.firstChild)
-  })
-
   function handleEditorReady(ctx: EditorContext) {
-    // const json = `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Like this one!"}]},{"type":"figure","attrs":{"src":"https://i.imgur.com/vu37jQt.gif","alt":"Programmer at work","caption":"Do work with a meaning"}}]}`
-    // ctx.viewProvider.setState(json)
     ctx.viewProvider.execCommand((state, dispatch) => {
       const tr = state.tr
       tr.insert(
