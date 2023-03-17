@@ -1,7 +1,8 @@
 import { chainCommands } from 'prosemirror-commands'
 import { keymap } from 'prosemirror-keymap'
+import { NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
 import type { Command, Plugin } from 'prosemirror-state'
-import { SvelteComponentTyped } from 'svelte'
+import { NodeViewConstructor } from 'prosemirror-view'
 import { get, writable } from 'svelte/store'
 
 import type {
@@ -13,9 +14,7 @@ import type {
   Extensions
 } from '../typings'
 import { BaseNodeView } from '../BaseNodeView'
-import { NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
-import { NodeViewConstructor } from 'prosemirror-view'
-import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
+import { createNodeSpec } from './createNodeSpec'
 
 export class ExtensionProvider {
   #props: EditorProps
@@ -89,34 +88,8 @@ export class ExtensionProvider {
 
     const nodeViews = {} as { [node: string]: NodeViewConstructor }
     const schemaNodes = Object.entries(nodes).reduce((acc, [name, value]) => {
-      acc[name] = {
-        ...value.schema,
-        ...(value.component && {
-          toDOM(node) {
-            const div = document.createElement('div')
-            const comp = new value.component({
-              target: div,
-              props: {
-                node,
-                attrs: node.attrs
-              }
-            })
-            const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
-            console.log('spec', spec)
-            return spec
-            // const html = comp.$$.root.innerHTML
-            // div.removeChild(comp.$$.root.firstChild)
-            // div.innerHTML = html
-            // console.log('html', html)
-            // console.log('div', div)
-            // return comp.$$.root.firstChild as HTMLElement
-            // return { dom: comp.$$.root.firstChild as HTMLElement }
-          }
-        })
-      }
-      if (value.component) {
-        // nodeViews[name] = BaseNodeView.fromComponent(ctx, value.component)
-      }
+      acc[name] = createNodeSpec(value)
+      // nodeViews[name] = BaseNodeView.fromComponent(ctx, value.component)
       return acc
     }, {} as { [name: string]: NodeSpec })
 

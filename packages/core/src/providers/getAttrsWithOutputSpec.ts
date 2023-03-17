@@ -24,7 +24,7 @@
  * @param customHandler
  */
 export function getAttrsWithOutputSpec(
-  spec: any[],
+  spec: readonly any[],
   dom: HTMLElement,
   output: any,
   customHandler?: (el: HTMLElement, attr: string) => any

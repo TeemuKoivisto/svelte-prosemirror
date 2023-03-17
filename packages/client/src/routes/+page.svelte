@@ -5,10 +5,14 @@
   import { figureExtension } from '@my-org/ext-figure'
 
   import type { EditorContext } from '@my-org/core'
+  import { onMount } from 'svelte'
 
-  let documentId = 'abcd1234'
+  let documentId = 'abcd1234',
+    extensions = [] as any[]
 
-  const extensions = [paragraphExtension(), figureExtension()]
+  onMount(() => {
+    extensions = [paragraphExtension(), figureExtension()]
+  })
 
   function handleEditorReady(ctx: EditorContext) {
     ctx.viewProvider.execCommand((state, dispatch) => {
@@ -44,9 +48,11 @@
         <input bind:value={documentId} id="documentId" />
       </div>
     </fieldset>
-    <Context {extensions} onEditorReady={handleEditorReady}>
-      <Editor />
-    </Context>
+    {#if extensions.length > 0}
+      <Context {extensions} onEditorReady={handleEditorReady}>
+        <Editor />
+      </Context>
+    {/if}
   </main>
 </section>
 

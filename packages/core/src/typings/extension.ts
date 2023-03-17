@@ -11,6 +11,15 @@ export type CreateExtensionFn = (
   ...args: any[]
 ) => (ctx: EditorContext, props: EditorProps) => Extension
 
+export interface SveltePMNode {
+  dynamic?: boolean
+  attrs?: { [attr: string]: any }
+  schema?: NodeSpec
+  attrExtractor?: (dom: HTMLElement | string) => { [attr: string]: any } | undefined
+  // component?: SvelteComponentTyped
+  component?: any
+}
+
 export interface Extension {
   name: string
   opts?: any
@@ -19,11 +28,7 @@ export interface Extension {
   plugins?: Plugin[]
   store?: Record<string, any>
   nodes?: {
-    [name: string]: {
-      schema?: NodeSpec
-      // component?: SvelteComponentTyped
-      component?: any
-    }
+    [name: string]: SveltePMNode
   }
   onDestroy?: () => void
 }

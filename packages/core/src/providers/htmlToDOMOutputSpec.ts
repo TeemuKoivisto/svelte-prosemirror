@@ -1,5 +1,3 @@
-// import { DOMOutputSpec } from 'prosemirror-model'
-
 export function htmlToDOMOutputSpec(
   el: HTMLElement,
   collected: any[] = [],

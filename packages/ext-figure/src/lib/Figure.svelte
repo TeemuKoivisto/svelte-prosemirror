@@ -8,7 +8,7 @@
     alt: string
   }
 
-  const attrs: Attrs = {
+  export const attrs: Attrs = {
     id: undefined,
     title: '',
     src: '',
@@ -30,32 +30,33 @@
     ),
     content: 'inline*',
     selectable: false,
-    group: 'block',
-    parseDOM: [
-      {
-        tag: 'figure',
-        getAttrs: (dom: HTMLElement | string) => {
-          if (dom instanceof HTMLElement) {
-            return {
-              id: dom.getAttribute('id'),
-              src: dom.getAttribute('src')
-            }
-          }
-          return null
-        }
-      }
-    ],
-    toDOM(node: PMNode) {
-      const { id, title, src, alt } = node.attrs
-      return ['figure', { id }, ['img', { src, alt }], ['figcaption', {}, 0]]
-    }
+    group: 'block'
+    // parseDOM: [
+    //   {
+    //     tag: 'figure',
+    //     getAttrs: (dom: HTMLElement | string) => {
+    //       if (dom instanceof HTMLElement) {
+    //         return {
+    //           id: dom.getAttribute('id'),
+    //           src: dom.getAttribute('src')
+    //         }
+    //       }
+    //       return null
+    //     }
+    //   }
+    // ],
+    // toDOM(node: PMNode) {
+    //   const { id, title, src, alt } = node.attrs
+    //   return ['figure', { id }, ['img', { src, alt }], ['figcaption', {}, 0]]
+    // }
   }
 </script>
 
 <script lang="ts">
   import type { Node as PMNode } from 'prosemirror-model'
 
-  export let node: PMNode, attrs: Attrs
+  export let node: PMNode | undefined = undefined,
+    attrs: Attrs
   const { id, src, alt, title } = attrs
 </script>
 
