@@ -12,12 +12,12 @@ export type CreateExtensionFn = (
 ) => (ctx: EditorContext, props: EditorProps) => Extension
 
 export interface SveltePMNode {
-  dynamic?: boolean
   attrs?: { [attr: string]: any }
+  selectors?: string[]
   schema?: NodeSpec
-  attrExtractor?: (dom: HTMLElement | string) => { [attr: string]: any } | undefined
-  // component?: SvelteComponentTyped
-  component?: any
+  attrExtractor?: (dom: HTMLElement | string, attr: string) => { [attr: string]: any } | undefined
+  nodeView?: any // SvelteComponentTyped with different props
+  component?: any // SvelteComponentTyped
 }
 
 export interface Extension {

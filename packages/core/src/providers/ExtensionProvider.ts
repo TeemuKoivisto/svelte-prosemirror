@@ -11,9 +11,10 @@ import type {
   EditorProps,
   CreateExtension,
   Extension,
-  Extensions
+  Extensions,
+  SveltePMNode
 } from '../typings'
-import { BaseNodeView } from '../BaseNodeView'
+import { SvelteNodeView } from '../SvelteNodeView'
 import { createNodeSpec } from './createNodeSpec'
 
 export class ExtensionProvider {
@@ -72,7 +73,7 @@ export class ExtensionProvider {
         })
       }
       return acc
-    }, {} as { [name: string]: any })
+    }, {} as { [name: string]: SveltePMNode })
     console.log('nodes', nodes)
 
     const defaultSchema = {
@@ -89,7 +90,9 @@ export class ExtensionProvider {
     const nodeViews = {} as { [node: string]: NodeViewConstructor }
     const schemaNodes = Object.entries(nodes).reduce((acc, [name, value]) => {
       acc[name] = createNodeSpec(value)
-      // nodeViews[name] = BaseNodeView.fromComponent(ctx, value.component)
+      if (value.nodeView) {
+        nodeViews[name] = SvelteNodeView.fromComponent(ctx, value.nodeView)
+      }
       return acc
     }, {} as { [name: string]: NodeSpec })
 

@@ -33,6 +33,7 @@
   "dependencies": {
     "@my-org/core": "workspace:*",
     "@my-org/editor": "workspace:*",
+    "@my-org/ext-equation": "workspace:*",
     "@my-org/ext-figure": "workspace:*",
     "@my-org/ext-paragraph": "workspace:*",
     "@my-org/types": "workspace:*",

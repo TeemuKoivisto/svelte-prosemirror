@@ -5,7 +5,7 @@ import { SveltePMNode } from '../typings'
 import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
 
 export function createNodeSpec(node: SveltePMNode): NodeSpec {
-  const { attrs, schema, component } = node
+  const { schema, component } = node
   const nodeSpec = {
     ...schema
   }
@@ -36,20 +36,18 @@ export function createNodeSpec(node: SveltePMNode): NodeSpec {
         }
       }
     ]
-    // nodeViews[name] = BaseNodeView.fromComponent(ctx, component)
+  } else if (!component && schema?.toDOM === undefined) {
+    throw Error(
+      `You must provide either Svelte component or schema.toDOM method for your Svelte PMNode!`
+    )
   }
   return nodeSpec
 }
 
 export function createSpec(node: SveltePMNode): readonly [string, ...any[]] {
-  const { attrs, schema, component } = node
-  if (!component && schema?.toDOM === undefined) {
-    throw Error(
-      `You must provide either Svelte component or schema.toDOM method for your Svelte PMNode!`
-    )
-  } else if (!component && schema?.toDOM) {
+  const { attrs, component } = node
+  if (!component) {
     return ['']
-    // return schema.toDOM
   }
   const div = document.createElement('div')
   const comp = new component({

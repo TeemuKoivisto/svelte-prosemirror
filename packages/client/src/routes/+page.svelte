@@ -3,6 +3,7 @@
 
   import { paragraphExtension } from '@my-org/ext-paragraph'
   import { figureExtension } from '@my-org/ext-figure'
+  import { equationExtension } from '@my-org/ext-equation'
 
   import type { EditorContext } from '@my-org/core'
   import { onMount } from 'svelte'
@@ -11,7 +12,7 @@
     extensions = [] as any[]
 
   onMount(() => {
-    extensions = [paragraphExtension(), figureExtension()]
+    extensions = [paragraphExtension(), figureExtension(), equationExtension()]
   })
 
   function handleEditorReady(ctx: EditorContext) {
@@ -19,15 +20,24 @@
       const tr = state.tr
       tr.insert(
         1,
-        state.schema.nodes.figure.createAndFill(
+        state.schema.nodes.equation.createAndFill(
           {
-            src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
-            alt: 'Bob Ross in front of painting',
-            caption: 'Happy trees :)'
+            latex: 'a^2 = \\sqrt{b^2 + c^2}'
           },
-          state.schema.text('Happy trees :)')
+          state.schema.text('Mah equation')
         ) as any
       )
+      // tr.insert(
+      //   1,
+      //   state.schema.nodes.figure.createAndFill(
+      //     {
+      //       src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
+      //       alt: 'Bob Ross in front of painting',
+      //       caption: 'Happy trees :)'
+      //     },
+      //     state.schema.text('Happy trees :)')
+      //   ) as any
+      // )
       dispatch && dispatch(tr)
     })
   }

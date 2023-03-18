@@ -52,6 +52,7 @@ importers:
       '@iconify/svelte': ^3.0.1
       '@my-org/core': workspace:*
       '@my-org/editor': workspace:*
+      '@my-org/ext-equation': workspace:*
       '@my-org/ext-figure': workspace:*
       '@my-org/ext-paragraph': workspace:*
       '@my-org/types': workspace:*
@@ -81,6 +82,7 @@ importers:
       '@iconify/svelte': 3.1.0_svelte@3.55.1
       '@my-org/core': link:../core
       '@my-org/editor': link:../editor
+      '@my-org/ext-equation': link:../ext-equation
       '@my-org/ext-figure': link:../ext-figure
       '@my-org/ext-paragraph': link:../ext-paragraph
       '@my-org/types': link:../types
@@ -211,6 +213,51 @@ importers:
       typescript: 4.9.5
       vite: 4.1.4_sass@1.58.3
 
+  packages/ext-equation:
+    specifiers:
+      '@codemirror/state': ^6.2.0
+      '@codemirror/view': ^6.7.3
+      '@my-org/core': workspace:*
+      '@my-org/editor': workspace:*
+      '@popperjs/core': ^2.11.6
+      '@sveltejs/kit': ^1.9.3
+      '@sveltejs/package': ^1.0.2
+      '@types/katex': ^0.16.0
+      katex: ^0.16.4
+      prosemirror-commands: ^1.5.0
+      prosemirror-keymap: ^1.2.0
+      prosemirror-model: ^1.19.0
+      prosemirror-state: ^1.4.2
+      prosemirror-transform: ^1.7.1
+      prosemirror-view: ^1.30.0
+      svelte: ^3.55.1
+      svelte-check: ^3.0.3
+      svelte-preprocess: ^5.0.1
+      svelte2tsx: ^0.6.0
+      typescript: ^4.9.4
+    dependencies:
+      '@codemirror/state': 6.2.0
+      '@codemirror/view': 6.9.2
+      '@popperjs/core': 2.11.6
+      katex: 0.16.4
+    devDependencies:
+      '@my-org/core': link:../core
+      '@my-org/editor': link:../editor
+      '@sveltejs/kit': 1.11.0_svelte@3.55.1
+      '@sveltejs/package': 1.0.2_4x7phaipmicbaooxtnresslofa
+      '@types/katex': 0.16.0
+      prosemirror-commands: 1.5.1
+      prosemirror-keymap: 1.2.1
+      prosemirror-model: 1.19.0
+      prosemirror-state: 1.4.2
+      prosemirror-transform: 1.7.1
+      prosemirror-view: 1.30.1
+      svelte: 3.55.1
+      svelte-check: 3.1.0_svelte@3.55.1
+      svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
+      svelte2tsx: 0.6.3_4x7phaipmicbaooxtnresslofa
+      typescript: 4.9.5
+
   packages/ext-figure:
     specifiers:
       '@my-org/core': workspace:*
@@ -324,6 +371,18 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
     dev: true
+
+  /@codemirror/state/6.2.0:
+    resolution: {integrity: sha512-69QXtcrsc3RYtOtd+GsvczJ319udtBf1PTrr2KbLWM/e2CXUPnh0Nz9AUo8WfhSQ7GeL8dPVNUmhQVgpmuaNGA==}
+    dev: false
+
+  /@codemirror/view/6.9.2:
+    resolution: {integrity: sha512-ci0r/v6aKOSlzOs7/STMTYP3jX/+YMq2dAfAJcLIB6uom4ThtrUlzeuS7GTRGNqJJ+qAJR1vGWfXgu4CO/0myQ==}
+    dependencies:
+      '@codemirror/state': 6.2.0
+      style-mod: 4.0.2
+      w3c-keyname: 2.2.6
+    dev: false
 
   /@esbuild/android-arm/0.16.17:
     resolution: {integrity: sha512-N9x1CMXVhtWEAMS7pNNONyA14f71VPQN9Cnavj1XQh6T7bskqiLLrSca4O0Vr8Wdcga943eThxnVp3JLnBMYtw==}
@@ -688,6 +747,10 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
+  /@popperjs/core/2.11.6:
+    resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
+
   /@rollup/plugin-commonjs/24.0.1_rollup@3.18.0:
     resolution: {integrity: sha512-15LsiWRZk4eOGqvrJyu3z3DaBu5BhXIMeWnijSRvd8irrrg9SHpQ1pH+BUK4H6Z9wL9yOxZJMTLU+Au86XHxow==}
     engines: {node: '>=14.0.0'}
@@ -952,6 +1015,10 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/katex/0.16.0:
+    resolution: {integrity: sha512-hz+S3nV6Mym5xPbT9fnO8dDhBFQguMYpY0Ipxv06JMi1ORgnEM4M1ymWDUhUNer3ElLmT583opRo4RzxKmh9jw==}
     dev: true
 
   /@types/lodash.debounce/4.0.7:
@@ -1501,6 +1568,11 @@ packages:
     dependencies:
       delayed-stream: 1.0.0
     dev: true
+
+  /commander/8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
+    dev: false
 
   /commander/9.5.0:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
@@ -2914,6 +2986,13 @@ packages:
       object.assign: 4.1.4
     dev: true
 
+  /katex/0.16.4:
+    resolution: {integrity: sha512-WudRKUj8yyBeVDI4aYMNxhx5Vhh2PjpzQw1GRu/LVGqL4m1AxwD1GcUp0IMbdJaf5zsjtj8ghP0DOQRYhroNkw==}
+    hasBin: true
+    dependencies:
+      commander: 8.3.0
+    dev: false
+
   /kleur/4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
@@ -4051,6 +4130,10 @@ packages:
     dependencies:
       acorn: 8.8.2
     dev: true
+
+  /style-mod/4.0.2:
+    resolution: {integrity: sha512-C4myMmRTO8iaC5Gg+N1ftK2WT4eXUTMAa+HEFPPrfVeO/NtqLTtAmV1HbqnuGtLwCek44Ra76fdGUkSqjiMPcQ==}
+    dev: false
 
   /supports-color/7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
