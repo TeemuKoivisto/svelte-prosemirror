@@ -5,7 +5,7 @@ export function htmlToDOMOutputSpec(
 ): any[] {
   collected.push(el.tagName.toLowerCase())
   const attrs = {} as { [attr: string]: string }
-  console.log(el.outerHTML)
+  // console.log(el.outerHTML)
   // console.log(Array.from(el.attributes))
   let foundHole = false
   Array.from(el.attributes).forEach(attr => {

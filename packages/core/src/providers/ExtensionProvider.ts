@@ -74,7 +74,7 @@ export class ExtensionProvider {
       }
       return acc
     }, {} as { [name: string]: SveltePMNode })
-    console.log('nodes', nodes)
+    // console.log('nodes', nodes)
 
     const defaultSchema = {
       nodes: {
@@ -103,8 +103,8 @@ export class ExtensionProvider {
       }
     }
 
-    console.log('nodes 2', schemaNodes)
-    console.log('schema', schema)
+    // console.log('nodes 2', schemaNodes)
+    // console.log('schema', schema)
 
     this.plugins.set(plugins)
     this.schema.set(new Schema(schema))

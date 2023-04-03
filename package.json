@@ -10,7 +10,7 @@
   },
   "engines": {
     "node": ">=16",
-    "pnpm": "^7.0.0"
+    "pnpm": ">=7.0.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.2",

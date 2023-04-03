@@ -60,8 +60,9 @@ export class ViewProvider {
   execCommand(cmd: Command) {
     const view = this.view
     const state = this.getState()
-    cmd(state, view.dispatch)
+    cmd(state, view.dispatch, view)
     this.focus()
+    return this
   }
 
   focus() {

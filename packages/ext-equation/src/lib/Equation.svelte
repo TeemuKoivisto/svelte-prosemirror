@@ -19,8 +19,8 @@
       {}
     ),
     content: 'inline*',
-    selectable: false,
     group: 'block',
+    atom: true,
     // @TODO customize NodeSpec, add -> attrs, selectors
     parseDOM: [
       {
@@ -29,7 +29,7 @@
           if (dom instanceof HTMLElement) {
             return {
               id: dom.getAttribute('id'),
-              src: dom.getAttribute('src')
+              latex: dom.getAttribute('latex')
             }
           }
           return null
@@ -37,8 +37,8 @@
       }
     ],
     toDOM(node: PMNode) {
-      const { id, title, src, alt } = node.attrs
-      return ['figure', { id, class: 'equation' }, ['img', { src, alt }], ['figcaption', {}, 0]]
+      const { id, title, latex } = node.attrs
+      return ['figure', { id, class: 'equation', latex }, ['div'], ['figcaption', {}]]
     }
   }
 </script>
@@ -49,7 +49,7 @@
   import { createPopper } from '@popperjs/core'
   import type { Instance, OptionsGeneric, Modifier } from '@popperjs/core'
   import katex from 'katex'
-  import { DOMSerializer, Node as PMNode } from 'prosemirror-model'
+  import { Node as PMNode } from 'prosemirror-model'
   import type {
     Decoration,
     DecorationSource,
@@ -57,40 +57,55 @@
     NodeView,
     NodeViewConstructor
   } from 'prosemirror-view'
-  import { createEventDispatcher, onMount } from 'svelte'
+  import { onMount } from 'svelte'
   import { EditorContext } from '@my-org/core'
+
+  import 'katex/dist/katex.min.css'
 
   export let node: PMNode | undefined = undefined,
     attrs: Attrs,
+    selected: boolean | undefined,
     view: EditorView,
     getPos: () => number,
-    decorations: readonly Decoration[],
-    innerDecorations: DecorationSource,
-    update: (
-      newNode: PMNode,
-      _decorations: readonly Decoration[],
-      _innerDecorations: DecorationSource
-    ) => boolean,
-    selectNode: () => void,
-    deselectNode: () => void,
+    // decorations: readonly Decoration[],
+    // innerDecorations: DecorationSource,
     ctx: EditorContext
 
-  const { id, latex, title } = attrs
-
   let codemirrorEl: HTMLElement
+  let katexEl: HTMLElement
   let popperEl: HTMLElement
   let popperInstance: Instance | undefined
   let codemirror: CodeMirror | undefined
 
-  const dispatch = createEventDispatcher<{ update: { attrs: any } }>()
+  $: id = attrs.id
+  $: latex = attrs.latex
+  $: title = attrs.title
+
+  $: {
+    if (katexEl && latex) {
+      katex.render(latex, katexEl, {
+        throwOnError: false
+      })
+    }
+  }
+
+  $: {
+    console.log('selected', selected)
+    if (selected) {
+      renderCodeMirror()
+    } else {
+      closePopper()
+    }
+  }
 
   onMount(() => {
+    console.log('hello onMount', node)
     if (!node) return
     popperEl = document.createElement('div')
     popperEl.classList.add('popup')
     document.body.appendChild(popperEl)
     if (latex) {
-      katex.render(latex, codemirrorEl, {
+      katex.render(latex, katexEl, {
         throwOnError: false
       })
     }
@@ -106,26 +121,21 @@
     content: HTMLElement,
     opts?: Partial<OptionsGeneric<Partial<Modifier<any, any>>>>
   ) {
-    closePopper()
     popperEl.appendChild(content)
     popperEl.setAttribute('data-show', '')
     popperInstance = createPopper(target, popperEl, opts)
   }
 
   function updatePopper() {
-    if (popperInstance) {
-      popperInstance.update()
-    }
+    popperInstance?.update()
   }
 
   function closePopper() {
-    if (popperInstance) {
-      while (popperEl.hasChildNodes()) {
-        popperEl.removeChild(popperEl.firstChild as ChildNode)
-      }
-      popperEl.removeAttribute('data-show')
-      popperInstance.destroy()
-    }
+    codemirror?.destroy()
+    codemirror = undefined
+    popperEl?.firstChild?.remove()
+    popperInstance?.destroy()
+    popperInstance = undefined
   }
 
   function handleCodeMirrorChange(v: ViewUpdate) {
@@ -143,9 +153,10 @@
     view.dispatch(tr)
   }
 
-  function handleCodeMirrorOpen() {
+  function renderCodeMirror() {
     if (!codemirror) {
       codemirror = new CodeMirror({
+        parent: codemirrorEl,
         state: EditorState.create({
           doc: latex,
           extensions: [
@@ -162,7 +173,7 @@
           {
             name: 'offset',
             options: {
-              offset: [0, 8]
+              offset: [8, 8]
             }
           }
         ]
@@ -173,31 +184,30 @@
       })
     }
   }
-
-  function handleLatexChange() {
-    dispatch('update', { attrs: {} })
-  }
 </script>
 
+<div class="equation-editor" class:visible={codemirror} bind:this={codemirrorEl}>
+  <a
+    class="equation-editor-info"
+    href="https://en.wikibooks.org/wiki/LaTeX/Mathematics#Symbols"
+    target="_blank"
+    rel="noreferrer"
+  >
+    ?
+  </a>
+</div>
 <figure class="equation" {id}>
-  {#if latex}
-    <div class="equation-editor" data-latex={latex} bind:this={codemirrorEl}>
-      <a
-        class="equation-editor-info"
-        href="https://en.wikibooks.org/wiki/LaTeX/Mathematics#Symbols"
-        target="_blank"
-        rel="noreferrer"
-      >
-        ?
-      </a>
-    </div>
-  {:else}
-    <div>placeholder</div>
-  {/if}
+  <div class="equation" role="button" data-latex={latex} on:click={renderCodeMirror}>
+    {#if !latex}
+      <div class="equation-placeholder">e=mc^2</div>
+    {:else}
+      <div bind:this={katexEl} />
+    {/if}
+  </div>
   <figcaption data-hole />
 </figure>
 
-<style lang="scss">
+<style lang="scss" global>
   .popup {
     color: #353535;
     font-family: 'PT Sans', sans-serif;
@@ -278,8 +288,13 @@
     background: #fff;
     border: 1px solid #e2e2e2;
     box-shadow: 0 4px 9px 0 rgb(84 83 83 / 30%);
+    display: hidden;
     height: auto;
     min-height: 4em;
+  }
+
+  .popup .visible {
+    display: block;
   }
 
   .popup .equation-editor-info {

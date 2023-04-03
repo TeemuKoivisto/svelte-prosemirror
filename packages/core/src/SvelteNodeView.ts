@@ -1,4 +1,4 @@
-import { DOMSerializer, Node as PMNode } from 'prosemirror-model'
+import { Attrs, DOMSerializer, Node as PMNode } from 'prosemirror-model'
 import type {
   Decoration,
   DecorationSource,
@@ -6,9 +6,22 @@ import type {
   NodeView,
   NodeViewConstructor
 } from 'prosemirror-view'
-import type { SvelteComponentTyped } from 'svelte'
+import { writable, Writable } from 'svelte/store'
 
+import type { SvelteComponentTyped } from 'svelte'
 import type { EditorContext } from './typings'
+
+export interface SvelteNodeViewProps {
+  node: PMNode
+  attrs: Attrs
+  selected: boolean | undefined
+  // selected: Writable<boolean>
+  view: EditorView
+  getPos: () => number
+  decorations: readonly Decoration[]
+  innerDecorations: DecorationSource
+  ctx: EditorContext
+}
 
 export class SvelteNodeView implements NodeView {
   protected _dom?: HTMLElement
@@ -17,6 +30,9 @@ export class SvelteNodeView implements NodeView {
   node: PMNode
   decorations: readonly Decoration[]
   innerDecorations: DecorationSource
+
+  selected: boolean | undefined
+  // selected = writable(false)
   ctx: EditorContext
   component: SvelteComponentTyped<{}>
   #mounted?: SvelteComponentTyped
@@ -47,9 +63,19 @@ export class SvelteNodeView implements NodeView {
     return this._dom
   }
 
-  /**
-   * Override this
-   */
+  get props(): SvelteNodeViewProps {
+    return {
+      node: this.node,
+      attrs: this.node.attrs,
+      selected: this.selected,
+      view: this.view,
+      getPos: this.getPos,
+      decorations: this.decorations,
+      innerDecorations: this.innerDecorations,
+      ctx: this.ctx
+    }
+  }
+
   init = (): this => {
     const toDOM = this.node.type.spec.toDOM
     if (!toDOM) throw Error(`@my-org/core: node "${this.node.type}" was not given a toDOM method!`)
@@ -59,32 +85,18 @@ export class SvelteNodeView implements NodeView {
     // console.log('dom', dom)
     // console.log('contentDOM', contentDOM)
     this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
-    const props = {
-      node: this.node,
-      attrs: this.node.attrs,
-      view: this.view,
-      decorations: this.decorations,
-      innerDecorations: this.innerDecorations,
-      ctx: this.ctx
-    }
     // @ts-ignore
-    this.#mounted = new this.component({ target: this.dom, props })
+    this.#mounted = new this.component({ target: this.dom, props: this.props })
+    console.log('mounted', this.#mounted)
     return this
   }
 
   render() {
-    const props = {
-      node: this.node,
-      attrs: this.node.attrs,
-      view: this.view,
-      decorations: this.decorations,
-      innerDecorations: this.innerDecorations,
-      ctx: this.ctx
-    }
-    this.#mounted?.$$set && this.#mounted?.$$set(props)
+    this.#mounted?.$$set && this.#mounted?.$$set(this.props)
   }
 
   shouldUpdate: (node: PMNode) => boolean = node => {
+    console.log('should update')
     if (node.type !== this.node.type) {
       return false
     } else if (node.sameMarkup(this.node)) {
@@ -98,6 +110,7 @@ export class SvelteNodeView implements NodeView {
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource
   ): boolean => {
+    console.log('update')
     // if (!newNode.sameMarkup(this.node)) return false
     if (node.type.name !== this.node.type.name) {
       return false
@@ -110,17 +123,27 @@ export class SvelteNodeView implements NodeView {
   }
 
   selectNode = () => {
-    this.dom.classList.add('ProseMirror-selectednode')
+    console.log('selectNode ')
+    // this.dom.classList.add('ProseMirror-selectednode')
+    // this.#mounted?.$on('selected', () => {})
+    // console.log(this.#mounted)
+    this.selected = true
+    this.render()
   }
 
   deselectNode = () => {
-    this.dom.classList.remove('ProseMirror-selectednode')
+    console.log('deselectNode ')
+    // this.dom.classList.remove('ProseMirror-selectednode')
     // this.#mounted?.$$.
+    this.selected = false
+    this.render()
   }
 
   destroy = () => {
     this.#mounted?.$destroy()
   }
+
+  ignoreMutation = () => true
 
   static fromComponent<P>(
     ctx: EditorContext,

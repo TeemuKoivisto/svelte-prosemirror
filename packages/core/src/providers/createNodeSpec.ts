@@ -5,11 +5,12 @@ import { SveltePMNode } from '../typings'
 import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
 
 export function createNodeSpec(node: SveltePMNode): NodeSpec {
-  const { schema, component } = node
+  const { schema } = node
   const nodeSpec = {
     ...schema
   }
   const staticSpec = createSpec(node)
+  const component = node.component // || node.nodeView
   if (component) {
     nodeSpec.toDOM = (node: PMNode) => {
       const div = document.createElement('div')
@@ -21,7 +22,7 @@ export function createNodeSpec(node: SveltePMNode): NodeSpec {
         }
       })
       const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
-      console.log('spec', spec)
+      // console.log('spec', spec)
       return spec as unknown as DOMOutputSpec
     }
     nodeSpec.parseDOM = [
@@ -58,7 +59,7 @@ export function createSpec(node: SveltePMNode): readonly [string, ...any[]] {
     }
   })
   const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
-  console.log('spec', spec)
+  // console.log('spec', spec)
   // @TODO add class list for 'tag'
   return spec as [string, ...any[]]
 }
