@@ -1,20 +1,20 @@
 <script lang="ts" context="module">
   import type { NodeSpec } from 'prosemirror-model'
 
-  export interface Attrs {
+  export interface EquationAttrs {
     id: string | undefined
     title: string
     latex: string
   }
 
-  export const attrs: Attrs = {
+  export const equationAttrs: EquationAttrs = {
     id: undefined,
     title: '',
     latex: ''
   }
 
-  export const schema: NodeSpec = {
-    attrs: Object.entries(attrs).reduce(
+  export const equationSchema: NodeSpec = {
+    attrs: Object.entries(equationAttrs).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: { default: value } }),
       {}
     ),
@@ -57,7 +57,7 @@
   import 'katex/dist/katex.min.css'
 
   export let node: PMNode | undefined = undefined,
-    attrs: Attrs,
+    attrs: EquationAttrs,
     selected: boolean | undefined,
     view: EditorView,
     getPos: () => number,

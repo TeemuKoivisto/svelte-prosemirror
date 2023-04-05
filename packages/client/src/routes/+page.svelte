@@ -18,26 +18,28 @@
   function handleEditorReady(ctx: EditorContext) {
     ctx.viewProvider.execCommand((state, dispatch) => {
       const tr = state.tr
-      tr.insert(2, state.schema.nodes.paragraph.createAndFill() as any)
+      const { schema } = state
+      const nodes = schema.nodes
+      tr.insert(2, nodes.paragraph.createAndFill() as any)
       tr.insert(
         1,
-        state.schema.nodes.equation.createAndFill(
+        nodes.equation.createAndFill(
           {
             latex: 'a^2 = \\sqrt{b^2 + c^2}'
           },
-          state.schema.text('Mah equation')
+          schema.text('Mah equation')
         ) as any
       )
       tr.insert(
         1,
-        state.schema.nodes.figure.createAndFill(
-          {
+        nodes.figure.create(undefined, [
+          nodes.image.create({
             src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
             alt: 'Bob Ross in front of painting',
-            caption: 'Happy trees :)'
-          },
-          state.schema.text('Happy trees :)')
-        ) as any
+            title: 'Bob Ross in front of painting'
+          }),
+          nodes.figcaption.create(undefined, schema.text('Happy trees :)'))
+        ])
       )
       dispatch && dispatch(tr)
     })
