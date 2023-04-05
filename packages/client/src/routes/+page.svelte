@@ -28,17 +28,17 @@
           state.schema.text('Mah equation')
         ) as any
       )
-      // tr.insert(
-      //   1,
-      //   state.schema.nodes.figure.createAndFill(
-      //     {
-      //       src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
-      //       alt: 'Bob Ross in front of painting',
-      //       caption: 'Happy trees :)'
-      //     },
-      //     state.schema.text('Happy trees :)')
-      //   ) as any
-      // )
+      tr.insert(
+        1,
+        state.schema.nodes.figure.createAndFill(
+          {
+            src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
+            alt: 'Bob Ross in front of painting',
+            caption: 'Happy trees :)'
+          },
+          state.schema.text('Happy trees :)')
+        ) as any
+      )
       dispatch && dispatch(tr)
     })
   }

@@ -47,7 +47,7 @@
   import { EditorView as CodeMirror, lineNumbers, placeholder, ViewUpdate } from '@codemirror/view'
   import { EditorState } from '@codemirror/state'
   import { createPopper } from '@popperjs/core'
-  import type { Instance, OptionsGeneric, Modifier } from '@popperjs/core'
+  import type { Instance } from '@popperjs/core'
   import katex from 'katex'
   import { Node as PMNode } from 'prosemirror-model'
   import type {
@@ -104,6 +104,7 @@
     popperEl = document.createElement('div')
     popperEl.classList.add('popup')
     document.body.appendChild(popperEl)
+    codemirrorEl.remove()
     if (latex) {
       katex.render(latex, katexEl, {
         throwOnError: false
@@ -116,14 +117,19 @@
     }
   })
 
-  function openPopper(
-    target: HTMLElement,
-    content: HTMLElement,
-    opts?: Partial<OptionsGeneric<Partial<Modifier<any, any>>>>
-  ) {
+  function openPopper(anchor: HTMLElement, content: HTMLElement) {
     popperEl.appendChild(content)
-    popperEl.setAttribute('data-show', '')
-    popperInstance = createPopper(target, popperEl, opts)
+    popperInstance = createPopper(anchor, popperEl, {
+      placement: 'bottom',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 8]
+          }
+        }
+      ]
+    })
   }
 
   function updatePopper() {
@@ -167,17 +173,7 @@
           ]
         })
       })
-      openPopper(popperEl, codemirrorEl, {
-        placement: 'bottom',
-        modifiers: [
-          {
-            name: 'offset',
-            options: {
-              offset: [8, 8]
-            }
-          }
-        ]
-      })
+      openPopper(katexEl, codemirrorEl)
 
       window.requestAnimationFrame(() => {
         codemirror?.focus()
@@ -186,7 +182,7 @@
   }
 </script>
 
-<div class="equation-editor" class:visible={codemirror} bind:this={codemirrorEl}>
+<div class="equation-editor" bind:this={codemirrorEl}>
   <a
     class="equation-editor-info"
     href="https://en.wikibooks.org/wiki/LaTeX/Mathematics#Symbols"
@@ -274,23 +270,8 @@
 
   .popup .equation-editor {
     position: relative;
-    min-width: 500px;
+    min-width: calc(600px - 2rem);
     max-width: 800px;
-  }
-
-  /* .popup .cm-editor {
-  border: 1px solid #e2e2e2;
-  box-shadow: 0 4px 9px 0 rgba(84, 83, 83, 0.3);
-  height: auto;
-  min-height: 4em;
-} */
-  .popup .equation-editor:first-child {
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    box-shadow: 0 4px 9px 0 rgb(84 83 83 / 30%);
-    display: hidden;
-    height: auto;
-    min-height: 4em;
   }
 
   .popup .visible {
@@ -320,11 +301,31 @@
     opacity: 1;
   }
 
-  .popup .cm-scroller {
-    max-height: 400px;
-  }
-
-  .popup .cm-placeholder {
-    color: #999 !important;
+  .popup {
+    .cm-editor {
+      border: 1px solid #e2e2e2;
+      box-shadow: 0 4px 9px 0 rgba(84, 83, 83, 0.3);
+      height: auto;
+      min-height: 4em;
+    }
+    .cm-focused {
+      outline: none;
+    }
+    .cm-content,
+    .cm-gutter {
+      min-height: 62px;
+    }
+    .cm-gutters {
+      margin: 1px;
+    }
+    .cm-scroller {
+      overflow: auto;
+    }
+    .cm-wrap {
+      border: 1px solid silver;
+    }
+    .cm-placeholder {
+      color: #999 !important;
+    }
   }
 </style>
