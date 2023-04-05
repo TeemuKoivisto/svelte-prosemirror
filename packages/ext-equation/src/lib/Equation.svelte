@@ -38,7 +38,7 @@
     ],
     toDOM(node: PMNode) {
       const { id, title, latex } = node.attrs
-      return ['figure', { id, class: 'equation', latex }, ['div'], ['figcaption', {}]]
+      return ['figure', { id, class: 'equation', latex }, ['pre', latex], ['figcaption', {}]]
     }
   }
 </script>
@@ -50,13 +50,7 @@
   import type { Instance } from '@popperjs/core'
   import katex from 'katex'
   import { Node as PMNode } from 'prosemirror-model'
-  import type {
-    Decoration,
-    DecorationSource,
-    EditorView,
-    NodeView,
-    NodeViewConstructor
-  } from 'prosemirror-view'
+  import type { EditorView } from 'prosemirror-view'
   import { onMount } from 'svelte'
   import { EditorContext } from '@my-org/core'
 
@@ -67,8 +61,6 @@
     selected: boolean | undefined,
     view: EditorView,
     getPos: () => number,
-    // decorations: readonly Decoration[],
-    // innerDecorations: DecorationSource,
     ctx: EditorContext
 
   let codemirrorEl: HTMLElement
@@ -99,7 +91,6 @@
   }
 
   onMount(() => {
-    console.log('hello onMount', node)
     if (!node) return
     popperEl = document.createElement('div')
     popperEl.classList.add('popup')
@@ -118,6 +109,11 @@
   })
 
   function openPopper(anchor: HTMLElement, content: HTMLElement) {
+    const arrow = document.createElement('div')
+    // https://popper.js.org/docs/v2/modifiers/arrow/
+    // arrow.setAttribute('data-popper-arrow', '')
+    arrow.classList.add('popper-arrow')
+    popperEl.appendChild(arrow)
     popperEl.appendChild(content)
     popperInstance = createPopper(anchor, popperEl, {
       placement: 'bottom',
@@ -132,13 +128,10 @@
     })
   }
 
-  function updatePopper() {
-    popperInstance?.update()
-  }
-
   function closePopper() {
     codemirror?.destroy()
     codemirror = undefined
+    popperEl?.firstChild?.remove()
     popperEl?.firstChild?.remove()
     popperInstance?.destroy()
     popperInstance = undefined
@@ -204,6 +197,9 @@
 </figure>
 
 <style lang="scss" global>
+  .equation {
+    text-align: center;
+  }
   .popup {
     color: #353535;
     font-family: 'PT Sans', sans-serif;
@@ -218,33 +214,21 @@
     display: inline-block;
   }
 
-  .popup-arrow,
-  .popup-arrow::before {
+  .popper-arrow {
+    width: 0;
+    height: 0;
     position: absolute;
-    width: 8px;
-    height: 8px;
-    background: inherit;
+    border: 5px solid transparent;
   }
 
-  .popup-arrow {
-    visibility: hidden;
-  }
-
-  .popup-arrow::before {
-    visibility: visible;
-    content: '';
-    transform: rotate(45deg);
-  }
-
-  .popup[data-popper-placement^='bottom'] > .popup-arrow {
+  .popup[data-popper-placement^='bottom'] > .popper-arrow {
     top: -5px;
     left: calc(50% - 5px);
     border-bottom-color: #e2e2e2;
     border-top-width: 0;
-    margin: 0 5px;
   }
 
-  .popup[data-popper-placement^='top'] > .popup-arrow {
+  .popup[data-popper-placement^='top'] > .popper-arrow {
     bottom: -5px;
     left: calc(50% - 5px);
     border-top-color: #e2e2e2;
@@ -252,7 +236,7 @@
     margin: 0 5px;
   }
 
-  .popup[data-popper-placement^='left'] > .popup-arrow {
+  .popup[data-popper-placement^='left'] > .popper-arrow {
     right: -5px;
     top: calc(50% - 5px);
     border-left-color: #e2e2e2;
@@ -260,7 +244,7 @@
     margin: 5px 0;
   }
 
-  .popup[data-popper-placement^='right'] > .popup-arrow {
+  .popup[data-popper-placement^='right'] > .popper-arrow {
     left: -5px;
     top: calc(50% - 5px);
     border-right-color: #e2e2e2;

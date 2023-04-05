@@ -1,4 +1,4 @@
-import { Attrs, DOMSerializer, Node as PMNode } from 'prosemirror-model'
+import { Attrs, Node as PMNode } from 'prosemirror-model'
 import type {
   Decoration,
   DecorationSource,
@@ -6,7 +6,6 @@ import type {
   NodeView,
   NodeViewConstructor
 } from 'prosemirror-view'
-import { writable, Writable } from 'svelte/store'
 
 import type { SvelteComponentTyped } from 'svelte'
 import type { EditorContext } from './typings'
@@ -15,7 +14,6 @@ export interface SvelteNodeViewProps {
   node: PMNode
   attrs: Attrs
   selected: boolean | undefined
-  // selected: Writable<boolean>
   view: EditorView
   getPos: () => number
   decorations: readonly Decoration[]
@@ -32,7 +30,6 @@ export class SvelteNodeView implements NodeView {
   innerDecorations: DecorationSource
 
   selected: boolean | undefined
-  // selected = writable(false)
   ctx: EditorContext
   component: SvelteComponentTyped<{}>
   #mounted?: SvelteComponentTyped
@@ -44,7 +41,7 @@ export class SvelteNodeView implements NodeView {
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource,
     ctx: EditorContext,
-    component: SvelteComponentTyped<{}>
+    component: SvelteComponentTyped<SvelteNodeViewProps>
   ) {
     this.node = node
     this.view = view
@@ -95,7 +92,7 @@ export class SvelteNodeView implements NodeView {
     this.#mounted?.$$set && this.#mounted?.$$set(this.props)
   }
 
-  shouldUpdate: (node: PMNode) => boolean = node => {
+  shouldUpdate = (node: PMNode) => {
     console.log('should update')
     if (node.type !== this.node.type) {
       return false
@@ -124,17 +121,12 @@ export class SvelteNodeView implements NodeView {
 
   selectNode = () => {
     console.log('selectNode ')
-    // this.dom.classList.add('ProseMirror-selectednode')
-    // this.#mounted?.$on('selected', () => {})
-    // console.log(this.#mounted)
     this.selected = true
     this.render()
   }
 
   deselectNode = () => {
     console.log('deselectNode ')
-    // this.dom.classList.remove('ProseMirror-selectednode')
-    // this.#mounted?.$$.
     this.selected = false
     this.render()
   }
@@ -145,9 +137,9 @@ export class SvelteNodeView implements NodeView {
 
   ignoreMutation = () => true
 
-  static fromComponent<P>(
+  static fromComponent(
     ctx: EditorContext,
-    component: SvelteComponentTyped<{}>
+    component: SvelteComponentTyped<SvelteNodeViewProps>
   ): NodeViewConstructor {
     return (
       node: PMNode,
