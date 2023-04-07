@@ -27,15 +27,15 @@
       onEditorReady,
       onEdit
     }
-    const newCtx = createProviders(editorProps)
-    newCtx.extProvider.init(newCtx, newProps.extensions)
+    const newCtx = createProviders()
+    newCtx.extProvider.init(newCtx, newProps)
     ctx.set(newCtx)
     view.set(newCtx.viewProvider)
     extProvider.set(newCtx.extProvider)
     props.set(newProps)
   }
 
-  const ctx = writable(createProviders(editorProps))
+  const ctx = writable(createProviders())
   const view = writable($ctx.viewProvider)
   const extProvider = writable($ctx.extProvider)
   const props = writable(editorProps)

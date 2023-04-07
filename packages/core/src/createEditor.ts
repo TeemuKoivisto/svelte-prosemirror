@@ -1,4 +1,3 @@
-import { Schema } from 'prosemirror-model'
 import { EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { get } from 'svelte/store'

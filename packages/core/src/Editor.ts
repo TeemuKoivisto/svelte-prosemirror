@@ -52,6 +52,18 @@ export class Editor {
     return this
   }
 
+  recreate(props: EditorProps = {}) {
+    this.extProvider.init(this.ctx, props)
+    const dom = this.editorView?.dom
+    if (!dom) {
+      throw Error(
+        `@my-org/core: No DOM node to which to mount the editor, has the EditorView already been destroyed?`
+      )
+    }
+    this.editorView = init(dom, this.ctx, props, this.editorView)
+    return this
+  }
+
   destroy() {
     this.extProvider.destroy()
     this.editorView?.destroy()
