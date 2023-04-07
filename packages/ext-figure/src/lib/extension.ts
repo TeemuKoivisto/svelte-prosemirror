@@ -1,4 +1,4 @@
-import type { CreateExtension, EditorContext } from '@my-org/core'
+import type { CreateExtension, Extension, EditorContext } from '@my-org/core'
 import Figcaption, { figcaptionAttrs, figcaptionSchema } from './Figcaption.svelte'
 import Figure, { figureAttrs, figureSchema } from './Figure.svelte'
 import Image, { imageAttrs, imageSchema } from './Image.svelte'
@@ -23,5 +23,5 @@ export const figureExtension = () => (ctx: EditorContext) => {
         component: Image
       }
     }
-  }
+  } satisfies Extension
 }

@@ -1,4 +1,4 @@
-import type { CreateExtension, EditorContext } from '@my-org/core'
+import type { CreateExtension, Extension, EditorContext } from '@my-org/core'
 import Equation, { equationAttrs, equationSchema } from './Equation.svelte'
 
 export const equationExtension = () => (ctx: EditorContext) => {
@@ -12,5 +12,5 @@ export const equationExtension = () => (ctx: EditorContext) => {
         // component: Equation
       }
     }
-  }
+  } satisfies Extension
 }

@@ -7,7 +7,7 @@ import { gapCursor } from 'prosemirror-gapcursor'
 import { Schema } from 'prosemirror-model'
 import 'prosemirror-state'
 
-import type { CreateExtension, EditorContext } from '@my-org/core'
+import type { CreateExtension, Extension, EditorContext } from '@my-org/core'
 
 export const exampleSetupExtension = () => (ctx: EditorContext) => {
   return {
@@ -22,5 +22,5 @@ export const exampleSetupExtension = () => (ctx: EditorContext) => {
         history()
       ]
     }
-  }
+  } satisfies Extension
 }
