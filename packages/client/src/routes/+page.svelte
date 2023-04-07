@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Context, Editor } from '@my-org/editor'
+  import { Editor } from '@my-org/core'
+  import { Context } from '@my-org/editor'
 
   import { paragraphExtension } from '@my-org/ext-paragraph'
   import { figureExtension } from '@my-org/ext-figure'
@@ -7,19 +8,23 @@
   import { exampleSetupExtension } from '@my-org/ext-example-setup'
 
   import type { EditorContext } from '@my-org/core'
-  import { onMount } from 'svelte'
 
-  let documentId = 'abcd1234',
-    extensions = [] as any[]
+  let documentId = 'abcd1234'
+  let instance: Editor
 
-  onMount(() => {
-    extensions = [
-      paragraphExtension(),
-      figureExtension(),
-      equationExtension(),
-      exampleSetupExtension()
-    ]
-  })
+  function editor(dom: HTMLElement) {
+    instance = Editor.make()
+      .setProps({
+        extensions: [
+          paragraphExtension(),
+          figureExtension(),
+          equationExtension(),
+          exampleSetupExtension()
+        ],
+        onEditorReady: handleEditorReady
+      })
+      .create(dom)
+  }
 
   function handleEditorReady(ctx: EditorContext) {
     ctx.viewProvider.execCommand((state, dispatch) => {
@@ -67,11 +72,7 @@
         <input bind:value={documentId} id="documentId" />
       </div>
     </fieldset>
-    {#if extensions.length > 0}
-      <Context {extensions} onEditorReady={handleEditorReady}>
-        <Editor />
-      </Context>
-    {/if}
+    <div use:editor />
   </main>
 </section>
 

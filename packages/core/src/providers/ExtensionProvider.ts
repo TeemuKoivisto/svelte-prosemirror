@@ -18,20 +18,14 @@ import { SvelteNodeView } from '../SvelteNodeView'
 import { createNodeSpec } from './createNodeSpec'
 
 export class ExtensionProvider {
-  #props: EditorProps
-
   extensions = writable<Extension[]>([])
   plugins = writable<Plugin[]>([])
   commands = writable<Commands>({})
   schema = writable<Schema>()
   nodeViews = writable<{ [node: string]: NodeViewConstructor }>({})
 
-  constructor(props: EditorProps) {
-    this.#props = props
-  }
-
-  init(ctx: EditorContext, createExtensions: CreateExtension[]) {
-    const created = createExtensions.map(ext => ext(ctx, this.#props))
+  init(ctx: EditorContext, props: EditorProps) {
+    const created = (props.extensions || []).map(ext => ext(ctx, props))
     this.extensions.set(created)
     this.commands.set(
       created.reduce((acc, ext) => Object.assign(acc, ext.commands), {} as Commands)

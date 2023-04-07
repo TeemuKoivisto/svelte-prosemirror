@@ -9,7 +9,7 @@
 
   import type { CreateExtension, EditorContext, EditorProps } from '@my-org/core'
 
-  export let extensions: CreateExtension[],
+  export let extensions: CreateExtension[] = [],
     schema: Schema | undefined = undefined,
     onEditorReady: ((stores: EditorContext) => void) | undefined = undefined,
     onEdit: ((state: EditorState) => void) | undefined = undefined
