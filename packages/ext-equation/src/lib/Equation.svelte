@@ -82,7 +82,6 @@
   }
 
   $: {
-    console.log('selected', selected)
     if (selected) {
       renderCodeMirror()
     } else {

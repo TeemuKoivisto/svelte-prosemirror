@@ -4,6 +4,7 @@
   import { paragraphExtension } from '@my-org/ext-paragraph'
   import { figureExtension } from '@my-org/ext-figure'
   import { equationExtension } from '@my-org/ext-equation'
+  import { exampleSetupExtension } from '@my-org/ext-example-setup'
 
   import type { EditorContext } from '@my-org/core'
   import { onMount } from 'svelte'
@@ -12,7 +13,12 @@
     extensions = [] as any[]
 
   onMount(() => {
-    extensions = [paragraphExtension(), figureExtension(), equationExtension()]
+    extensions = [
+      paragraphExtension(),
+      figureExtension(),
+      equationExtension(),
+      exampleSetupExtension()
+    ]
   })
 
   function handleEditorReady(ctx: EditorContext) {

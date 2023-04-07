@@ -52,16 +52,6 @@ export class ExtensionProvider {
       return acc
     }, {} as { [key: string]: { cmd: Command; priority: number }[] })
 
-    const keymaps = Object.keys(sortedKeymaps).reduce((acc, key) => {
-      acc[key] = sortedKeymaps[key][0].cmd
-      return acc
-    }, {} as { [key: string]: Command })
-
-    const plugins = [
-      keymap(keymaps),
-      ...created.reduce((acc, ext) => [...acc, ...(ext.plugins || [])], [] as Plugin[])
-    ]
-
     const nodes = created.reduce((acc, ext) => {
       if (ext.nodes) {
         Object.keys(ext.nodes).forEach(name => {
@@ -96,18 +86,32 @@ export class ExtensionProvider {
       return acc
     }, {} as { [name: string]: NodeSpec })
 
-    const schema = {
+    const schema = new Schema({
       nodes: {
         ...defaultSchema.nodes,
         ...schemaNodes
       }
-    }
+    })
 
     // console.log('nodes 2', schemaNodes)
     // console.log('schema', schema)
 
+    // const keymaps = Object.keys(sortedKeymaps).reduce((acc, key) => {
+    //   acc[key] = sortedKeymaps[key][0].cmd
+    //   return acc
+    // }, {} as { [key: string]: Command })
+
+    const plugins = [
+      // @TODO creates duplicate plugin keys
+      // keymap(keymaps),
+      ...created.reduce(
+        (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(schema)) || [])],
+        [] as Plugin[]
+      )
+    ]
+
     this.plugins.set(plugins)
-    this.schema.set(new Schema(schema))
+    this.schema.set(schema)
     this.nodeViews.set(nodeViews)
   }
 

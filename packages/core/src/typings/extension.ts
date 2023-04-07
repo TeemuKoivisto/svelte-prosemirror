@@ -1,4 +1,4 @@
-import { NodeSpec } from 'prosemirror-model'
+import { NodeSpec, Schema } from 'prosemirror-model'
 import type { Plugin } from 'prosemirror-state'
 import type { SvelteComponentTyped } from 'svelte'
 
@@ -25,11 +25,12 @@ export interface Extension {
   opts?: any
   commands?: { [key: string]: Command }
   keymaps?: { [key: string]: Command | { cmd: Command; priority: number }[] }
-  plugins?: Plugin[]
   store?: Record<string, any>
   nodes?: {
     [name: string]: SveltePMNode
   }
+  init?: (ctx: EditorContext) => void
+  plugins?: (schema: Schema) => Plugin[]
   onDestroy?: () => void
 }
 

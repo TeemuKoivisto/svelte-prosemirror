@@ -1,0 +1,1 @@
+export { exampleSetupExtension } from './extension'
