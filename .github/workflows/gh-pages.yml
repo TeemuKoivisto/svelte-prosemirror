@@ -1,6 +1,9 @@
-name: Deploy to Github Pages
+name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -25,8 +28,11 @@ jobs:
       - name: Install dependencies with pnpm
         uses: ./.github/actions/pnpm
 
+      - name: Build & test
+        uses: ./.github/actions/build-test
+
       - name: Build
-        run: pnpm -r build
+        run: pnpm --filter client build
         env:
           GH_PAGES: true
 

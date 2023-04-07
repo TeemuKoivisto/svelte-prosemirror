@@ -5,7 +5,11 @@ runs:
   using: composite
   steps:
     - name: Build packages
-      run: pnpm -r build
+      run: |
+        pnpm --filter types build
+        pnpm --filter core build
+        pnpm --filter="@my-org/ext*" build
+        pnpm --filter=editor build
       shell: bash
 
     - name: Run type check and unit tests
