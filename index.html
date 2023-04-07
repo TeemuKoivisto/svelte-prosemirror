@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>svelte-to-prosemirror</title>
+
+    <script>
+      try {
+        if (!('theme' in localStorage)) {
+          localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        }
+
+        document.querySelector('html').classList.add(localStorage.theme)
+      } catch (e) {
+        console.error(e)
+      }
+    </script>
+
+    <!-- <link rel="icon" href="/favicon.png" /> -->
+
+    <meta http-equiv="content-security-policy" content="">
+		<link href="./svelte-prosemirror/_app/immutable/assets/_layout.b6d0b954.css" rel="stylesheet">
+		<link href="./svelte-prosemirror/_app/immutable/assets/_page.d69413cb.css" rel="stylesheet">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/entry/start.df03641f.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/chunks/index.6ed39e6e.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/chunks/singletons.a42a8718.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/entry/app.30b3025b.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/entry/_layout.svelte.1d44b441.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/entry/_layout.ts.984db11e.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/chunks/_layout.da46b06b.js">
+		<link rel="modulepreload" href="./svelte-prosemirror/_app/immutable/entry/_page.svelte.2c878223.js">
+  </head>
+
+  <body>
+    <div id="svelte">
+
+
+<section class="p-4 h-full m-auto lg:container md:p-16 md:pt-8 xs:p-8 rounded-2xl"><header class="flex flex-col items-center mt-8"><h1 class="my-3 text-5xl font-bold flex items-center hover:underline"><a href="https://github.com/TeemuKoivisto/svelte-prosemirror">svelte-to-prosemirror</a></h1>
+    <div class="mt-6"></div></header>
+  <main class="svelte-1io7wqh"><fieldset class="svelte-1io7wqh"><legend>Props</legend>
+      <div><label for="documentId" class="svelte-1io7wqh">Document id</label>
+        <input id="documentId" value="abcd1234"></div></fieldset>
+    <div></div></main>
+</section>
+
+
+			
+			<script>
+				{
+					__sveltekit_ua0784 = {
+						env: {},
+						assets: "/svelte-prosemirror",
+						base: new URL("./svelte-prosemirror", location).pathname,
+						element: document.currentScript.parentElement
+					};
+
+					const data = [null,null];
+
+					Promise.all([
+						import("./svelte-prosemirror/_app/immutable/entry/start.df03641f.js"),
+						import("./svelte-prosemirror/_app/immutable/entry/app.30b3025b.js")
+					]).then(([kit, app]) => {
+						kit.start(app, __sveltekit_ua0784.element, {
+							node_ids: [0, 2],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
