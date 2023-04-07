@@ -16,9 +16,8 @@
   ],
   "scripts": {
     "install": "svelte-kit sync || true",
-    "build:pkg": "svelte-package",
-    "watch": "svelte-package --watch",
-    "build": "vite build"
+    "build": "svelte-package",
+    "watch": "svelte-package --watch"
   },
   "devDependencies": {
     "@my-org/core": "workspace:*",
