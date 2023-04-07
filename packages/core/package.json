@@ -17,7 +17,8 @@
     "watch": "rimraf dist && vite build --watch",
     "buildr": "rimraf dist && rollup -c",
     "watchr": "rimraf dist && rollup -cw",
-    "test": "vitest"
+    "testd": "vitest",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
