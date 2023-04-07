@@ -19,7 +19,7 @@ export default {
       lib: './src/lib'
     },
     paths: {
-      base: GH_PAGES ? '/svelte-prosemirror' : undefined
+      // base: GH_PAGES ? '/svelte-prosemirror' : undefined
     },
     adapter: adapter({
       // default options are shown
