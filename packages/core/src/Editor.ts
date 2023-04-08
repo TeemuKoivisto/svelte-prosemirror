@@ -29,7 +29,7 @@ export class Editor {
     return this
   }
 
-  get view(): ViewProvider {
+  get viewProvider(): ViewProvider {
     return this.ctx.viewProvider
   }
 
@@ -70,7 +70,7 @@ export class Editor {
     this.editorView?.destroy()
   }
 
-  static make() {
-    return new Editor()
+  static create(props: EditorProps, dom: HTMLElement) {
+    return new Editor().setProps(props).create(dom)
   }
 }

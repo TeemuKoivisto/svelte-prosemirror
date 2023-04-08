@@ -18,10 +18,10 @@ export const editorActions = {
       const existing = localStorage.getItem(STATE_STORAGE_KEY)
       const yjsExt = e.extProvider.getExtension('yjs')
       if (existing && !yjsExt) {
-        e.view.setState(JSON.parse(existing))
+        e.viewProvider.setState(JSON.parse(existing))
       }
     } catch (err) {}
-    e.view.state.subscribe(s => {
+    e.viewProvider.state.subscribe(s => {
       state.set(s)
       const newState = s?.toJSON()
       localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(newState))

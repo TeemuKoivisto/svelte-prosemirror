@@ -22,13 +22,7 @@
 
   function editor(dom: HTMLElement) {
     const props: EditorProps = {
-      extensions: [
-        paragraphExtension(),
-        figureExtension(),
-        equationExtension(),
-        exampleSetupExtension({ history: false }),
-        marksExtension()
-      ],
+      extensions: [paragraphExtension(), figureExtension(), equationExtension(), marksExtension()],
       onEditorReady: handleEditorReady
     }
     if (YJS_URL) {
@@ -46,15 +40,18 @@
           ws_url: YJS_URL
         })
       )
+      props.extensions?.push(exampleSetupExtension({ noHistory: true }))
+    } else {
+      props.extensions?.push(exampleSetupExtension())
     }
-    instance = Editor.make().setProps(props).create(dom)
+    instance = Editor.create(props, dom)
     editorActions.setEditor(instance)
   }
 
   function handleEditorReady(ctx: EditorContext) {}
 
   function handleInsertFigure() {
-    instance?.view.execCommand((state, dispatch) => {
+    instance?.viewProvider.execCommand((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
@@ -75,7 +72,7 @@
   }
 
   function handleInsertEquation() {
-    instance?.view.execCommand((state, dispatch) => {
+    instance?.viewProvider.execCommand((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes

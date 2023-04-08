@@ -8,26 +8,29 @@ import { Schema } from 'prosemirror-model'
 import 'prosemirror-state'
 
 import type { Extension, EditorContext } from '@my-org/core'
+import type { Plugin } from 'prosemirror-state'
 
 interface Options {
-  history?: boolean
+  noHistory?: boolean
 }
 
-export const exampleSetupExtension = (opts: Options) => (ctx: EditorContext) => {
-  return {
-    name: 'example-setup' as const,
-    plugins(schema: Schema) {
-      const list = [
-        buildInputRules(schema),
-        keymap(buildKeymap(schema)),
-        keymap(baseKeymap),
-        dropCursor(),
-        gapCursor()
-      ]
-      if (opts.history) {
-        list.push(history())
+export const exampleSetupExtension =
+  (opts: Options = {}) =>
+  (ctx: EditorContext) => {
+    return {
+      name: 'example-setup' as const,
+      plugins(schema: Schema): Plugin[] {
+        const list = [
+          buildInputRules(schema),
+          keymap(buildKeymap(schema)),
+          keymap(baseKeymap),
+          dropCursor(),
+          gapCursor()
+        ]
+        if (!opts.noHistory) {
+          list.push(history())
+        }
+        return list
       }
-      return list
-    }
-  } satisfies Extension
-}
+    } satisfies Extension
+  }

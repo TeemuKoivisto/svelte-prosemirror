@@ -27,12 +27,12 @@
   function handleIconClick(title: IconType) {
     switch (title) {
       case 'bold':
-        editor?.view.execCommand((state, dispatch, view) => {
-          toggleMark(state.schema.marks.bold)(state, dispatch, view)
+        editor?.viewProvider.execCommand((state, ...rest) => {
+          toggleMark(state.schema.marks.bold)(state, ...rest)
         })
         return
       case 'italic':
-        editor?.view.execCommand((state, ...rest) => {
+        editor?.viewProvider.execCommand((state, ...rest) => {
           toggleMark(state.schema.marks.italic)(state, ...rest)
         })
         return

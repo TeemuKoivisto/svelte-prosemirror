@@ -2,6 +2,7 @@ import { keymap } from 'prosemirror-keymap'
 import { redo, undo, yCursorPlugin, ySyncPlugin, yUndoPlugin } from 'y-prosemirror'
 import { Awareness } from 'y-protocols/awareness'
 
+import type { Plugin } from 'prosemirror-state'
 import type { Extension, EditorContext } from '@my-org/core'
 
 import * as commands from './commands'
@@ -19,7 +20,7 @@ export const yjsExtension = (opts: YjsOptions) => (ctx: EditorContext) => {
       'Mod-y': redo,
       'Mod-Shift-z': redo
     },
-    plugins() {
+    plugins(): Plugin[] {
       return [
         ySyncPlugin(store.yXmlFragment, {
           permanentUserData: store.permanentUserData,
