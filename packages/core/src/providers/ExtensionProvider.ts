@@ -115,13 +115,7 @@ export class ExtensionProvider {
   }
 
   getExtension<K extends keyof Extensions>(name: K) {
-    const ext = get(this.extensions).find(e => e.name === name)
-    if (!ext) {
-      throw Error(
-        `@my-org/core: No extension "${name}" found, are you sure you provided it to the Editor?`
-      )
-    }
-    return ext as Extensions[K]
+    return get(this.extensions).find(e => e.name === name) as Extensions[K] | undefined
   }
 
   destroy() {

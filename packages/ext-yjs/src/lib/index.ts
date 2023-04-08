@@ -3,7 +3,7 @@ import { yjsExtensionName } from './types'
 
 declare module '@my-org/core' {
   interface Extensions {
-    [yjsExtensionName]: ReturnType<typeof yjsExtension>
+    [yjsExtensionName]: ReturnType<ReturnType<typeof yjsExtension>>
   }
 }
 
