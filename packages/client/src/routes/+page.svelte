@@ -48,7 +48,7 @@
   function handleEditorReady() {}
 
   function handleInsertFigure() {
-    editor?.viewProvider.execCommand((state, dispatch) => {
+    editor?.cmd((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
@@ -69,7 +69,7 @@
   }
 
   function handleInsertEquation() {
-    editor?.viewProvider.execCommand((state, dispatch) => {
+    editor?.cmd((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes

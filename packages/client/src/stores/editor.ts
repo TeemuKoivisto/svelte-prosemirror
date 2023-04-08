@@ -12,16 +12,16 @@ export const state = writable<EditorState | undefined>()
 export const activeMarks = derived(state, s => (s ? getActiveMarks(s) : []))
 
 export const editorActions = {
-  setEditor(e: Editor) {
-    editor = e
+  setEditor(instance: Editor) {
+    editor = instance
     try {
       const existing = localStorage.getItem(STATE_STORAGE_KEY)
-      const yjsExt = e.extProvider.getExtension('yjs')
+      const yjsExt = instance.getExtension('yjs')
       if (existing && !yjsExt) {
-        e.viewProvider.setState(JSON.parse(existing))
+        instance.setState(JSON.parse(existing))
       }
     } catch (err) {}
-    e.viewProvider.state.subscribe(s => {
+    instance.state.subscribe(s => {
       state.set(s)
       const newState = s?.toJSON()
       localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(newState))
