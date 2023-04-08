@@ -2,10 +2,13 @@
   import { Editor } from '@my-org/core'
   import { Context } from '@my-org/editor'
 
+  import { editorActions } from '$stores/editor'
+
   import { paragraphExtension } from '@my-org/ext-paragraph'
   import { figureExtension } from '@my-org/ext-figure'
   import { equationExtension } from '@my-org/ext-equation'
   import { exampleSetupExtension } from '@my-org/ext-example-setup'
+  import { marksExtension } from '@my-org/ext-marks'
   import { yjsExtension } from '@my-org/ext-yjs'
 
   import { YJS_URL } from '$config'
@@ -21,7 +24,8 @@
         paragraphExtension(),
         figureExtension(),
         equationExtension(),
-        exampleSetupExtension({ history: false })
+        exampleSetupExtension({ history: false }),
+        marksExtension()
       ],
       onEditorReady: handleEditorReady
     }
@@ -42,6 +46,7 @@
       )
     }
     instance = Editor.make().setProps(props).create(dom)
+    editorActions.setEditor(instance)
   }
 
   function handleEditorReady(ctx: EditorContext) {}
@@ -104,15 +109,17 @@
       <button class="btn" on:click={handleInsertFigure}>Insert figure</button>
       <button class="btn" on:click={handleInsertEquation}>Insert equation</button>
     </fieldset>
-    <div use:editor />
+    <div class="editor">
+      <div use:editor />
+    </div>
   </main>
 </section>
 
 <style lang="scss">
   main {
     margin: 40px auto 0 auto;
-    max-width: 680px;
-    padding-bottom: 20px;
+    size: A4 portrait;
+    @apply flex flex-col items-center w-full;
   }
   fieldset {
     margin: 1rem 0;
@@ -123,14 +130,17 @@
   .btn {
     @apply bg-gray-200 py-1 px-2 rounded hover:bg-gray-300;
   }
+  .editor {
+    max-width: 50rem;
+    @apply bg-white rounded w-full;
+  }
   :global(.ProseMirror) {
-    border: 1px solid black;
+    border-top: 0;
     min-height: 140px;
     overflow-wrap: break-word;
     outline: none;
-    padding: 10px;
     white-space: pre-wrap;
-    max-width: 600px;
     width: 100%;
+    @apply p-4;
   }
 </style>

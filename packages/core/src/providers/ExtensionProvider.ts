@@ -1,11 +1,12 @@
 import { chainCommands } from 'prosemirror-commands'
 import { keymap } from 'prosemirror-keymap'
-import { NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
-import type { Command, Plugin } from 'prosemirror-state'
+import { MarkSpec, NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
+import type { Plugin } from 'prosemirror-state'
 import { NodeViewConstructor } from 'prosemirror-view'
 import { get, writable } from 'svelte/store'
 
 import type {
+  Command,
   Commands,
   EditorContext,
   EditorProps,
@@ -31,60 +32,64 @@ export class ExtensionProvider {
       created.reduce((acc, ext) => Object.assign(acc, ext.commands), {} as Commands)
     )
 
-    const sortedKeymaps = created.reduce((acc, cur) => {
-      Object.keys(cur.keymaps || {}).forEach(key => {
-        const val = cur.keymaps![key]
+    const extData: {
+      marks: { [name: string]: MarkSpec }
+      nodes: { [name: string]: NodeSpec }
+      nodeViews: { [node: string]: NodeViewConstructor }
+      sortedKeymaps: { [key: string]: { cmd: Command; priority: number }[] }
+      svelteNodes: { [name: string]: SveltePMNode }
+    } = {
+      marks: {},
+      nodes: {},
+      nodeViews: {},
+      sortedKeymaps: {},
+      svelteNodes: {}
+    }
+
+    for (const key in created) {
+      const ext = created[key]
+      for (const name in ext.keymaps) {
+        const val = ext.keymaps[name]
         const cmd = Array.isArray(val) ? val : [{ cmd: val, priority: 0 }]
-        if (key in acc) {
-          // @ts-ignore
-          acc[key] = [...acc[key], ...cmd].sort((a, b) => b.priority - a.priority)
+        cmd.sort((a, b) => b.priority - a.priority)
+        if (name in extData.sortedKeymaps) {
+          extData.sortedKeymaps[name] = [...extData.sortedKeymaps[key], ...cmd].sort(
+            (a, b) => b.priority - a.priority
+          )
         } else {
-          // @ts-ignore
-          acc[key] = cmd.sort((a, b) => b.priority - a.priority)
+          extData.sortedKeymaps[name] = cmd
         }
-      })
-      return acc
-    }, {} as { [key: string]: { cmd: Command; priority: number }[] })
-
-    const nodes = created.reduce((acc, ext) => {
-      if (ext.nodes) {
-        Object.keys(ext.nodes).forEach(name => {
-          if (name in acc) {
-            throw Error(`@my-org/core: duplicate nodes provided from extensions: ${name}`)
-          }
-          // @ts-ignore
-          acc[name] = ext.nodes[name]
-        })
       }
-      return acc
-    }, {} as { [name: string]: SveltePMNode })
-    // console.log('nodes', nodes)
+      for (const name in ext.nodes) {
+        if (name in extData.svelteNodes) {
+          throw Error(`@my-org/core: duplicate node "${name}" provided from extension ${key}`)
+        }
+        const value = ext.nodes[name]
+        extData.svelteNodes[name] = value
+        extData.nodes[name] = createNodeSpec(value)
+        if (value.nodeView) {
+          extData.nodeViews[name] = SvelteNodeView.fromComponent(ctx, value.nodeView)
+        }
+      }
+      for (const name in ext.marks) {
+        if (name in extData.marks) {
+          throw Error(`@my-org/core: duplicate mark "${name}" provided from extension ${key}`)
+        }
+        extData.marks[name] = ext.marks[name]
+      }
+    }
 
-    const defaultSchema = {
+    const schema = new Schema({
       nodes: {
         doc: {
           content: 'block+'
         },
         text: {
           group: 'inline'
-        }
-      }
-    }
-
-    const nodeViews = {} as { [node: string]: NodeViewConstructor }
-    const schemaNodes = Object.entries(nodes).reduce((acc, [name, value]) => {
-      acc[name] = createNodeSpec(value)
-      if (value.nodeView) {
-        nodeViews[name] = SvelteNodeView.fromComponent(ctx, value.nodeView)
-      }
-      return acc
-    }, {} as { [name: string]: NodeSpec })
-
-    const schema = new Schema({
-      nodes: {
-        ...defaultSchema.nodes,
-        ...schemaNodes
-      }
+        },
+        ...extData.nodes
+      },
+      marks: extData.marks
     })
 
     // console.log('nodes 2', schemaNodes)
@@ -106,7 +111,7 @@ export class ExtensionProvider {
 
     this.plugins.set(plugins)
     this.schema.set(schema)
-    this.nodeViews.set(nodeViews)
+    this.nodeViews.set(extData.nodeViews)
   }
 
   getExtension<K extends keyof Extensions>(name: K) {

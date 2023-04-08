@@ -36,6 +36,7 @@
     "@my-org/ext-equation": "workspace:*",
     "@my-org/ext-example-setup": "workspace:*",
     "@my-org/ext-figure": "workspace:*",
+    "@my-org/ext-marks": "workspace:*",
     "@my-org/ext-paragraph": "workspace:*",
     "@my-org/ext-yjs": "workspace:*",
     "@my-org/types": "workspace:*",
