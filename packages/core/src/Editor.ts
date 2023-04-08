@@ -26,6 +26,7 @@ export class Editor {
       viewProvider: new ViewProvider(),
       extProvider: new ExtensionProvider()
     }
+    return this
   }
 
   get view(): ViewProvider {
