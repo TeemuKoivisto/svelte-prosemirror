@@ -6,41 +6,52 @@
   import { figureExtension } from '@my-org/ext-figure'
   import { equationExtension } from '@my-org/ext-equation'
   import { exampleSetupExtension } from '@my-org/ext-example-setup'
+  import { yjsExtension } from '@my-org/ext-yjs'
 
-  import type { EditorContext } from '@my-org/core'
+  import { YJS_URL } from '$config'
+
+  import type { EditorContext, EditorProps } from '@my-org/core'
 
   let documentId = 'abcd1234'
   let instance: Editor
 
   function editor(dom: HTMLElement) {
-    instance = Editor.make()
-      .setProps({
-        extensions: [
-          paragraphExtension(),
-          figureExtension(),
-          equationExtension(),
-          exampleSetupExtension()
-        ],
-        onEditorReady: handleEditorReady
-      })
-      .create(dom)
+    const props: EditorProps = {
+      extensions: [
+        paragraphExtension(),
+        figureExtension(),
+        equationExtension(),
+        exampleSetupExtension({ history: false })
+      ],
+      onEditorReady: handleEditorReady
+    }
+    if (YJS_URL) {
+      props.extensions?.push(
+        yjsExtension({
+          document: {
+            id: 'docId126'
+          },
+          user: {
+            id: 'id-john-123',
+            name: 'John',
+            clientID: 1,
+            color: '#ff3354'
+          },
+          ws_url: YJS_URL
+        })
+      )
+    }
+    instance = Editor.make().setProps(props).create(dom)
   }
 
-  function handleEditorReady(ctx: EditorContext) {
-    ctx.viewProvider.execCommand((state, dispatch) => {
+  function handleEditorReady(ctx: EditorContext) {}
+
+  function handleInsertFigure() {
+    instance?.view.execCommand((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
       tr.insert(2, nodes.paragraph.createAndFill() as any)
-      tr.insert(
-        1,
-        nodes.equation.createAndFill(
-          {
-            latex: 'a^2 = \\sqrt{b^2 + c^2}'
-          },
-          schema.text('Mah equation')
-        ) as any
-      )
       tr.insert(
         1,
         nodes.figure.create(undefined, [
@@ -51,6 +62,25 @@
           }),
           nodes.figcaption.create(undefined, schema.text('Happy trees :)'))
         ])
+      )
+      dispatch && dispatch(tr)
+    })
+  }
+
+  function handleInsertEquation() {
+    instance?.view.execCommand((state, dispatch) => {
+      const tr = state.tr
+      const { schema } = state
+      const nodes = schema.nodes
+      tr.insert(2, nodes.paragraph.createAndFill() as any)
+      tr.insert(
+        1,
+        nodes.equation.create(
+          {
+            latex: 'a^2 = \\sqrt{b^2 + c^2}'
+          },
+          schema.text('Mah equation')
+        )
       )
       dispatch && dispatch(tr)
     })
@@ -71,6 +101,8 @@
         <label for="documentId">Document id</label>
         <input bind:value={documentId} id="documentId" />
       </div>
+      <button class="btn" on:click={handleInsertFigure}>Insert figure</button>
+      <button class="btn" on:click={handleInsertEquation}>Insert equation</button>
     </fieldset>
     <div use:editor />
   </main>
@@ -87,6 +119,9 @@
   }
   label {
     margin-right: 0.75rem;
+  }
+  .btn {
+    @apply bg-gray-200 py-1 px-2 rounded hover:bg-gray-300;
   }
   :global(.ProseMirror) {
     border: 1px solid black;

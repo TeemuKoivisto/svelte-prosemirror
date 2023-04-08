@@ -23,7 +23,7 @@ export interface SveltePMNode {
 export interface Extension {
   name: string
   opts?: any
-  commands?: { [key: string]: Command }
+  commands?: { [name: string]: (...args: any[]) => Command }
   keymaps?: { [key: string]: Command | { cmd: Command; priority: number }[] }
   store?: Record<string, any>
   nodes?: {
@@ -31,7 +31,7 @@ export interface Extension {
   }
   init?: (ctx: EditorContext) => void
   plugins?: (schema: Schema) => Plugin[]
-  onDestroy?: () => void
+  destroy?: () => void
 }
 
 // This interface is augmented by all the other extensions in order to generate type-safe access to their

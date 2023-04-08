@@ -37,6 +37,7 @@
     "@my-org/ext-example-setup": "workspace:*",
     "@my-org/ext-figure": "workspace:*",
     "@my-org/ext-paragraph": "workspace:*",
+    "@my-org/ext-yjs": "workspace:*",
     "@my-org/types": "workspace:*",
     "@iconify/svelte": "^3.0.1",
     "autoprefixer": "^10.4.13",

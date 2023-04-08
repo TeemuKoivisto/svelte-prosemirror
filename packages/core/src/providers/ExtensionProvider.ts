@@ -120,6 +120,6 @@ export class ExtensionProvider {
   }
 
   destroy() {
-    get(this.extensions).forEach(e => e.onDestroy && e.onDestroy())
+    get(this.extensions).forEach(e => e.destroy && e.destroy())
   }
 }
