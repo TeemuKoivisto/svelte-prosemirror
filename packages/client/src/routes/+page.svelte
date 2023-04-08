@@ -11,6 +11,8 @@
   import { marksExtension } from '@my-org/ext-marks'
   import { yjsExtension } from '@my-org/ext-yjs'
 
+  import Toolbar from '$components/Toolbar.svelte'
+
   import { YJS_URL } from '$config'
 
   import type { EditorContext, EditorProps } from '@my-org/core'
@@ -100,16 +102,17 @@
     <div class="mt-6" />
   </header>
   <main>
-    <fieldset>
+    <fieldset class="bg-white p-4">
       <legend>Props</legend>
-      <div>
+      <div class="mb-4">
         <label for="documentId">Document id</label>
-        <input bind:value={documentId} id="documentId" />
+        <input class="bg-gray-100 rounded" bind:value={documentId} id="documentId" />
       </div>
       <button class="btn" on:click={handleInsertFigure}>Insert figure</button>
       <button class="btn" on:click={handleInsertEquation}>Insert equation</button>
     </fieldset>
     <div class="editor">
+      <Toolbar />
       <div use:editor />
     </div>
   </main>
