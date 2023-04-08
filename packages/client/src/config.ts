@@ -13,8 +13,8 @@ const parseInteger = (env?: string) => {
   return undefined
 }
 
-export const getPrefixedWS_URL = (url: string) => {
-  if (url.slice(0, 2) !== 'ws' && typeof window !== 'undefined') {
+export const getPrefixedWS_URL = (url?: string) => {
+  if (url && url.slice(0, 2) !== 'ws' && typeof window !== 'undefined') {
     return `ws://${window.location.host}${url.charAt(0) !== '/' ? '/' : ''}${url}`
   }
   return url
