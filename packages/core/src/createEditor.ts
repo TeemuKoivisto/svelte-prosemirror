@@ -2,30 +2,30 @@ import { EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { get } from 'svelte/store'
 
-import type { EditorProps, EditorContext } from './typings'
+import type { Editor, EditorProps } from './typings'
 
-export function createEditorState(ctx: EditorContext) {
+export function createEditorState(editor: Editor) {
   return EditorState.create({
-    schema: get(ctx.extProvider.schema),
-    plugins: get(ctx.extProvider.plugins)
+    schema: get(editor.extProvider.schema),
+    plugins: get(editor.extProvider.plugins)
   })
 }
 
 export function createEditorView(
   element: HTMLElement,
   state: EditorState,
-  ctx: EditorContext,
+  editor: Editor,
   props: EditorProps
 ) {
   return new EditorView(
     { mount: element },
     {
       state,
-      nodeViews: get(ctx.extProvider.nodeViews),
+      nodeViews: get(editor.extProvider.nodeViews),
       dispatchTransaction(tr: Transaction) {
         const oldEditorState = this.state
         const { state: newState } = oldEditorState.applyTransaction(tr)
-        ctx.viewProvider.setState(newState)
+        editor.viewProvider.setState(newState)
         props.onEdit && props.onEdit(newState)
       }
     }
@@ -34,12 +34,12 @@ export function createEditorView(
 
 export function init(
   element: HTMLElement,
-  ctx: EditorContext,
+  editor: Editor,
   props: EditorProps,
   oldView?: EditorView
 ) {
-  const state = createEditorState(ctx)
-  const view = oldView || createEditorView(element, state, ctx, props)
+  const state = createEditorState(editor)
+  const view = oldView || createEditorView(element, state, editor, props)
   if (oldView) {
     view.setProps({
       state,
@@ -47,16 +47,12 @@ export function init(
         if (!this.state) return
         const oldEditorState = this.state
         const newState = oldEditorState.apply(tr)
-        ctx.viewProvider.setState(newState)
+        editor.viewProvider.setState(newState)
         props.onEdit && props.onEdit(newState)
       }
     })
   }
-  // if (window) {
-  //   window.editorView = view
-  //   window.commands = get(ctx.extProvider.commands)
-  // }
-  ctx.viewProvider.setView(view)
-  props.onEditorReady && props.onEditorReady(ctx)
+  editor.viewProvider.setView(view)
+  props.onEditorReady && props.onEditorReady(editor)
   return view
 }

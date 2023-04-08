@@ -1,8 +1,7 @@
 <script lang="ts">
   import { Editor } from '@my-org/core'
-  import { Context } from '@my-org/editor'
 
-  import { editorActions } from '$stores/editor'
+  import { editor, editorActions } from '$stores/editor'
 
   import { paragraphExtension } from '@my-org/ext-paragraph'
   import { figureExtension } from '@my-org/ext-figure'
@@ -15,12 +14,11 @@
 
   import { YJS_URL } from '$config'
 
-  import type { EditorContext, EditorProps } from '@my-org/core'
+  import type { EditorProps } from '@my-org/core'
 
   let documentId = 'abcd1234'
-  let instance: Editor
 
-  function editor(dom: HTMLElement) {
+  function editor_action(dom: HTMLElement) {
     const props: EditorProps = {
       extensions: [paragraphExtension(), figureExtension(), equationExtension(), marksExtension()],
       onEditorReady: handleEditorReady
@@ -44,14 +42,13 @@
     } else {
       props.extensions?.push(exampleSetupExtension())
     }
-    instance = Editor.create(props, dom)
-    editorActions.setEditor(instance)
+    editorActions.setEditor(Editor.create(props, dom))
   }
 
-  function handleEditorReady(ctx: EditorContext) {}
+  function handleEditorReady() {}
 
   function handleInsertFigure() {
-    instance?.viewProvider.execCommand((state, dispatch) => {
+    editor?.viewProvider.execCommand((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
@@ -72,7 +69,7 @@
   }
 
   function handleInsertEquation() {
-    instance?.viewProvider.execCommand((state, dispatch) => {
+    editor?.viewProvider.execCommand((state, dispatch) => {
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
@@ -110,7 +107,7 @@
     </fieldset>
     <div class="editor">
       <Toolbar />
-      <div use:editor />
+      <div use:editor_action />
     </div>
   </main>
 </section>

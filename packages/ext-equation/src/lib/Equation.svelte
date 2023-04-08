@@ -52,7 +52,7 @@
   import { Node as PMNode } from 'prosemirror-model'
   import type { EditorView } from 'prosemirror-view'
   import { onMount } from 'svelte'
-  import { EditorContext } from '@my-org/core'
+  import { Editor } from '@my-org/core'
 
   import 'katex/dist/katex.min.css'
 
@@ -61,7 +61,7 @@
     selected: boolean | undefined,
     view: EditorView,
     getPos: () => number,
-    ctx: EditorContext
+    editor: Editor
 
   let codemirrorEl: HTMLElement
   let katexEl: HTMLElement

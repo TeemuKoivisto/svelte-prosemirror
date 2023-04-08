@@ -1,14 +1,14 @@
 {
   "name": "@my-org/ext-paragraph",
   "version": "0.0.1",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "package/index.js",
+  "module": "package/index.js",
   "svelte": "package/index.js",
   "type": "module",
   "types": "package/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./dist/index.js"
+    ".": "./package/index.js"
   },
   "files": [
     "dist",

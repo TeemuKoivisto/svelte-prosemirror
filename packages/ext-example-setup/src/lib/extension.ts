@@ -7,30 +7,28 @@ import { gapCursor } from 'prosemirror-gapcursor'
 import { Schema } from 'prosemirror-model'
 import 'prosemirror-state'
 
-import type { Extension, EditorContext } from '@my-org/core'
+import type { Editor, Extension } from '@my-org/core'
 import type { Plugin } from 'prosemirror-state'
 
 interface Options {
   noHistory?: boolean
 }
 
-export const exampleSetupExtension =
-  (opts: Options = {}) =>
-  (ctx: EditorContext) => {
-    return {
-      name: 'example-setup' as const,
-      plugins(schema: Schema): Plugin[] {
-        const list = [
-          buildInputRules(schema),
-          keymap(buildKeymap(schema)),
-          keymap(baseKeymap),
-          dropCursor(),
-          gapCursor()
-        ]
-        if (!opts.noHistory) {
-          list.push(history())
-        }
-        return list
+export const exampleSetupExtension = (opts: Options = {}) => {
+  return {
+    name: 'example-setup' as const,
+    plugins(_, schema: Schema): Plugin[] {
+      const list = [
+        buildInputRules(schema),
+        keymap(buildKeymap(schema)),
+        keymap(baseKeymap),
+        dropCursor(),
+        gapCursor()
+      ]
+      if (!opts.noHistory) {
+        list.push(history())
       }
-    } satisfies Extension
-  }
+      return list
+    }
+  } satisfies Extension
+}

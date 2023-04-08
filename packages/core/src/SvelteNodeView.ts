@@ -8,7 +8,7 @@ import type {
 } from 'prosemirror-view'
 
 import type { SvelteComponentTyped } from 'svelte'
-import type { EditorContext } from './typings'
+import type { Editor } from './typings'
 
 export interface SvelteNodeViewProps {
   node: PMNode
@@ -18,7 +18,7 @@ export interface SvelteNodeViewProps {
   getPos: () => number
   decorations: readonly Decoration[]
   innerDecorations: DecorationSource
-  ctx: EditorContext
+  editor: Editor
 }
 
 export class SvelteNodeView implements NodeView {
@@ -30,7 +30,7 @@ export class SvelteNodeView implements NodeView {
   innerDecorations: DecorationSource
 
   selected: boolean | undefined
-  ctx: EditorContext
+  editor: Editor
   component: SvelteComponentTyped<{}>
   #mounted?: SvelteComponentTyped
 
@@ -40,14 +40,14 @@ export class SvelteNodeView implements NodeView {
     readonly getPos: () => number,
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource,
-    ctx: EditorContext,
+    editor: Editor,
     component: SvelteComponentTyped<SvelteNodeViewProps>
   ) {
     this.node = node
     this.view = view
     this.decorations = decorations
     this.innerDecorations = innerDecorations
-    this.ctx = ctx
+    this.editor = editor
     this.component = component
   }
 
@@ -69,7 +69,7 @@ export class SvelteNodeView implements NodeView {
       getPos: this.getPos,
       decorations: this.decorations,
       innerDecorations: this.innerDecorations,
-      ctx: this.ctx
+      editor: this.editor
     }
   }
 
@@ -138,7 +138,7 @@ export class SvelteNodeView implements NodeView {
   ignoreMutation = () => true
 
   static fromComponent(
-    ctx: EditorContext,
+    editor: Editor,
     component: SvelteComponentTyped<SvelteNodeViewProps>
   ): NodeViewConstructor {
     return (
@@ -147,6 +147,6 @@ export class SvelteNodeView implements NodeView {
       getPos: () => number,
       decorations: readonly Decoration[],
       innerDecorations: DecorationSource
-    ) => new this(node, view, getPos, decorations, innerDecorations, ctx, component).init()
+    ) => new this(node, view, getPos, decorations, innerDecorations, editor, component).init()
   }
 }

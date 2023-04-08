@@ -8,9 +8,8 @@ import { get, writable } from 'svelte/store'
 import type {
   Command,
   Commands,
-  EditorContext,
+  Editor,
   EditorProps,
-  CreateExtension,
   Extension,
   Extensions,
   SveltePMNode
@@ -25,29 +24,24 @@ export class ExtensionProvider {
   schema = writable<Schema>()
   nodeViews = writable<{ [node: string]: NodeViewConstructor }>({})
 
-  init(ctx: EditorContext, props: EditorProps) {
-    const created = (props.extensions || []).map(ext => ext(ctx, props))
-    this.extensions.set(created)
-    this.commands.set(
-      created.reduce((acc, ext) => Object.assign(acc, ext.commands), {} as Commands)
-    )
-
+  init(editor: Editor, { extensions = [] }: EditorProps) {
     const extData: {
+      commands: { [name: string]: (...args: any[]) => Command }
       marks: { [name: string]: MarkSpec }
       nodes: { [name: string]: NodeSpec }
       nodeViews: { [node: string]: NodeViewConstructor }
       sortedKeymaps: { [key: string]: { cmd: Command; priority: number }[] }
       svelteNodes: { [name: string]: SveltePMNode }
     } = {
+      commands: {},
       marks: {},
       nodes: {},
       nodeViews: {},
       sortedKeymaps: {},
       svelteNodes: {}
     }
-
-    for (const key in created) {
-      const ext = created[key]
+    for (const key in extensions) {
+      const ext = extensions[key]
       for (const name in ext.keymaps) {
         const val = ext.keymaps[name]
         const cmd = Array.isArray(val) ? val : [{ cmd: val, priority: 0 }]
@@ -68,7 +62,7 @@ export class ExtensionProvider {
         extData.svelteNodes[name] = value
         extData.nodes[name] = createNodeSpec(value)
         if (value.nodeView) {
-          extData.nodeViews[name] = SvelteNodeView.fromComponent(ctx, value.nodeView)
+          extData.nodeViews[name] = SvelteNodeView.fromComponent(editor, value.nodeView)
         }
       }
       for (const name in ext.marks) {
@@ -76,6 +70,9 @@ export class ExtensionProvider {
           throw Error(`@my-org/core: duplicate mark "${name}" provided from extension ${key}`)
         }
         extData.marks[name] = ext.marks[name]
+      }
+      if (ext.commands) {
+        extData.commands = { ...extData.commands, ...ext.commands }
       }
     }
 
@@ -103,15 +100,24 @@ export class ExtensionProvider {
     const plugins = [
       // @TODO creates duplicate plugin keys
       // keymap(keymaps),
-      ...created.reduce(
-        (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(schema)) || [])],
+      ...extensions.reduce(
+        (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, schema)) || [])],
         [] as Plugin[]
       )
     ]
-
+    this.commands.set(extData.commands)
+    this.extensions.set(extensions)
     this.plugins.set(plugins)
     this.schema.set(schema)
     this.nodeViews.set(extData.nodeViews)
+  }
+
+  initExtensions(editor: Editor) {
+    const extensions = get(this.extensions)
+    for (const name in extensions) {
+      const ext = extensions[name]
+      if (ext.init) ext.init(editor)
+    }
   }
 
   getExtension<K extends keyof Extensions>(name: K) {

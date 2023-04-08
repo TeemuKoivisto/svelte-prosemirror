@@ -1,9 +1,10 @@
-import type { CreateExtension, Extension, EditorContext } from '@my-org/core'
 import Figcaption, { figcaptionAttrs, figcaptionSchema } from './Figcaption.svelte'
 import Figure, { figureAttrs, figureSchema } from './Figure.svelte'
 import Image, { imageAttrs, imageSchema } from './Image.svelte'
 
-export const figureExtension = () => (ctx: EditorContext) => {
+import type { Extension } from '@my-org/core'
+
+export const figureExtension = () => {
   return {
     name: 'figure' as const,
     nodes: {

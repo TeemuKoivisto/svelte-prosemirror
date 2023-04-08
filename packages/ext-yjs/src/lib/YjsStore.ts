@@ -4,12 +4,13 @@ import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 import { derived, get, writable } from 'svelte/store'
 
-import type { EditorContext } from '@my-org/core'
 import { createYjsSnapshot } from './createYjsSnapshot'
-import { AwarenessChange, YjsOptions, YjsSnapshot, YjsUser } from './types'
+
+import type { Editor } from '@my-org/core'
+import type { AwarenessChange, YjsOptions, YjsSnapshot, YjsUser } from './types'
 
 export class YjsStore {
-  #ctx: EditorContext
+  #editor: Editor | undefined
   #opts: YjsOptions
 
   ydoc: Y.Doc
@@ -31,8 +32,7 @@ export class YjsStore {
     }, [] as YjsUser[])
   )
 
-  constructor(ctx: EditorContext, opts: YjsOptions) {
-    this.#ctx = ctx
+  constructor(opts: YjsOptions) {
     this.#opts = opts
     const { document, user, initial, ws_url } = opts
     const ydoc = initial?.doc || new Y.Doc()
@@ -45,6 +45,10 @@ export class YjsStore {
     this.yXmlFragment = ydoc.getXmlFragment('pm-doc')
     this.currentUser.set(opts.user)
     this.subscribeToYjs()
+  }
+
+  setEditor(editor: Editor) {
+    this.#editor = editor
   }
 
   subscribeToYjs() {
@@ -95,7 +99,7 @@ export class YjsStore {
       }
     })
     const binding: ProsemirrorBinding | null = ySyncPluginKey.getState(
-      this.#ctx.viewProvider.getState()
+      this.#editor!.viewProvider.getState()
     ).binding
     if (!binding) {
       throw Error('Failed to retrieve ProsemirrorBinding from ySyncPlugin')
@@ -118,7 +122,7 @@ export class YjsStore {
 
   resumeEditing() {
     const binding: ProsemirrorBinding | null = ySyncPluginKey.getState(
-      this.#ctx.viewProvider.getState()
+      this.#editor!.viewProvider.getState()
     ).binding
     if (!binding) {
       throw Error('@ext-yjs: failed to retrieve ProsemirrorBinding from ySyncPlugin')

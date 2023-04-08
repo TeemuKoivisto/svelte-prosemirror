@@ -1,13 +1,14 @@
 import { EditorState } from 'prosemirror-state'
 
-import type { EditorContext } from './context'
+import type { Editor } from '../Editor'
+import type { Extension } from './extension'
 
-import type { CreateExtension } from './extension'
+export type { Editor } from '../Editor'
 
 export interface EditorProps {
-  extensions?: CreateExtension[]
+  extensions?: Extension[]
   // The name of the default top-level node for the schema. Defaults to `"doc"`.
   topNode?: string
-  onEditorReady?: (ctx: EditorContext) => void
+  onEditorReady?: (editor: Editor) => void
   onEdit?: (state: EditorState) => void
 }

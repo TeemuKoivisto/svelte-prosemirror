@@ -10,5 +10,4 @@ declare global {
 
 export { Editor } from './Editor'
 export * from './createEditor'
-export * from './providers'
 export * from './typings'

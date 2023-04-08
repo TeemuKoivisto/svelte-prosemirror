@@ -4,9 +4,9 @@ import { italic } from './italic'
 import { link } from './link'
 import { strikethrough } from './strikethrough'
 
-import type { Extension, EditorContext } from '@my-org/core'
+import type { Extension } from '@my-org/core'
 
-export const marksExtension = () => (ctx: EditorContext) => {
+export const marksExtension = () => {
   return {
     name: 'basic-marks' as const,
     marks: {

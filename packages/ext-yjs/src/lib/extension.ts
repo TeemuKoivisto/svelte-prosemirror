@@ -3,14 +3,14 @@ import { redo, undo, yCursorPlugin, ySyncPlugin, yUndoPlugin } from 'y-prosemirr
 import { Awareness } from 'y-protocols/awareness'
 
 import type { Plugin } from 'prosemirror-state'
-import type { Extension, EditorContext } from '@my-org/core'
+import type { Extension } from '@my-org/core'
 
 import * as commands from './commands'
 import { YjsStore } from './YjsStore'
 import { yjsExtensionName, YjsOptions } from './types'
 
-export const yjsExtension = (opts: YjsOptions) => (ctx: EditorContext) => {
-  const store = new YjsStore(ctx, opts)
+export const yjsExtension = (opts: YjsOptions) => {
+  const store = new YjsStore(opts)
   return {
     name: yjsExtensionName,
     opts,
@@ -19,6 +19,9 @@ export const yjsExtension = (opts: YjsOptions) => (ctx: EditorContext) => {
       'Mod-z': undo,
       'Mod-y': redo,
       'Mod-Shift-z': redo
+    },
+    init(editor) {
+      store.setEditor(editor)
     },
     plugins(): Plugin[] {
       return [

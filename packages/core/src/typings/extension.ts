@@ -2,14 +2,9 @@ import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model'
 import type { Plugin } from 'prosemirror-state'
 import type { SvelteComponentTyped } from 'svelte'
 
-import type { EditorContext } from './context'
+import type { Editor } from '../Editor'
 import type { EditorProps } from './editor'
 import type { Command } from './pm'
-
-export type CreateExtension = (ctx: EditorContext, props: EditorProps) => Extension
-export type CreateExtensionFn = (
-  ...args: any[]
-) => (ctx: EditorContext, props: EditorProps) => Extension
 
 export interface SveltePMNode {
   attrs?: { [attr: string]: any }
@@ -32,11 +27,13 @@ export interface Extension {
   nodes?: {
     [name: string]: SveltePMNode
   }
-  init?: (ctx: EditorContext) => void
-  plugins?: (schema: Schema) => Plugin[]
+  init?: (editor: Editor) => void
+  plugins?: (editor: Editor, schema: Schema) => Plugin[]
   destroy?: () => void
 }
 
 // This interface is augmented by all the other extensions in order to generate type-safe access to their
 // data from ExtensionProvider
 export interface Extensions {}
+
+export interface EditorCommands {}

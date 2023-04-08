@@ -1,7 +1,8 @@
-import type { CreateExtension, Extension, EditorContext } from '@my-org/core'
 import Equation, { equationAttrs, equationSchema } from './Equation.svelte'
 
-export const equationExtension = () => (ctx: EditorContext) => {
+import type { Extension } from '@my-org/core'
+
+export const equationExtension = () => {
   return {
     name: 'equation' as const,
     nodes: {
