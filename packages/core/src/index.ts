@@ -8,6 +8,7 @@ declare global {
   }
 }
 
-export { Editor } from './Editor'
-export * from './createEditor'
+export * from './createExtensions'
+export * from './Editor'
+export * from './SvelteNodeView'
 export * from './typings'

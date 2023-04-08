@@ -1,20 +1,13 @@
-import { EditorState } from 'prosemirror-state'
+import { EditorState, Transaction } from 'prosemirror-state'
 import { get, Writable, writable } from 'svelte/store'
 
-import { createExtensions, init } from './createEditor'
+import { createExtensions } from './createExtensions'
 
 import type { Schema } from 'prosemirror-model'
 import type { Plugin } from 'prosemirror-state'
 import type { NodeViewConstructor } from 'prosemirror-view'
-import type { EditorView } from 'prosemirror-view'
-import type {
-  Command,
-  Commands,
-  EditorProps,
-  Extensions,
-  Initialized,
-  JSONEditorState
-} from './typings'
+import { EditorView } from 'prosemirror-view'
+import type { Command, Commands, EditorProps, Extensions, JSONEditorState } from './typings'
 
 export class Editor {
   #editorView: EditorView | undefined
@@ -22,7 +15,6 @@ export class Editor {
   state = writable<EditorState | undefined>()
   props = writable<EditorProps | undefined>()
   editable = writable<boolean>(true)
-  data = writable<Initialized | undefined>()
   // plugins = writable<Plugin[]>([])
   // commands = writable<Commands>({})
   // schema = writable<Schema>()
@@ -39,10 +31,6 @@ export class Editor {
       )
     }
     return this.#editorView
-  }
-
-  get extensions() {
-    return get(this.props)?.extensions || []
   }
 
   get commands() {
@@ -76,6 +64,10 @@ export class Editor {
       state: () =>
         ({ ...self.editorView.state.toJSON(), plugins: [] } as unknown as JSONEditorState)
     }
+  }
+
+  getExtensions() {
+    return get(this.props)?.extensions || []
   }
 
   cmd(cmd: Command) {
@@ -118,23 +110,55 @@ export class Editor {
   }
 
   getExtension<K extends keyof Extensions>(name: K) {
-    return (get(this.props)?.extensions || []).find(e => e.name === name) as
-      | Extensions[K]
-      | undefined
+    return this.getExtensions().find(e => e.name === name) as Extensions[K] | undefined
   }
 
   config(cb: (editor: Editor) => void) {
+    cb(this)
     return this
   }
 
   create(dom: HTMLElement) {
     const editorProps = get(this.props) ?? {}
     const created = createExtensions(this, editorProps)
-    this.data.set(created)
-    const view = init(dom, this, editorProps ?? {}, this.#editorView)
+    const newState = EditorState.create({
+      schema: created.schema,
+      plugins: created.plugins
+    })
+    const oldView = this.#editorView
+    let view = oldView
+    if (oldView) {
+      const self = this
+      oldView.setProps({
+        state: newState,
+        dispatchTransaction(tr: Transaction) {
+          if (!this.state) return
+          const oldEditorState = this.state
+          const newState = oldEditorState.apply(tr)
+          self.setState(newState)
+          editorProps.onEdit && editorProps.onEdit(newState)
+        }
+      })
+    } else {
+      const self = this
+      view = new EditorView(
+        { mount: dom },
+        {
+          state: newState,
+          nodeViews: created.nodeViews,
+          dispatchTransaction(tr: Transaction) {
+            const oldEditorState = this.state
+            const { state: newState } = oldEditorState.applyTransaction(tr)
+            self.setState(newState)
+            editorProps.onEdit && editorProps.onEdit(newState)
+          }
+        }
+      )
+    }
     this.#editorView = view
-    this.state.set(view.state)
+    this.state.set(view?.state)
     this.initExtensions(this)
+    editorProps.onEditorReady && editorProps.onEditorReady(this)
     return this
   }
 
@@ -145,19 +169,14 @@ export class Editor {
         `@my-org/core: No DOM node to which to mount the editor, has the EditorView already been destroyed?`
       )
     }
-    const editorProps = props ?? get(this.props) ?? {}
-    const created = createExtensions(this, editorProps)
-    this.data.set(created)
-    const view = init(dom, this, editorProps, this.#editorView)
-    this.#editorView = view
-    this.state.set(view.state)
-    this.initExtensions(this)
-    return this
+    if (props) {
+      this.setProps(props)
+    }
+    return this.create(dom)
   }
 
   destroy() {
-    const editorProps = get(this.props)
-    editorProps?.extensions?.forEach(e => {
+    this.getExtensions().forEach(e => {
       if (e.destroy) e.destroy()
     })
     this.#editorView?.destroy()

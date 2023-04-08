@@ -1,50 +1,10 @@
-import { MarkSpec, NodeSpec, Schema, SchemaSpec } from 'prosemirror-model'
-import { EditorView, NodeViewConstructor } from 'prosemirror-view'
-import { EditorState, Plugin, Transaction } from 'prosemirror-state'
-import { get } from 'svelte/store'
+import { Schema } from 'prosemirror-model'
+import { Plugin } from 'prosemirror-state'
 
 import { SvelteNodeView } from './SvelteNodeView'
 import { createNodeSpec } from './extensions/createNodeSpec'
 
-import type {
-  Command,
-  Commands,
-  Editor,
-  EditorProps,
-  ExtensionData,
-  Extension,
-  Extensions,
-  Initialized,
-  SveltePMNode
-} from './typings'
-
-export function createEditorState(editor: Editor) {
-  return EditorState.create({
-    schema: get(editor.data)?.schema,
-    plugins: get(editor.data)?.plugins
-  })
-}
-
-export function createEditorView(
-  element: HTMLElement,
-  state: EditorState,
-  editor: Editor,
-  props: EditorProps
-) {
-  return new EditorView(
-    { mount: element },
-    {
-      state,
-      nodeViews: get(editor.data)?.nodeViews,
-      dispatchTransaction(tr: Transaction) {
-        const oldEditorState = this.state
-        const { state: newState } = oldEditorState.applyTransaction(tr)
-        editor.setState(newState)
-        props.onEdit && props.onEdit(newState)
-      }
-    }
-  )
-}
+import type { Editor, EditorProps, ExtensionData, Initialized } from './typings'
 
 export function createExtensions(editor: Editor, { extensions = [] }: EditorProps): Initialized {
   const extData: ExtensionData = {
@@ -121,28 +81,4 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
     )
   ]
   return { ...extData, plugins, schema }
-}
-
-export function init(
-  element: HTMLElement,
-  editor: Editor,
-  props: EditorProps,
-  oldView?: EditorView
-) {
-  const state = createEditorState(editor)
-  const view = oldView || createEditorView(element, state, editor, props)
-  if (oldView) {
-    view.setProps({
-      state,
-      dispatchTransaction(tr: Transaction) {
-        if (!this.state) return
-        const oldEditorState = this.state
-        const newState = oldEditorState.apply(tr)
-        editor.setState(newState)
-        props.onEdit && props.onEdit(newState)
-      }
-    })
-  }
-  props.onEditorReady && props.onEditorReady(editor)
-  return view
 }
