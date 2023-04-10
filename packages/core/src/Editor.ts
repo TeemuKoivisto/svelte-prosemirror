@@ -1,11 +1,8 @@
 import { EditorState, Transaction } from 'prosemirror-state'
-import { get, Writable, writable } from 'svelte/store'
+import { get, writable } from 'svelte/store'
 
 import { createExtensions } from './createExtensions'
 
-import type { Schema } from 'prosemirror-model'
-import type { Plugin } from 'prosemirror-state'
-import type { NodeViewConstructor } from 'prosemirror-view'
 import { EditorView } from 'prosemirror-view'
 import type { Command, Commands, EditorProps, Extensions, JSONEditorState } from './typings'
 
@@ -15,10 +12,6 @@ export class Editor {
   state = writable<EditorState | undefined>()
   props = writable<EditorProps | undefined>()
   editable = writable<boolean>(true)
-  // plugins = writable<Plugin[]>([])
-  // commands = writable<Commands>({})
-  // schema = writable<Schema>()
-  // nodeViews = writable<{ [node: string]: NodeViewConstructor }>({})
 
   constructor() {
     return this
@@ -101,14 +94,6 @@ export class Editor {
     this.state.set(newState)
   }
 
-  initExtensions(editor: Editor) {
-    const extensions = get(this.props)?.extensions || []
-    for (const name in extensions) {
-      const ext = extensions[name]
-      if (ext.init) ext.init(editor)
-    }
-  }
-
   getExtension<K extends keyof Extensions>(name: K) {
     return this.getExtensions().find(e => e.name === name) as Extensions[K] | undefined
   }
@@ -118,9 +103,8 @@ export class Editor {
     return this
   }
 
-  create(dom: HTMLElement) {
-    const editorProps = get(this.props) ?? {}
-    const created = createExtensions(this, editorProps)
+  create(dom: HTMLElement, props: EditorProps = {}) {
+    const created = createExtensions(this, props)
     const newState = EditorState.create({
       schema: created.schema,
       plugins: created.plugins
@@ -136,7 +120,7 @@ export class Editor {
           const oldEditorState = this.state
           const newState = oldEditorState.apply(tr)
           self.setState(newState)
-          editorProps.onEdit && editorProps.onEdit(newState)
+          props.onEdit && props.onEdit(newState)
         }
       })
     } else {
@@ -148,17 +132,19 @@ export class Editor {
           nodeViews: created.nodeViews,
           dispatchTransaction(tr: Transaction) {
             const oldEditorState = this.state
-            const { state: newState } = oldEditorState.applyTransaction(tr)
+            const newState = oldEditorState.apply(tr)
             self.setState(newState)
-            editorProps.onEdit && editorProps.onEdit(newState)
+            props.onEdit && props.onEdit(newState)
           }
         }
       )
     }
     this.#editorView = view
     this.state.set(view?.state)
-    this.initExtensions(this)
-    editorProps.onEditorReady && editorProps.onEditorReady(this)
+    props.extensions?.forEach(ext => {
+      if (ext.init) ext.init(this)
+    })
+    props.onEditorReady && props.onEditorReady(this)
     return this
   }
 
@@ -182,7 +168,7 @@ export class Editor {
     this.#editorView?.destroy()
   }
 
-  static create(props: EditorProps, dom: HTMLElement) {
-    return new Editor().setProps(props).create(dom)
+  static create(dom: HTMLElement, props?: EditorProps) {
+    return new Editor().create(dom, props)
   }
 }

@@ -42,7 +42,7 @@
     } else {
       props.extensions?.push(exampleSetupExtension())
     }
-    editorActions.setEditor(Editor.create(props, dom))
+    editorActions.setEditor(Editor.create(dom, props))
   }
 
   function handleEditorReady() {}
