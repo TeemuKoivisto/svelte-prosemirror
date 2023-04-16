@@ -152,13 +152,10 @@ export class Editor {
     const dom = this.#editorView?.dom
     if (!dom) {
       throw Error(
-        `@my-org/core: No DOM node to which to mount the editor, has the EditorView already been destroyed?`
+        `@my-org/core: Can't recreate Editor, editorView.dom doesn't exist - has EditorView already been destroyed?`
       )
     }
-    if (props) {
-      this.setProps(props)
-    }
-    return this.create(dom)
+    return this.create(dom, props)
   }
 
   destroy() {

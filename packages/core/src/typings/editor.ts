@@ -7,7 +7,9 @@ export type { Editor } from '../Editor'
 
 export interface EditorProps {
   extensions?: Extension[]
-  // The name of the default top-level node for the schema. Defaults to `"doc"`.
+  /**
+   * The name of the default top-level node for the schema. Defaults to `"doc"`.
+   */
   topNode?: string
   onEditorReady?: (editor: Editor) => void
   onEdit?: (state: EditorState) => void
