@@ -4,6 +4,8 @@ tl:dr; use Svelte for writing ProseMirror nodes (and hide the boilerplate).
 
 I wanted to find out if I can compile Svelte components into ProseMirror nodes and make my life simpler. Submitted to [SvelteHack 2023](https://hack.sveltesociety.dev/)
 
+https://teemukoivisto.github.io/svelte-prosemirror/
+
 ## Long explanation
 
 [ProseMirror](prosemirror.net) is a rich-text editing library which is powerful but also a little bit complicated. One particular issue I find with ProseMirorr is the repetition of boilerplate that I think, in places, could be removed. For example, if you want to create a somewhat complicated node you'll write a schema something like:
@@ -66,11 +68,9 @@ This is the main contribution of this submission to SvelteHack 2023 https://hack
 
 ## Extras
 
-Since I have been crunching this problem for some time now, I also wanted to come up with the simplest editor architecture to divide my ProseMirror editor into extensions. There are many frameworks that do this, such as TipTap or Remirror, but I've long thought it can be made more simple.
+Since I have been crunching this problem for some time now, I also wanted to come up with the simplest editor architecture to divide my ProseMirror editor into extensions. There are many frameworks that do this, such as [TipTap](https://tiptap.dev/) or [Remirror](https://remirror.io/), but I wanted to make something even simpler.
 
-In addition to this, I've made a wrapper to use these Svelte components as extensions as simply as possible. Instead of using classes like all the other contemporaries I'm leveraging the new TypeScript `satisfies` operator that allows type-checking the objects making the extensions super-lean and easy to understand. No inheritance, no leaky abstractions!
-
-I think I've also found out how to do this now that TypeScript announced `satisfies` operator in 4.9. So instead of using some super-class I can use an object:
+With TypeScript 4.9 came a new `satisfies` operator that I think fits this job perfectly. Using it I was able to ditch the `class`-based approach with inhereritance and just use plain objects:
 
 ```ts
 import Figcaption, { figcaptionAttrs, figcaptionSchema } from './Figcaption.svelte'
@@ -103,7 +103,7 @@ export const figureExtension = () => {
 }
 ```
 
-which makes extending/reusing the extensions pretty damn straighforward _and_ you also maintain the shape of the object. Whereas with an `Extension` class you'd just see a generic `Extension` as you've typed it as `Extension`, with an object literal VSCode shows when you check the type almost the original thing:
+This is pretty cool as you can keep the type-safety as well as make the extensions pretty damn simple. No inheritance - no leaky abstractions. The biggest win (in addition to more flexible format) is being abble to see with VSCode's IntelliSense the original extension with super great detail:
 
 ```js
 const figureExtension: () => {
@@ -128,35 +128,17 @@ const figureExtension: () => {
 }
 ```
 
-Which I think is pretty neat. No inheritance - no leaky abstractions!
+There are only few lifecycle hooks I've added to the extensions (`init()` and `plugins()`) and all in all, I think this is the most minimal approach.
 
 ## And there's even more
 
-It's pretty common to wrap your interactive UI logic that you embed inside ProseMirror nodes using React, Vue or Svelte. So there's nothing new that I'm doing here.
+Well since I kinda made a generic editor framework here, there are some additional benefits when you have Svelte as your primary tool. Namely I was able to use `writable`s all around to get really easy to use functions & state https://github.com/TeemuKoivisto/svelte-prosemirror/blob/main/packages/client/src/stores/editor.ts
 
-However, since I am using the same component layout in the NodeView as in the Svelte-to-Prosemirror component - only difference being additional attributes - 
-
-
-
-
-
-
-The Svelte-based DOM nodes come with various limitations due to the fact that they are rendered by ProseMirror and not by Svelte. Thus, if you want anything interactive that's not intercepted and canceled by ProseMirror, you need to use NodeViews. NodeViews allow you to create DOM fragments that contain your own interactive UI widgets and whatnot. It's pretty common practise to use a framework, such as React, Vue or Svelte, to render these NodeViews to allow leveraging complex UI libraries so it's not a huge contribution of this project.
-
-But since you're already using Svelte components for nodes it's rather intuitive to, when you need to add more interactivity to a node, to transform it to a NodeView component that has similar but extended props to use.
-
-In my mind, Svelte is quite the optimal match for ProseMirror since neither use a shadow DOM render engine, like React or Vue, and instead rely on performing xxx to see what DOM have changed and need to be updated.
-
-Also since I'm using solely Svelte for the whole framework I can easily integrate 
-
-
-I think here are the building blocks of one awesome Svelte-first rich-text editor framework that opens up a great deal of productivity as it does not try to satisfy all the constraints of various frontend frameworks out there but focuses exclusively on leveraging Svelte.
+NodeViews turned out pretty intuitive since I'm using the same props as with the nodes with just few additional ones included: https://github.com/TeemuKoivisto/svelte-prosemirror/blob/main/packages/ext-equation/src/lib/Equation.svelte
 
 ## Moving forward
 
-It would be awesome to develop this bridge even further but there's a bit too much here for one person to do on a few spare hours per week.
-
-If there are any enthusiastic contributors willing to help to prototype and contribute by for example porting extensions from other frameworks, I'm more than happy to help! Here could be the makings for one awesome Svelte rich-text editor framework.
+It would be awesome to develop this even further so if there are anyone interested in contributing, we could get the ball rolling.
 
 ## How to run
 
