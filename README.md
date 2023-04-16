@@ -54,9 +54,9 @@ Obviously, I thought Svelte was the best choice so what I did was define a Svelt
 
 There's somewhat similar figure component here https://github.com/TeemuKoivisto/svelte-prosemirror/tree/main/packages/ext-figure/src/lib but without the interactive UI as in here https://github.com/TeemuKoivisto/svelte-prosemirror/blob/main/packages/ext-equation/src/lib/Equation.svelte Basically for figure I used regular ProseMirror nodes (compiled using Svelte) and for the equation a NodeView (DOM rendered inside ProseMirror but managed by you) to make it interactive. Not exactly equivalent but you probably get the idea.
 
-The ProseMirror `ParseRule`s and `DOMOutputSpec`s are generated behind the scenes by rendering the Svelte component on mount into DOM, then recursing it to turn it back into a ProseMirror `NodeSpec` by extracting the attributes from DOM based on the defined default attributes. It doesn't allow reusing the same attribute in multiple DOM nodes and the whole compilation step should be done during builld time but hey, works for this prototype! Also, since all is still in standard ProseMirror schema there is no performance-penalty whatsoever - it's all syntactic sugar. So you could say this is a very hackish Svelte to ProseMirror compiler.
+The ProseMirror `ParseRule`s and `DOMOutputSpec`s are generated behind the scenes by rendering the Svelte component on mount into DOM, then recursing it to turn it back into a ProseMirror `NodeSpec` by extracting the attributes from DOM based on the defined default attributes. It doesn't allow reusing the same attribute in multiple DOM nodes and the whole compilation step should be done during builld time but hey, works for this prototype! Also, since everything is still standard ProseMirror schema there's no performance-penalty whatsoever - it's all syntactic sugar. You could say this is a very hackish Svelte to ProseMirror compiler.
 
-I attempted to use `<slot>` for the content hole but since I could not extract them from the Svelte component, I went with this `data-hole` attribute instead.
+I attempted to use `<slot>` for the content hole but since I could not extract them from the Svelte component, I went with `data-hole` attribute instead.
 
 The styles are encapsulated pretty nicely and typing works solidly as you use the same interface for the Svelte component as you do for the ProseMirror schema.
 
@@ -99,7 +99,7 @@ export const figureExtension = () => {
 }
 ```
 
-This is pretty cool as you can keep the type-safety as well as make the extensions pretty damn simple. No inheritance - no leaky abstractions. The biggest win (in addition to more flexible format) is being abble to see with VSCode's IntelliSense the original extension with super great detail:
+This is pretty cool as you can maintain type-safety as well as make the extensions pretty damn simple. No inheritance - no leaky abstractions. The biggest win (in addition to more flexible format) is being able to see with intellisense the original extension in great detail:
 
 ```js
 const figureExtension: () => {
@@ -124,8 +124,6 @@ const figureExtension: () => {
 }
 ```
 
-There are only few lifecycle hooks I've added to the extensions and I'm pretty happy how it turned out.
-
 ## And there's even more
 
 Well since I kinda made a generic editor framework here, there are some additional benefits when you have Svelte as your primary tool. Namely I was able to use `writable`s all around to get really easy to use functions & state https://github.com/TeemuKoivisto/svelte-prosemirror/blob/main/packages/client/src/stores/editor.ts
@@ -134,7 +132,7 @@ NodeViews turned out pretty intuitive since I'm using the same props as with the
 
 ## Moving forward
 
-It would be awesome to develop this even further so if there are anyone interested in contributing, we could get the ball rolling.
+It would be awesome to develop this even further so if there are anyone interested in contributing, we could get the ball rolling. Migrating over some more complicated extensions from eg TipTap to try things out would probably be the next step.
 
 ## How to run
 
