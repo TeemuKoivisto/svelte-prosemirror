@@ -15,7 +15,7 @@ export const equationSchema: NodeSpec = {
   attrs: {
     id: { default: undefined },
     title: { default: '' },
-    latex: { default: ''}
+    latex: { default: '' }
   },
   content: 'inline*',
   group: 'block',
@@ -37,7 +37,7 @@ export const equationSchema: NodeSpec = {
   ],
   toDOM(node: PMNode) {
     const { id, title, latex } = node.attrs
-    return ['figure', { id, title, class: 'equation', latex }, ['pre', latex], ['figcaption', {}]]
+    return ['figure', { id, title, class: 'equation', latex }, ['pre', latex], ['figcaption', 0]]
   }
 }
 ```
@@ -52,23 +52,19 @@ Being frustrated by all of this, I wanted to figure out how to minimize the repe
 
 Obviously, I thought Svelte was the best choice so what I did was define a Svelte component (in addition to the regular ProseMirror schema) which included the serialized HTML as well as the related styles - all in a single file.
 
-Here's the same example written as `Equation.svelte` component:
-
-```ts
-
-```
+There's somewhat similar figure component here https://github.com/TeemuKoivisto/svelte-prosemirror/tree/main/packages/ext-figure/src/lib but without the interactive UI as in here https://github.com/TeemuKoivisto/svelte-prosemirror/blob/main/packages/ext-equation/src/lib/Equation.svelte Basically for figure I used regular ProseMirror nodes (compiled using Svelte) and for the equation a NodeView (DOM rendered inside ProseMirror but managed by you) to make it interactive. Not exactly equivalent but you probably get the idea.
 
 The ProseMirror `ParseRule`s and `DOMOutputSpec`s are generated behind the scenes by rendering the Svelte component on mount into DOM, then recursing it to turn it back into a ProseMirror `NodeSpec` by extracting the attributes from DOM based on the defined default attributes. It doesn't allow reusing the same attribute in multiple DOM nodes and the whole compilation step should be done during builld time but hey, works for this prototype! Also, since all is still in standard ProseMirror schema there is no performance-penalty whatsoever - it's all syntactic sugar. So you could say this is a very hackish Svelte to ProseMirror compiler.
 
-I attempted to use `<slot>` for the content hole but since I could not extract them from the Svelte component, I went with this `data-hole` attribute instead. 
+I attempted to use `<slot>` for the content hole but since I could not extract them from the Svelte component, I went with this `data-hole` attribute instead.
 
 The styles are encapsulated pretty nicely and typing works solidly as you use the same interface for the Svelte component as you do for the ProseMirror schema.
 
 This is the main contribution of this submission to SvelteHack 2023 https://hack.sveltesociety.dev/
 
-## Extras
+## Other things
 
-Since I have been crunching this problem for some time now, I also wanted to come up with the simplest editor architecture to divide my ProseMirror editor into extensions. There are many frameworks that do this, such as [TipTap](https://tiptap.dev/) or [Remirror](https://remirror.io/), but I wanted to make something even simpler.
+Since I have been crunching this problem for some time now, I also wanted to come up with the simplest editor architecture to divide my ProseMirror editor into extensions and use Svelte for everything. There are many frameworks that do this, such as [TipTap](https://tiptap.dev/) or [Remirror](https://remirror.io/), but I wanted to make something even simpler.
 
 With TypeScript 4.9 came a new `satisfies` operator that I think fits this job perfectly. Using it I was able to ditch the `class`-based approach with inhereritance and just use plain objects:
 
@@ -128,7 +124,7 @@ const figureExtension: () => {
 }
 ```
 
-There are only few lifecycle hooks I've added to the extensions (`init()` and `plugins()`) and all in all, I think this is the most minimal approach.
+There are only few lifecycle hooks I've added to the extensions and I'm pretty happy how it turned out.
 
 ## And there's even more
 
