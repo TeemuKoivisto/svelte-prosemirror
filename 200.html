@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -21,29 +21,31 @@
 
     <!-- <link rel="icon" href="/favicon.png" /> -->
 
-    <meta http-equiv="content-security-policy" content="">
-		<link rel="modulepreload" href="/_app/immutable/entry/start.513ac4a5.js">
-		<link rel="modulepreload" href="/_app/immutable/chunks/index.20b47fcd.js">
-		<link rel="modulepreload" href="/_app/immutable/chunks/singletons.1b393bac.js">
-		<link rel="modulepreload" href="/_app/immutable/chunks/index.cb3c44c5.js">
-		<link rel="modulepreload" href="/_app/immutable/entry/app.02eeb9d1.js">
+    
+		<link rel="modulepreload" href="/_app/immutable/entry/start.769df057.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/scheduler.9de6a18d.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/singletons.161cadfb.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/index.2ca159af.js">
+		<link rel="modulepreload" href="/_app/immutable/entry/app.3307d444.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/index.5beaa735.js">
   </head>
 
   <body>
     <div id="svelte">
 			<script>
 				{
-					__sveltekit_1tmftdr = {
-						env: {},
+					__sveltekit_10eby7n = {
 						base: "",
-						element: document.currentScript.parentElement
+						env: {}
 					};
 
+					const element = document.currentScript.parentElement;
+
 					Promise.all([
-						import("/_app/immutable/entry/start.513ac4a5.js"),
-						import("/_app/immutable/entry/app.02eeb9d1.js")
+						import("/_app/immutable/entry/start.769df057.js"),
+						import("/_app/immutable/entry/app.3307d444.js")
 					]).then(([kit, app]) => {
-						kit.start(app, __sveltekit_1tmftdr.element);
+						kit.start(app, element);
 					});
 				}
 			</script>
