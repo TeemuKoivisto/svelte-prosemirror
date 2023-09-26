@@ -1,7 +1,6 @@
 import { ProsemirrorBinding, ySyncPluginKey } from 'y-prosemirror'
 import { Awareness } from 'y-protocols/awareness'
-// import { WebsocketProvider } from 'y-websocket'
-import { WebsocketProvider } from '@xsync/y-websocket'
+import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 import { derived, get, writable } from 'svelte/store'
 
