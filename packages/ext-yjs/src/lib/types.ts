@@ -1,4 +1,5 @@
-import { WebsocketProvider } from 'y-websocket'
+// import { WebsocketProvider } from 'y-websocket'
+import { WebsocketProvider } from '@xsync/y-websocket'
 import { Doc } from 'yjs'
 
 export const yjsExtensionName = 'yjs' as const

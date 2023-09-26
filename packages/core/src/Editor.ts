@@ -55,7 +55,7 @@ export class Editor {
     return {
       doc: () => self.editorView.state.doc.toJSON(),
       state: () =>
-        ({ ...self.editorView.state.toJSON(), plugins: [] } as unknown as JSONEditorState)
+        ({ ...self.editorView.state.toJSON(), plugins: [] }) as unknown as JSONEditorState
     }
   }
 

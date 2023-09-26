@@ -11,24 +11,22 @@
     "svelte-check": "svelte-check"
   },
   "devDependencies": {
-    "@iconify-icons/fe": "^1.2.3",
+    "@iconify-icons/fe": "^1.2.5",
     "@iconify-icons/feather": "^1.2.3",
-    "@iconify-icons/mdi": "^1.2.36",
-    "@sveltejs/adapter-static": "1.0.5",
-    "@sveltejs/kit": "^1.9.3",
+    "@iconify-icons/mdi": "^1.2.47",
+    "@sveltejs/adapter-static": "2.0.3",
+    "@sveltejs/kit": "^1.25.1",
     "@types/lodash.debounce": "^4.0.7",
-    "@types/uuid": "^9.0.0",
-    "cross-fetch": "^3.1.5",
-    "postcss": "^8.4.20",
+    "@types/uuid": "^9.0.4",
+    "cross-fetch": "^4.0.0",
+    "postcss": "^8.4.30",
     "postcss-load-config": "^4.0.1",
-    "prettier-plugin-svelte": "^2.9.0",
-    "sass": "^1.57.1",
-    "svelte": "^3.55.0",
-    "svelte-check": "^2.10.3",
-    "svelte-preprocess": "^5.0.0",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.3"
+    "prettier-plugin-svelte": "^3.0.3",
+    "sass": "^1.68.0",
+    "svelte": "^4.2.1",
+    "svelte-check": "^3.5.2",
+    "svelte-preprocess": "^5.0.4",
+    "tslib": "^2.6.2"
   },
   "dependencies": {
     "@my-org/core": "workspace:*",
@@ -40,12 +38,12 @@
     "@my-org/ext-paragraph": "workspace:*",
     "@my-org/ext-yjs": "workspace:*",
     "@my-org/types": "workspace:*",
-    "@iconify/svelte": "^3.0.1",
-    "autoprefixer": "^10.4.13",
+    "@iconify/svelte": "^3.1.4",
+    "autoprefixer": "^10.4.16",
     "lodash.debounce": "^4.0.8",
-    "prosemirror-commands": "^1.5.0",
-    "prosemirror-model": "^1.19.0",
-    "prosemirror-state": "^1.4.2",
-    "tailwindcss": "^3.2.4"
+    "prosemirror-commands": "^1.5.2",
+    "prosemirror-model": "^1.19.3",
+    "prosemirror-state": "^1.4.3",
+    "tailwindcss": "^3.3.3"
   }
 }

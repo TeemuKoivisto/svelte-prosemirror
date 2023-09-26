@@ -1,18 +1,22 @@
 {
   "name": "@my-org/ext-figure",
   "version": "0.0.1",
-  "main": "package/index.js",
-  "module": "package/index.js",
-  "svelte": "package/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "svelte": "./dist/index.js",
   "type": "module",
-  "types": "package/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./package/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
   },
   "files": [
-    "dist",
-    "package"
+    "dist"
   ],
   "scripts": {
     "install": "svelte-kit sync || true",
@@ -22,19 +26,18 @@
   "devDependencies": {
     "@my-org/core": "workspace:*",
     "@my-org/editor": "workspace:*",
-    "@sveltejs/kit": "^1.9.3",
-    "@sveltejs/package": "^1.0.2",
-    "prosemirror-commands": "^1.5.0",
-    "prosemirror-keymap": "^1.2.0",
-    "prosemirror-model": "^1.19.0",
-    "prosemirror-state": "^1.4.2",
-    "prosemirror-transform": "^1.7.1",
-    "prosemirror-view": "^1.30.0",
-    "svelte": "^3.55.1",
-    "svelte-check": "^3.0.3",
-    "svelte-preprocess": "^5.0.1",
-    "svelte2tsx": "^0.6.0",
-    "typescript": "^4.9.4"
+    "@sveltejs/kit": "^1.25.1",
+    "@sveltejs/package": "^2.2.2",
+    "prosemirror-commands": "^1.5.2",
+    "prosemirror-keymap": "^1.2.2",
+    "prosemirror-model": "^1.19.3",
+    "prosemirror-state": "^1.4.3",
+    "prosemirror-transform": "^1.7.5",
+    "prosemirror-view": "^1.31.8",
+    "svelte": "^4.2.1",
+    "svelte-check": "^3.5.2",
+    "svelte-preprocess": "^5.0.4",
+    "svelte2tsx": "^0.6.22"
   },
   "peerDependencies": {
     "@my-org/core": "workspace:*",

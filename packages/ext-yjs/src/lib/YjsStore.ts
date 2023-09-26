@@ -1,6 +1,7 @@
 import { ProsemirrorBinding, ySyncPluginKey } from 'y-prosemirror'
 import { Awareness } from 'y-protocols/awareness'
-import { WebsocketProvider } from 'y-websocket'
+// import { WebsocketProvider } from 'y-websocket'
+import { WebsocketProvider } from '@xsync/y-websocket'
 import * as Y from 'yjs'
 import { derived, get, writable } from 'svelte/store'
 
@@ -40,7 +41,11 @@ export class YjsStore {
     this.ydoc = ydoc
     this.permanentUserData = new Y.PermanentUserData(ydoc)
     this.permanentUserData.setUserMapping(ydoc, user.clientID, user.name)
-    this.provider = initial?.provider || new WebsocketProvider(ws_url, document.id, ydoc)
+    this.provider =
+      initial?.provider ||
+      new WebsocketProvider(ws_url, document.id, ydoc, {
+        jwt: 'eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTMyOTkwMjY3NTQsImlhdCI6MTY5MjA4OTQyNjgxMCwib2lkIjoxLCJ1aWQiOiIyIiwiY2lkIjoxLCJhY2wiOlsiQURNSU4iXX0.BFBa1HdQT4qKFw6PZH0MLxgWH1_ZuDU5L2YjYlCI-Hh4Cqj3DyBaqiql0NDO7ulXOvG5pHgzMYMslpLAIeYUcA'
+      })
     this.awareness = this.provider.awareness
     this.yXmlFragment = ydoc.getXmlFragment('pm-doc')
     this.currentUser.set(opts.user)
