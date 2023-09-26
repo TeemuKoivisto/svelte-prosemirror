@@ -1,7 +1,7 @@
 import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model'
 import { EditorView, NodeViewConstructor } from 'prosemirror-view'
 import { EditorState, Plugin, Transaction } from 'prosemirror-state'
-import type { SvelteComponentTyped } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 
 import type { Editor } from '../Editor'
 import type { EditorProps } from './editor'
@@ -26,8 +26,8 @@ export interface SveltePMNode {
   selectors?: string[]
   schema?: NodeSpec
   attrExtractor?: (dom: HTMLElement | string, attr: string) => { [attr: string]: any } | undefined
-  nodeView?: any // SvelteComponentTyped with different props
-  component?: any // SvelteComponentTyped
+  nodeView?: any // SvelteComponent with different props
+  component?: any // SvelteComponent
 }
 
 export interface Extension {

@@ -7,7 +7,7 @@ import type {
   NodeViewConstructor
 } from 'prosemirror-view'
 
-import type { SvelteComponentTyped } from 'svelte'
+import type { SvelteComponent } from 'svelte'
 import type { Editor } from './typings'
 
 export interface SvelteNodeViewProps {
@@ -15,7 +15,7 @@ export interface SvelteNodeViewProps {
   attrs: Attrs
   selected: boolean | undefined
   view: EditorView
-  getPos: () => number
+  getPos: () => number | undefined
   decorations: readonly Decoration[]
   innerDecorations: DecorationSource
   editor: Editor
@@ -31,17 +31,17 @@ export class SvelteNodeView implements NodeView {
 
   selected: boolean | undefined
   editor: Editor
-  component: SvelteComponentTyped<{}>
-  #mounted?: SvelteComponentTyped
+  component: SvelteComponent<{}>
+  private mounted?: SvelteComponent
 
   constructor(
     node: PMNode,
     readonly view: EditorView,
-    readonly getPos: () => number,
+    readonly getPos: () => number | undefined,
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource,
     editor: Editor,
-    component: SvelteComponentTyped<SvelteNodeViewProps>
+    component: SvelteComponent<SvelteNodeViewProps>
   ) {
     this.node = node
     this.view = view
@@ -83,13 +83,13 @@ export class SvelteNodeView implements NodeView {
     // console.log('contentDOM', contentDOM)
     this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
     // @ts-ignore
-    this.#mounted = new this.component({ target: this.dom, props: this.props })
-    console.log('mounted', this.#mounted)
+    this.mounted = new this.component({ target: this.dom, props: this.props })
+    console.log('mounted', this.mounted)
     return this
   }
 
   render() {
-    this.#mounted?.$$set && this.#mounted?.$$set(this.props)
+    this.mounted?.$$set && this.mounted?.$$set(this.props)
   }
 
   shouldUpdate = (node: PMNode) => {
@@ -132,19 +132,19 @@ export class SvelteNodeView implements NodeView {
   }
 
   destroy = () => {
-    this.#mounted?.$destroy()
+    this.mounted?.$destroy()
   }
 
   ignoreMutation = () => true
 
   static fromComponent(
     editor: Editor,
-    component: SvelteComponentTyped<SvelteNodeViewProps>
+    component: SvelteComponent<SvelteNodeViewProps>
   ): NodeViewConstructor {
     return (
       node: PMNode,
       view: EditorView,
-      getPos: () => number,
+      getPos: () => number | undefined,
       decorations: readonly Decoration[],
       innerDecorations: DecorationSource
     ) => new this(node, view, getPos, decorations, innerDecorations, editor, component).init()
