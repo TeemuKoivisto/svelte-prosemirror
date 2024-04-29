@@ -19,23 +19,23 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "jsdom": "^22.1.0",
+    "jsdom": "^24.0.0",
     "prosemirror-commands": "^1.5.2",
     "prosemirror-keymap": "^1.2.2",
-    "prosemirror-model": "^1.19.3",
+    "prosemirror-model": "^1.20.0",
     "prosemirror-state": "^1.4.3",
-    "prosemirror-transform": "^1.7.5",
-    "prosemirror-view": "^1.31.8",
-    "svelte": "^4.2.1",
+    "prosemirror-transform": "^1.8.0",
+    "prosemirror-view": "^1.33.5",
+    "svelte": "^4.2.15",
     "tslib": "^2.6.2",
-    "vitest": "^0.34.5"
+    "vitest": "^1.5.2"
   },
   "dependencies": {
     "prosemirror-commands": "^1.5.2",
     "prosemirror-keymap": "^1.2.2",
-    "prosemirror-model": "^1.19.3",
+    "prosemirror-model": "^1.20.0",
     "prosemirror-state": "^1.4.3",
-    "prosemirror-transform": "^1.7.5",
-    "prosemirror-view": "^1.31.8"
+    "prosemirror-transform": "^1.8.0",
+    "prosemirror-view": "^1.33.5"
   }
 }

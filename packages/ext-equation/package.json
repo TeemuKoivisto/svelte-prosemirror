@@ -26,25 +26,25 @@
   "devDependencies": {
     "@my-org/core": "workspace:*",
     "@my-org/editor": "workspace:*",
-    "@sveltejs/kit": "^1.25.1",
-    "@sveltejs/package": "^2.2.2",
-    "@types/katex": "^0.16.3",
+    "@sveltejs/kit": "^2.5.7",
+    "@sveltejs/package": "^2.3.1",
+    "@types/katex": "^0.16.7",
     "prosemirror-commands": "^1.5.2",
     "prosemirror-keymap": "^1.2.2",
-    "prosemirror-model": "^1.19.3",
+    "prosemirror-model": "^1.20.0",
     "prosemirror-state": "^1.4.3",
-    "prosemirror-transform": "^1.7.5",
-    "prosemirror-view": "^1.31.8",
-    "svelte": "^4.2.1",
-    "svelte-check": "^3.5.2",
-    "svelte-preprocess": "^5.0.4",
-    "svelte2tsx": "^0.6.22"
+    "prosemirror-transform": "^1.8.0",
+    "prosemirror-view": "^1.33.5",
+    "svelte": "^4.2.15",
+    "svelte-check": "^3.7.0",
+    "svelte-preprocess": "^5.1.4",
+    "svelte2tsx": "^0.7.7"
   },
   "dependencies": {
-    "@codemirror/view": "^6.20.2",
-    "@codemirror/state": "^6.2.1",
+    "@codemirror/view": "^6.26.3",
+    "@codemirror/state": "^6.4.1",
     "@popperjs/core": "^2.11.8",
-    "katex": "^0.16.8"
+    "katex": "^0.16.10"
   },
   "peerDependencies": {
     "@my-org/core": "workspace:*",

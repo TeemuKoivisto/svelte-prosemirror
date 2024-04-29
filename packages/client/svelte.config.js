@@ -21,6 +21,15 @@ export default {
       pages: 'build',
       assets: 'build',
       fallback: '200.html'
-    })
+    }),
+    alias: {
+      $lib: 'src/lib',
+      $components: 'src/components',
+      $config: 'src/config',
+      $context: 'src/context',
+      $elements: 'src/elements',
+      $stores: 'src/stores',
+      $utils: 'src/utils'
+    }
   }
 }
