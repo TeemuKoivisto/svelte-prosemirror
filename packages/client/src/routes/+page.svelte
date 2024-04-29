@@ -88,52 +88,29 @@
   }
 </script>
 
-<section class="p-4 h-full m-auto lg:container md:p-16 md:pt-8 xs:p-8 rounded-2xl">
-  <header class="flex flex-col items-center mt-8">
-    <h1 class="my-3 text-5xl font-bold flex items-center hover:underline">
-      <a href="https://github.com/TeemuKoivisto/svelte-prosemirror">svelte-prosemirror</a>
-    </h1>
-    <div class="mt-6" />
-  </header>
-  <main>
-    <fieldset class="bg-white p-4">
-      <legend>Props</legend>
-      <div class="mb-4">
-        <label for="documentId">Document id</label>
-        <input class="bg-gray-100 rounded" bind:value={documentId} id="documentId" />
-      </div>
-      <button class="btn" on:click={handleInsertFigure}>Insert figure</button>
-      <button class="btn" on:click={handleInsertEquation}>Insert equation</button>
-    </fieldset>
-    <div class="editor">
-      <Toolbar />
-      <div use:editor_action />
+<section class="flex flex-col items-start pb-8">
+  <fieldset class="bg-white p-4">
+    <legend>Props</legend>
+    <div class="mb-4">
+      <label class="mr-4" for="documentId">Document id</label>
+      <input class="bg-gray-100 rounded" bind:value={documentId} id="documentId" />
     </div>
-  </main>
+    <button class="btn" on:click={handleInsertFigure}>Insert figure</button>
+    <button class="btn" on:click={handleInsertEquation}>Insert equation</button>
+  </fieldset>
+  <div class="mt-3 bg-white rounded w-full">
+    <Toolbar />
+    <div use:editor_action />
+  </div>
 </section>
 
 <style lang="scss">
-  main {
-    margin: 40px auto 0 auto;
-    size: A4 portrait;
-    @apply flex flex-col items-center w-full;
-  }
-  fieldset {
-    margin: 1rem 0;
-  }
-  label {
-    margin-right: 0.75rem;
-  }
   .btn {
     @apply bg-gray-200 py-1 px-2 rounded hover:bg-gray-300;
   }
-  .editor {
-    max-width: 50rem;
-    @apply bg-white rounded w-full;
-  }
   :global(.ProseMirror) {
     border-top: 0;
-    min-height: 140px;
+    min-height: 300px;
     overflow-wrap: break-word;
     outline: none;
     white-space: pre-wrap;
