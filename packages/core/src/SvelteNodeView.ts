@@ -1,4 +1,4 @@
-import { Attrs, Node as PMNode } from 'prosemirror-model'
+import { Attrs, DOMSerializer, Node as PMNode } from 'prosemirror-model'
 import type {
   Decoration,
   DecorationSource,
@@ -13,6 +13,7 @@ import type { Editor } from './typings'
 export interface SvelteNodeViewProps {
   node: PMNode
   attrs: Attrs
+  contentDOM: (node: HTMLElement) => void
   selected: boolean | undefined
   view: EditorView
   getPos: () => number | undefined
@@ -31,8 +32,8 @@ export class SvelteNodeView implements NodeView {
 
   selected: boolean | undefined
   editor: Editor
-  component: SvelteComponent<{}>
-  private mounted?: SvelteComponent
+  component?: typeof SvelteComponent<SvelteNodeViewProps>
+  mounted?: SvelteComponent
 
   constructor(
     node: PMNode,
@@ -41,7 +42,7 @@ export class SvelteNodeView implements NodeView {
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource,
     editor: Editor,
-    component: SvelteComponent<SvelteNodeViewProps>
+    component?: typeof SvelteComponent<SvelteNodeViewProps>
   ) {
     this.node = node
     this.view = view
@@ -63,28 +64,33 @@ export class SvelteNodeView implements NodeView {
   get props(): SvelteNodeViewProps {
     return {
       node: this.node,
-      attrs: this.node.attrs,
       selected: this.selected,
       view: this.view,
       getPos: this.getPos,
       decorations: this.decorations,
       innerDecorations: this.innerDecorations,
-      editor: this.editor
+      editor: this.editor,
+      contentDOM: (node: HTMLElement) => {
+        if (this.contentDOM) {
+          node.appendChild(this.contentDOM)
+        }
+      },
+      ...(this.node.attrs && { attrs: this.node.attrs })
     }
   }
 
   init = (): this => {
     const toDOM = this.node.type.spec.toDOM
     if (!toDOM) throw Error(`@my-org/core: node "${this.node.type}" was not given a toDOM method!`)
-    // const { dom, contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.node))
+    const { dom, contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.node))
     // this._dom = dom as HTMLElement
-    // this.contentDOM = contentDOM
-    // console.log('dom', dom)
-    // console.log('contentDOM', contentDOM)
+    this.contentDOM = contentDOM
     this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
-    // @ts-ignore
-    this.mounted = new this.component({ target: this.dom, props: this.props })
-    console.log('mounted', this.mounted)
+    if (this.component) {
+      this.mounted = new this.component({ target: this.dom, props: this.props })
+    } else {
+      contentDOM && this._dom.appendChild(contentDOM)
+    }
     return this
   }
 
@@ -93,7 +99,7 @@ export class SvelteNodeView implements NodeView {
   }
 
   shouldUpdate = (node: PMNode) => {
-    console.log('should update')
+    // console.log('should update')
     if (node.type !== this.node.type) {
       return false
     } else if (node.sameMarkup(this.node)) {
@@ -107,7 +113,6 @@ export class SvelteNodeView implements NodeView {
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource
   ): boolean => {
-    console.log('update')
     // if (!newNode.sameMarkup(this.node)) return false
     if (node.type.name !== this.node.type.name) {
       return false
@@ -120,13 +125,13 @@ export class SvelteNodeView implements NodeView {
   }
 
   selectNode = () => {
-    console.log('selectNode ')
+    // console.log('selectNode ')
     this.selected = true
     this.render()
   }
 
   deselectNode = () => {
-    console.log('deselectNode ')
+    // console.log('deselectNode ')
     this.selected = false
     this.render()
   }
@@ -135,11 +140,11 @@ export class SvelteNodeView implements NodeView {
     this.mounted?.$destroy()
   }
 
-  ignoreMutation = () => true
+  ignoreMutation = (_mutation: MutationRecord) => true
 
   static fromComponent(
     editor: Editor,
-    component: SvelteComponent<SvelteNodeViewProps>
+    component?: typeof SvelteComponent<SvelteNodeViewProps>
   ): NodeViewConstructor {
     return (
       node: PMNode,

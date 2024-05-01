@@ -8,6 +8,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
+    "./gapcursor.css": "./styles/gapcursor.css",
+    "./menu.css": "./styles/menu.css",
+    "./prosemirror-example-setup.css": "./styles/prosemirror-example-setup.css",
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",

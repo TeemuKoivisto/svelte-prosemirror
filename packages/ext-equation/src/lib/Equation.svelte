@@ -172,6 +172,12 @@
       })
     }
   }
+
+  function handleKeyDown(ev: KeyboardEvent) {
+    if (ev.key === 'Enter') {
+      renderCodeMirror()
+    }
+  }
 </script>
 
 <div class="equation-editor" bind:this={codemirrorEl}>
@@ -185,7 +191,14 @@
   </a>
 </div>
 <figure class="equation" {id}>
-  <div class="equation" role="button" data-latex={latex} on:click={renderCodeMirror}>
+  <div
+    class="equation"
+    role="button"
+    tabindex="-1"
+    data-latex={latex}
+    on:click={renderCodeMirror}
+    on:keydown={handleKeyDown}
+  >
     {#if !latex}
       <div class="equation-placeholder">e=mc^2</div>
     {:else}

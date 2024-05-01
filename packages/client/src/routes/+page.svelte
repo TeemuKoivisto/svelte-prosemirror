@@ -14,14 +14,26 @@
 
   import { YJS_URL } from '$config'
 
+  import '@my-org/ext-example-setup/gapcursor.css'
+  import '@my-org/ext-example-setup/menu.css'
+  import '@my-org/ext-example-setup/prosemirror-example-setup.css'
+  import '@my-org/ext-yjs/yjs.css'
+
   import type { EditorProps } from '@my-org/core'
 
   let documentId = 'abcd1234'
 
   function editor_action(dom: HTMLElement) {
     const props: EditorProps = {
-      extensions: [paragraphExtension(), figureExtension(), equationExtension(), marksExtension()],
-      onEditorReady: handleEditorReady
+      // doc: initial.pmDoc,
+      // extensions: [],
+      extensions: [
+        exampleSetupExtension({ noHistory: true }),
+        paragraphExtension(),
+        figureExtension(),
+        equationExtension(),
+        marksExtension()
+      ]
     }
     if (YJS_URL) {
       props.extensions?.push(
@@ -44,8 +56,6 @@
     }
     editorActions.setEditor(Editor.create(dom, props))
   }
-
-  function handleEditorReady() {}
 
   function handleInsertFigure() {
     editor?.cmd((state, dispatch) => {

@@ -8,6 +8,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
+    "./yjs.css": "./styles/yjs.css",
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",

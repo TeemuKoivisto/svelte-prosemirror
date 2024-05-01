@@ -10,11 +10,21 @@ export const marksExtension = () => {
   return {
     name: 'basic-marks' as const,
     marks: {
-      bold,
-      code,
-      italic,
-      link,
-      strikethrough
+      bold: {
+        schema: bold
+      },
+      code: {
+        schema: code
+      },
+      italic: {
+        schema: italic
+      },
+      link: {
+        schema: link
+      },
+      strikethrough: {
+        schema: strikethrough
+      }
     }
   } satisfies Extension
 }

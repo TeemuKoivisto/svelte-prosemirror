@@ -1,5 +1,7 @@
 import Equation, { equationAttrs, equationSchema } from './Equation.svelte'
 
+import { NView, SvelteNodeView } from '@my-org/core'
+
 import type { Extension } from '@my-org/core'
 
 export const equationExtension = () => {
@@ -9,7 +11,7 @@ export const equationExtension = () => {
       equation: {
         attrs: equationAttrs,
         schema: equationSchema,
-        nodeView: Equation
+        nodeView: editor => SvelteNodeView.fromComponent(editor, Equation)
         // component: Equation
       }
     }

@@ -1,15 +1,17 @@
 import { Schema } from 'prosemirror-model'
-import { Plugin } from 'prosemirror-state'
+import { Command, Plugin } from 'prosemirror-state'
 
 import { SvelteNodeView } from './SvelteNodeView'
 import { createNodeSpec } from './extensions/createNodeSpec'
 
-import type { Editor, EditorProps, ExtensionData, Initialized } from './typings'
+import type { Cmd, Editor, EditorProps, ExtensionData, Initialized } from './typings'
+import { keymap } from 'prosemirror-keymap'
 
 export function createExtensions(editor: Editor, { extensions = [] }: EditorProps): Initialized {
   const extData: ExtensionData = {
     commands: {},
     marks: {},
+    markViews: {},
     nodes: {},
     nodeViews: {},
     sortedKeymaps: {},
@@ -37,14 +39,20 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
       extData.svelteNodes[name] = value
       extData.nodes[name] = createNodeSpec(value)
       if (value.nodeView) {
-        extData.nodeViews[name] = SvelteNodeView.fromComponent(editor, value.nodeView)
+        extData.nodeViews[name] = value.nodeView(editor)
       }
     }
     for (const name in ext.marks) {
       if (name in extData.marks) {
         throw Error(`@my-org/core: duplicate mark "${name}" provided from extension ${key}`)
       }
-      extData.marks[name] = ext.marks[name]
+      const { schema, markView } = ext.marks[name]
+      if (schema) {
+        extData.marks[name] = schema
+      }
+      if (markView) {
+        extData.markViews[name] = markView
+      }
     }
     if (ext.commands) {
       extData.commands = { ...extData.commands, ...ext.commands }
@@ -64,17 +72,17 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
     marks: extData.marks
   })
 
-  // console.log('nodes 2', schemaNodes)
-  // console.log('schema', schema)
-
-  // const keymaps = Object.keys(sortedKeymaps).reduce((acc, key) => {
-  //   acc[key] = sortedKeymaps[key][0].cmd
-  //   return acc
-  // }, {} as { [key: string]: Command })
+  const keymaps = Object.keys(extData.sortedKeymaps).reduce(
+    (acc, key) => {
+      // @ts-ignore
+      acc[key] = extData.sortedKeymaps[key][0].cmd
+      return acc
+    },
+    {} as { [key: string]: Command }
+  )
 
   const plugins = [
-    // @TODO creates duplicate plugin keys
-    // keymap(keymaps),
+    keymap(keymaps),
     ...extensions.reduce(
       (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, schema)) || [])],
       [] as Plugin[]

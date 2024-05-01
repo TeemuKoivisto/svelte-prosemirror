@@ -3,6 +3,8 @@ import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
+import pkg from './package.json' assert { type: 'json' }
+
 export default defineConfig({
   build: {
     outDir: 'dist',
@@ -17,7 +19,13 @@ export default defineConfig({
         }
       }
     },
-    minify: false
+    minify: false,
+    rollupOptions: {
+      external: [
+        ...Object.keys(pkg['dependencies'] || {}),
+        ...Object.keys(pkg.devDependencies || {})
+      ]
+    }
   },
   resolve: {
     dedupe: ['svelte']

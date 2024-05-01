@@ -4,21 +4,22 @@ import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec'
 import { SveltePMNode } from '../typings'
 import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
 
-export function createNodeSpec(node: SveltePMNode): NodeSpec {
+export function createNodeSpec(node: SveltePMNode<any>): NodeSpec {
   const { schema } = node
   const nodeSpec = {
     ...schema
   }
-  const staticSpec = createSpec(node)
   const component = node.component // || node.nodeView
   if (component) {
+    const staticSpec = createSpec(node)
     nodeSpec.toDOM = (node: PMNode) => {
       const div = document.createElement('div')
       const comp = new component({
         target: div,
         props: {
           node,
-          attrs: node.attrs
+          attrs: node.attrs,
+          contentDOM: () => undefined
         }
       })
       const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
@@ -45,7 +46,7 @@ export function createNodeSpec(node: SveltePMNode): NodeSpec {
   return nodeSpec
 }
 
-export function createSpec(node: SveltePMNode): readonly [string, ...any[]] {
+export function createSpec(node: SveltePMNode<any>): readonly [string, ...any[]] {
   const { attrs, component } = node
   if (!component) {
     return ['']
@@ -55,7 +56,8 @@ export function createSpec(node: SveltePMNode): readonly [string, ...any[]] {
     target: div,
     props: {
       node: undefined,
-      attrs: attrs || {}
+      attrs,
+      contentDOM: () => undefined
     }
   })
   const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)

@@ -15,6 +15,5 @@
   "scripts": {
     "build": "vite build",
     "watch": "rimraf dist && vite build --watch"
-  },
-  "devDependencies": {}
+  }
 }

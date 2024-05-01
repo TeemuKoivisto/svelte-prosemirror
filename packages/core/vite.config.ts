@@ -5,6 +5,8 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import dts from 'vite-plugin-dts'
 
+import pkg from './package.json' assert { type: 'json' }
+
 export default defineConfig({
   build: {
     outDir: 'dist',
@@ -13,7 +15,10 @@ export default defineConfig({
       fileName: 'index',
       formats: ['es', 'cjs']
     },
-    minify: false
+    minify: false,
+    rollupOptions: {
+      external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.devDependencies || {})]
+    }
   },
   plugins: [dts(), tsconfigPaths()],
   test: {
