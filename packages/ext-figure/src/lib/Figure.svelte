@@ -21,12 +21,14 @@
 </script>
 
 <script lang="ts">
-  export let attrs: FigureAttrs
+  import type { NodeProps } from '@my-org/core'
 
-  const { id } = attrs
+  interface $$Props extends NodeProps<FigureAttrs> {}
+
+  export let attrs: FigureAttrs
 </script>
 
-<figure {id} data-hole />
+<figure id={attrs.id} data-hole />
 
 <style lang="scss">
   figure {

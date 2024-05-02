@@ -17,6 +17,12 @@
   }
 </script>
 
+<script lang="ts">
+  import type { NodeProps } from '@my-org/core'
+
+  interface $$Props extends NodeProps<FigcaptionAttrs> {}
+</script>
+
 <!-- svelte-ignore a11y-structure -->
 <figcaption data-hole />
 

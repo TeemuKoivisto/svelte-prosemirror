@@ -2,13 +2,15 @@ import { derived, get, writable } from 'svelte/store'
 
 import { getActiveMarks } from './getActiveMarks'
 
-import type { Editor } from '@my-org/core'
+import type { Editor, EditorProps, ExtObject } from '@my-org/core'
 import type { EditorState } from 'prosemirror-state'
 
 const STATE_STORAGE_KEY = 'editor-state'
 
 export let editor: Editor | undefined
+export const props = writable<EditorProps>()
 export const state = writable<EditorState | undefined>()
+export const extObj = writable<ExtObject>({} as ExtObject)
 export const activeMarks = derived(state, s => (s ? getActiveMarks(s) : []))
 
 export const editorActions = {
@@ -21,10 +23,16 @@ export const editorActions = {
         instance.setState(JSON.parse(existing))
       }
     } catch (err) {}
-    instance.state.subscribe(s => {
-      state.set(s)
-      const newState = s?.toJSON()
-      localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(newState))
+    extObj.set(instance.data.extObj)
+    props.set(instance.data.props)
+    state.set(instance.data.state)
+    instance.on('update', (k, v) => k === 'extObj' && extObj.set(v))
+    instance.on('update', (k, v) => k === 'props' && props.set(v))
+    instance.on('update', (k, v) => {
+      if (k === 'state') {
+        state.set(v)
+        localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(v.toJSON()))
+      }
     })
   }
 }

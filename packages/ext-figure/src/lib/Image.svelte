@@ -26,12 +26,14 @@
 </script>
 
 <script lang="ts">
-  export let attrs: ImageAttrs
+  import type { NodeProps } from '@my-org/core'
 
-  const { src, alt, title } = attrs
+  interface $$Props extends NodeProps<ImageAttrs> {}
+
+  export let attrs: ImageAttrs
 </script>
 
-<img {src} {alt} {title} />
+<img src={attrs.src} alt={attrs.alt} title={attrs.title} />
 
 <style lang="scss">
   :global(img.ProseMirror-selectednode) {

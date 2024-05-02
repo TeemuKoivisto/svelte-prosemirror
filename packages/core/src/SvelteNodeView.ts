@@ -10,9 +10,9 @@ import type {
 import type { SvelteComponent } from 'svelte'
 import type { Editor } from './typings'
 
-export interface SvelteNodeViewProps {
+export interface SvelteNodeViewProps<A extends Attrs> {
   node: PMNode
-  attrs: Attrs
+  attrs: A
   contentDOM: (node: HTMLElement) => void
   selected: boolean | undefined
   view: EditorView
@@ -22,7 +22,7 @@ export interface SvelteNodeViewProps {
   editor: Editor
 }
 
-export class SvelteNodeView implements NodeView {
+export class SvelteNodeView<A extends Attrs> implements NodeView {
   protected _dom?: HTMLElement
   contentDOM?: HTMLElement
 
@@ -32,7 +32,7 @@ export class SvelteNodeView implements NodeView {
 
   selected: boolean | undefined
   editor: Editor
-  component?: typeof SvelteComponent<SvelteNodeViewProps>
+  component?: typeof SvelteComponent<SvelteNodeViewProps<A>>
   mounted?: SvelteComponent
 
   constructor(
@@ -42,7 +42,7 @@ export class SvelteNodeView implements NodeView {
     decorations: readonly Decoration[],
     innerDecorations: DecorationSource,
     editor: Editor,
-    component?: typeof SvelteComponent<SvelteNodeViewProps>
+    component?: typeof SvelteComponent<SvelteNodeViewProps<A>>
   ) {
     this.node = node
     this.view = view
@@ -61,9 +61,10 @@ export class SvelteNodeView implements NodeView {
     return this._dom
   }
 
-  get props(): SvelteNodeViewProps {
+  get props(): SvelteNodeViewProps<A> {
     return {
       node: this.node,
+      attrs: this.node.attrs as A,
       selected: this.selected,
       view: this.view,
       getPos: this.getPos,
@@ -74,8 +75,7 @@ export class SvelteNodeView implements NodeView {
         if (this.contentDOM) {
           node.appendChild(this.contentDOM)
         }
-      },
-      ...(this.node.attrs && { attrs: this.node.attrs })
+      }
     }
   }
 
@@ -142,9 +142,9 @@ export class SvelteNodeView implements NodeView {
 
   ignoreMutation = (_mutation: MutationRecord) => true
 
-  static fromComponent(
+  static fromComponent<A extends Attrs>(
     editor: Editor,
-    component?: typeof SvelteComponent<SvelteNodeViewProps>
+    component?: typeof SvelteComponent<SvelteNodeViewProps<A>>
   ): NodeViewConstructor {
     return (
       node: PMNode,

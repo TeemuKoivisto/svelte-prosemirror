@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@my-org/core": "workspace:*",
-    "@my-org/editor": "workspace:*",
     "@sveltejs/kit": "^2.5.7",
     "@sveltejs/package": "^2.3.1",
     "prosemirror-commands": "^1.5.2",
@@ -51,7 +50,6 @@
   },
   "peerDependencies": {
     "@my-org/core": "workspace:*",
-    "@my-org/editor": "workspace:*",
     "prosemirror-model": ">=1.16.0",
     "prosemirror-state": ">=1.3.0",
     "prosemirror-view": ">=1.23.0",

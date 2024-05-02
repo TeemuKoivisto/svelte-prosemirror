@@ -1,6 +1,6 @@
 import Equation, { equationAttrs, equationSchema } from './Equation.svelte'
 
-import { NView, SvelteNodeView } from '@my-org/core'
+import { SvelteNodeView } from '@my-org/core'
 
 import type { Extension } from '@my-org/core'
 

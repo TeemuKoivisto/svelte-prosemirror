@@ -1,7 +1,6 @@
 import { Fragment, Mark, Node as PMNode } from 'prosemirror-model'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
-import { derived, get, writable } from 'svelte/store'
 
 import { createExtensions } from './createExtensions'
 import { commands } from './commands'
@@ -18,9 +17,17 @@ import type {
   EditorCommands
 } from './typings'
 
+interface MutableData {
+  state: EditorState
+  props: EditorProps
+  editable: boolean
+  extObj: ExtObject
+}
+type UpdateArgs = { [K in keyof MutableData]: [field: K, value: MutableData[K]] }[keyof MutableData]
+
 type EditorEvents = {
   ready: (editor: Editor) => void
-  edit: (state: EditorState) => void
+  update(...[field, value]: UpdateArgs): void
   destroy: (editor: Editor) => void
 }
 
@@ -28,24 +35,24 @@ export class Editor extends Observable<EditorEvents> {
   private _editorView: EditorView | undefined
 
   commands: typeof commands & EditorCommands = commands
-  state = writable<EditorState | undefined>()
-  props = writable<EditorProps | undefined>()
-  editable = writable<boolean>(true)
-  extensions = derived(this.props, p => p?.extensions || [])
-  extObj = writable<ExtObject>({})
+  data: MutableData | undefined = undefined
 
   constructor() {
     super()
     return this
   }
 
-  get editorView() {
+  get editorView(): EditorView {
     if (this._editorView === undefined) {
       throw Error(
         '@my-org/core: Accessed undefined EditorView, did you initialize your Editor properly?'
       )
     }
     return this._editorView
+  }
+
+  get extensions() {
+    return this.data?.props?.extensions || []
   }
 
   get cmds() {
@@ -71,20 +78,20 @@ export class Editor extends Observable<EditorEvents> {
     return val
   }
 
-  get fromJSON() {
-    const self = this
-    return {
-      doc: (json: DocJSON) => self.setState({ doc: json }),
-      state: (json: EditorStateJSON) => self.setState(json)
-    }
+  docFromJSON(json: DocJSON) {
+    return this.setState({ doc: json })
   }
 
-  get toJSON() {
-    const self = this
-    return {
-      doc: () => self.editorView.state.doc.toJSON() as DocJSON,
-      state: () => ({ ...self.editorView.state.toJSON() }) as EditorStateJSON
-    }
+  stateFromJSON(json: EditorStateJSON) {
+    return this.setState(json)
+  }
+
+  docToJSON() {
+    return this.editorView.state.doc.toJSON() as DocJSON
+  }
+
+  stateToJSON() {
+    return this.editorView.state.toJSON() as EditorStateJSON
   }
 
   // @TODO needs createMark, setAttributes, isEqual
@@ -103,10 +110,6 @@ export class Editor extends Observable<EditorEvents> {
     return nodes[name].createChecked(attrs, content, marks)
   }
 
-  getExtensions() {
-    return get(this.props)?.extensions || []
-  }
-
   cmd(cmd: Cmd) {
     const view = this.editorView
     const state = view.state
@@ -116,7 +119,11 @@ export class Editor extends Observable<EditorEvents> {
   }
 
   setProps(props: EditorProps) {
-    this.props.set(props)
+    if (!this.data) {
+      throw Error(`@my-org/core: Trying to setProps on uninitialized editor`)
+    }
+    this.data = { ...this.data, props }
+    this.emit('update', 'props', props)
     return this
   }
 
@@ -135,11 +142,15 @@ export class Editor extends Observable<EditorEvents> {
       newState = stateOrJSON
     }
     view.updateState(newState)
-    this.state.set(newState)
+    if (this.data) {
+      this.data = { ...this.data, state: newState }
+    }
+    this.emit('update', 'state', newState)
+    return this
   }
 
   getExtension<K extends keyof Extensions>(name: K) {
-    const found = this.getExtensions().find(e => e.name === name)
+    const found = this.extensions.find(e => e.name === name)
     if (!found) {
       throw Error(`@my-org/core: Could not find extension "${name}"`)
     }
@@ -147,7 +158,7 @@ export class Editor extends Observable<EditorEvents> {
   }
 
   maybeGetExtension<K extends keyof Extensions>(name: K) {
-    return this.getExtensions().find(e => e.name === name) as Extensions[K] | undefined
+    return this.extensions.find(e => e.name === name) as Extensions[K] | undefined
   }
 
   config(cb: (editor: Editor) => void) {
@@ -157,15 +168,14 @@ export class Editor extends Observable<EditorEvents> {
 
   run(dom: HTMLElement, props: EditorProps = {}) {
     const created = createExtensions(this, props)
-    const oldProps = get(this.props)
+    const oldProps = this.data?.props
     const newState = EditorState.create({
       schema: created.schema,
       plugins: created.plugins,
       doc: props.doc ? created.schema.nodeFromJSON(props.doc) : undefined
     })
-    const oldView = this._editorView
-    let view = oldView
-    if (oldView) {
+    let view = this._editorView
+    if (view) {
       const self = this
       // Recreate only extensions that have changed
       if (props !== oldProps) {
@@ -175,7 +185,7 @@ export class Editor extends Observable<EditorEvents> {
           }
         })
       }
-      oldView.setProps({
+      view.setProps({
         state: newState,
         markViews: created.markViews,
         nodeViews: created.nodeViews,
@@ -184,10 +194,9 @@ export class Editor extends Observable<EditorEvents> {
           const oldEditorState = this.state
           const newState = oldEditorState.apply(tr)
           self.setState(newState)
-          self.emit('edit', newState)
         }
       })
-      oldView['editor'] = this
+      view['editor'] = this
     } else {
       const self = this
       view = new EditorView(
@@ -200,28 +209,28 @@ export class Editor extends Observable<EditorEvents> {
             const oldEditorState = this.state
             const newState = oldEditorState.apply(tr)
             self.setState(newState)
-            self.emit('edit', newState)
           }
         }
       )
       view['editor'] = this
     }
-    this._editorView = view
-    this.state.set(view?.state)
-    this.props.set(props)
-    const extObj = {} as ExtObject
-    const cmds: typeof commands & EditorCommands = { ...commands }
+    this._editorView = view as EditorView
+    this.data = {
+      state: this._editorView.state,
+      props,
+      editable: this._editorView.editable,
+      extObj: {}
+    }
+    this.commands = { ...commands }
     props.extensions?.forEach(ext => {
       if (ext.init) ext.init(this)
       // @ts-ignore
-      extObj[ext.name] = ext
+      this.data.extObj[ext.name] = ext
       if ('commands' in ext) {
         // @ts-ignore
-        cmds[ext.name] = ext.commands
+        this.commands[ext.name] = ext.commands
       }
     })
-    this.commands = cmds
-    this.extObj.set(extObj)
     this.emit('ready', this)
     return this
   }
@@ -238,7 +247,7 @@ export class Editor extends Observable<EditorEvents> {
 
   destroy() {
     this.emit('destroy', this)
-    this.getExtensions().forEach(e => {
+    this.extensions.forEach(e => {
       if (e.destroy) e.destroy()
     })
     this._editorView?.destroy()

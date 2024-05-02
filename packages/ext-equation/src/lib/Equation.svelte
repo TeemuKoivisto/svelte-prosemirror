@@ -52,16 +52,17 @@
   import { Node as PMNode } from 'prosemirror-model'
   import type { EditorView } from 'prosemirror-view'
   import { onMount } from 'svelte'
-  import { Editor } from '@my-org/core'
+  import { Editor, SvelteNodeViewProps } from '@my-org/core'
 
   import 'katex/dist/katex.min.css'
+
+  interface $$Props extends SvelteNodeViewProps<EquationAttrs> {}
 
   export let node: PMNode | undefined = undefined,
     attrs: EquationAttrs,
     selected: boolean | undefined,
     view: EditorView,
-    getPos: () => number,
-    editor: Editor
+    getPos: () => number | undefined
 
   let codemirrorEl: HTMLElement
   let katexEl: HTMLElement
@@ -143,12 +144,13 @@
     const updatedLatex = v.view.state.doc.toJSON().join('\n')
     const { tr } = view.state
     const pos = getPos()
-
-    tr.setNodeMarkup(pos, undefined, {
-      ...attrs,
-      latex: updatedLatex
-    })
-    view.dispatch(tr)
+    if (pos !== undefined) {
+      tr.setNodeMarkup(pos, undefined, {
+        ...attrs,
+        latex: updatedLatex
+      })
+      view.dispatch(tr)
+    }
   }
 
   function renderCodeMirror() {
