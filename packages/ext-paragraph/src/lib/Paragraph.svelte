@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import { NodeProps } from '@my-org/core'
-  import type { NodeSpec } from 'prosemirror-model'
+  import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface ParagraphAttrs {
     indent: number
@@ -22,7 +22,10 @@
 <script lang="ts">
   interface $$Props extends NodeProps<ParagraphAttrs> {}
 
-  export let attrs: ParagraphAttrs
+  export let node: PMNode | undefined,
+    attrs: ParagraphAttrs,
+    contentDOM: (node: HTMLElement) => void
+  /** */
 </script>
 
 <p data-indent={attrs.indent} data-hole />

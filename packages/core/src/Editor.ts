@@ -24,11 +24,10 @@ interface MutableData {
   extObj: ExtObject
 }
 type UpdateArgs = { [K in keyof MutableData]: [field: K, value: MutableData[K]] }[keyof MutableData]
-
 type EditorEvents = {
-  ready: (editor: Editor) => void
+  ready(editor: Editor): void
   update(...[field, value]: UpdateArgs): void
-  destroy: (editor: Editor) => void
+  destroy(editor: Editor): void
 }
 
 export class Editor extends Observable<EditorEvents> {

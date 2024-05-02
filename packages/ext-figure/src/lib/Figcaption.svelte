@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import type { NodeSpec } from 'prosemirror-model'
+  import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface FigcaptionAttrs {}
 
@@ -21,6 +21,11 @@
   import type { NodeProps } from '@my-org/core'
 
   interface $$Props extends NodeProps<FigcaptionAttrs> {}
+
+  export let node: PMNode | undefined,
+    attrs: FigcaptionAttrs,
+    contentDOM: (node: HTMLElement) => void
+  /** */
 </script>
 
 <!-- svelte-ignore a11y-structure -->

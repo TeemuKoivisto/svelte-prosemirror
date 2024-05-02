@@ -23,7 +23,7 @@ export interface Initialized extends ExtensionData {
 }
 
 export interface NodeProps<T> {
-  node?: PMNode | undefined
+  node: PMNode | undefined
   attrs: T
   contentDOM: (node: HTMLElement) => void
 }
