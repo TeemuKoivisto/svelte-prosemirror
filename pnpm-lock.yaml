@@ -80,6 +80,9 @@ importers:
       '@my-org/core':
         specifier: workspace:*
         version: link:../core
+      '@my-org/ext-blockquote':
+        specifier: workspace:*
+        version: link:../ext-blockquote
       '@my-org/ext-equation':
         specifier: workspace:*
         version: link:../ext-equation
@@ -206,6 +209,48 @@ importers:
         specifier: ^1.5.2
         version: 1.5.2(jsdom@24.0.0)
 
+  packages/ext-blockquote:
+    devDependencies:
+      '@my-org/core':
+        specifier: workspace:*
+        version: link:../core
+      '@sveltejs/kit':
+        specifier: ^2.5.7
+        version: 2.5.7(@sveltejs/vite-plugin-svelte@3.1.0)(svelte@4.2.15)(vite@5.2.10)
+      '@sveltejs/package':
+        specifier: ^2.3.1
+        version: 2.3.1(svelte@4.2.15)(typescript@5.4.5)
+      prosemirror-commands:
+        specifier: ^1.5.2
+        version: 1.5.2
+      prosemirror-keymap:
+        specifier: ^1.2.2
+        version: 1.2.2
+      prosemirror-model:
+        specifier: ^1.20.0
+        version: 1.20.0
+      prosemirror-state:
+        specifier: ^1.4.3
+        version: 1.4.3
+      prosemirror-transform:
+        specifier: ^1.8.0
+        version: 1.8.0
+      prosemirror-view:
+        specifier: ^1.33.5
+        version: 1.33.5
+      svelte:
+        specifier: ^4.2.15
+        version: 4.2.15
+      svelte-check:
+        specifier: ^3.7.0
+        version: 3.7.0(svelte@4.2.15)
+      svelte-preprocess:
+        specifier: ^5.1.4
+        version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
+      svelte2tsx:
+        specifier: ^0.7.7
+        version: 0.7.7(svelte@4.2.15)(typescript@5.4.5)
+
   packages/ext-equation:
     dependencies:
       '@codemirror/state':
@@ -256,7 +301,7 @@ importers:
         version: 4.2.15
       svelte-check:
         specifier: ^3.7.0
-        version: 3.7.0(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)
+        version: 3.7.0(svelte@4.2.15)
       svelte-preprocess:
         specifier: ^5.1.4
         version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
@@ -311,7 +356,7 @@ importers:
         version: 4.2.15
       svelte-check:
         specifier: ^3.7.0
-        version: 3.7.0(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)
+        version: 3.7.0(svelte@4.2.15)
       svelte-preprocess:
         specifier: ^5.1.4
         version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
@@ -353,7 +398,7 @@ importers:
         version: 4.2.15
       svelte-check:
         specifier: ^3.7.0
-        version: 3.7.0(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)
+        version: 3.7.0(svelte@4.2.15)
       svelte-preprocess:
         specifier: ^5.1.4
         version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
@@ -407,7 +452,7 @@ importers:
         version: 4.2.15
       svelte-check:
         specifier: ^3.7.0
-        version: 3.7.0(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)
+        version: 3.7.0(svelte@4.2.15)
       svelte-preprocess:
         specifier: ^5.1.4
         version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
@@ -449,7 +494,7 @@ importers:
         version: 4.2.15
       svelte-check:
         specifier: ^3.7.0
-        version: 3.7.0(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)
+        version: 3.7.0(svelte@4.2.15)
       svelte-preprocess:
         specifier: ^5.1.4
         version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
@@ -534,7 +579,7 @@ importers:
         version: 4.2.15
       svelte-check:
         specifier: ^3.7.0
-        version: 3.7.0(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)
+        version: 3.7.0(svelte@4.2.15)
       svelte-preprocess:
         specifier: ^5.1.4
         version: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
@@ -1273,7 +1318,7 @@ packages:
       chokidar: 3.6.0
       kleur: 4.1.5
       sade: 1.8.1
-      semver: 7.5.4
+      semver: 7.6.0
       svelte: 4.2.15
       svelte2tsx: 0.7.7(svelte@4.2.15)(typescript@5.4.5)
     transitivePeerDependencies:
@@ -5229,6 +5274,33 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.19
       chokidar: 3.5.3
+      fast-glob: 3.3.1
+      import-fresh: 3.3.0
+      picocolors: 1.0.0
+      sade: 1.8.1
+      svelte: 4.2.15
+      svelte-preprocess: 5.1.4(postcss-load-config@5.0.3)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5)
+      typescript: 5.4.5
+    transitivePeerDependencies:
+      - '@babel/core'
+      - coffeescript
+      - less
+      - postcss
+      - postcss-load-config
+      - pug
+      - sass
+      - stylus
+      - sugarss
+    dev: true
+
+  /svelte-check@3.7.0(svelte@4.2.15):
+    resolution: {integrity: sha512-Va6sGL4Vy4znn0K+vaatk98zoBvG2aDee4y3r5X4S80z8DXfbACHvdLlyXa4C4c5tQzK9H0Uq2pbd20wH3ucjQ==}
+    hasBin: true
+    peerDependencies:
+      svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.19
+      chokidar: 3.6.0
       fast-glob: 3.3.1
       import-fresh: 3.3.0
       picocolors: 1.0.0

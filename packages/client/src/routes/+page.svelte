@@ -3,6 +3,7 @@
 
   import { editor, editorActions } from '$stores/editor'
 
+  import { blockquoteExtension } from '@my-org/ext-blockquote'
   import { paragraphExtension } from '@my-org/ext-paragraph'
   import { figureExtension } from '@my-org/ext-figure'
   import { equationExtension } from '@my-org/ext-equation'
@@ -47,6 +48,7 @@
       extensions: [
         exampleSetupExtension({ history: !yjs }),
         paragraphExtension(),
+        blockquoteExtension(),
         figureExtension(),
         equationExtension(),
         marksExtension(),

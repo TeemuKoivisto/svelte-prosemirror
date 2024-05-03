@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@my-org/core": "workspace:*",
+    "@my-org/ext-blockquote": "workspace:*",
     "@my-org/ext-equation": "workspace:*",
     "@my-org/ext-example-setup": "workspace:*",
     "@my-org/ext-figure": "workspace:*",
