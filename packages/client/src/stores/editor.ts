@@ -26,10 +26,12 @@ export const editorActions = {
     extObj.set(instance.data.extObj)
     props.set(instance.data.props)
     state.set(instance.data.state)
-    instance.on('update', (k, v) => k === 'extObj' && extObj.set(v))
-    instance.on('update', (k, v) => k === 'props' && props.set(v))
     instance.on('update', (k, v) => {
-      if (k === 'state') {
+      if (k === 'extObj') {
+        extObj.set(v)
+      } else if (k === 'props') {
+        props.set(v)
+      } else if (k === 'state') {
         state.set(v)
         localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(v.toJSON()))
       }
