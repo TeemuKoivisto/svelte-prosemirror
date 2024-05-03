@@ -22,39 +22,42 @@
   import type { EditorProps } from '@my-org/core'
 
   let documentId = 'abcd1234'
+  let editorInstance: Editor
+  let props: EditorProps = {}
 
-  function editor_action(dom: HTMLElement) {
-    const props: EditorProps = {
-      // doc: initial.pmDoc,
-      // extensions: [],
+  // Create Yjs extension separately so that it's not destroyed if props that are not related to it change
+  // Otherwise the provider is destroyed and edits stop working...
+  $: yjs = YJS_URL
+    ? yjsExtension({
+        document: {
+          id: 'docId126'
+        },
+        user: {
+          id: 'id-john-123',
+          name: 'John',
+          clientID: 1,
+          color: '#ff3354'
+        },
+        ws_url: YJS_URL
+      })
+    : undefined
+
+  $: {
+    props = {
       extensions: [
-        exampleSetupExtension({ noHistory: true }),
+        exampleSetupExtension({ history: !yjs }),
         paragraphExtension(),
         figureExtension(),
         equationExtension(),
-        marksExtension()
+        marksExtension(),
+        ...(yjs ? [yjs] : [])
       ]
     }
-    if (YJS_URL) {
-      props.extensions?.push(
-        yjsExtension({
-          document: {
-            id: 'docId126'
-          },
-          user: {
-            id: 'id-john-123',
-            name: 'John',
-            clientID: 1,
-            color: '#ff3354'
-          },
-          ws_url: YJS_URL
-        })
-      )
-      props.extensions?.push(exampleSetupExtension({ noHistory: true }))
-    } else {
-      props.extensions?.push(exampleSetupExtension())
-    }
-    editorActions.setEditor(Editor.create(dom, props))
+  }
+
+  function editor_action(dom: HTMLElement) {
+    editorInstance = Editor.create(dom, props)
+    editorActions.setEditor(editorInstance)
   }
 
   function handleInsertFigure() {
