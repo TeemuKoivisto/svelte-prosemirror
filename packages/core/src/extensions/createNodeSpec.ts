@@ -4,17 +4,19 @@ import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec'
 import { SveltePMNode } from '../typings'
 import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
 
-export function createNodeSpec(node: SveltePMNode<any>): NodeSpec {
+import { mount } from 'svelte'
+
+export async function createNodeSpec(node: SveltePMNode<any>): Promise<NodeSpec> {
   const { schema } = node
   const nodeSpec = {
     ...schema
   }
   const component = node.component // || node.nodeView
   if (component) {
-    const staticSpec = createSpec(node)
+    const staticSpec = await createSpec(node)
     nodeSpec.toDOM = (node: PMNode) => {
       const div = document.createElement('div')
-      const comp = new component({
+      const comp = mount(component, {
         target: div,
         props: {
           node,
@@ -22,9 +24,12 @@ export function createNodeSpec(node: SveltePMNode<any>): NodeSpec {
           contentDOM: () => undefined
         }
       })
-      const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
-      // console.log('spec', spec)
-      return spec as unknown as DOMOutputSpec
+      comp.then((comp: any) => {
+        const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+        // console.log('spec', spec)
+        return spec as unknown as DOMOutputSpec
+      })
+      return div
     }
     nodeSpec.parseDOM = [
       ...(nodeSpec.parseDOM || []),
@@ -46,13 +51,13 @@ export function createNodeSpec(node: SveltePMNode<any>): NodeSpec {
   return nodeSpec
 }
 
-export function createSpec(node: SveltePMNode<any>): readonly [string, ...any[]] {
+export async function createSpec(node: SveltePMNode<any>): Promise<readonly [string, ...any[]]> {
   const { attrs, component } = node
   if (!component) {
     return ['']
   }
   const div = document.createElement('div')
-  const comp = new component({
+  const comp = await mount(component, {
     target: div,
     props: {
       node: undefined,

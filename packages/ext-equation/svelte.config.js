@@ -1,13 +1,13 @@
-import autoPreprocess from 'svelte-preprocess'
-
 const preprocessOptions = {
   scss: {}
 }
 
-/** @type {import('@sveltejs/kit').Config} */
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+
 export default {
-  preprocess: autoPreprocess(preprocessOptions),
+  preprocess: vitePreprocess(),
   preprocessOptions,
-  compilerOptions: {},
-  kit: {}
+  compilerOptions: {
+    runes: true
+  }
 }

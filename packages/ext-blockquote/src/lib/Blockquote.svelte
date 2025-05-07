@@ -1,4 +1,4 @@
-<script lang="ts" module>
+<script lang="ts" context="module">
   import type { NodeProps } from '@my-org/core'
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 

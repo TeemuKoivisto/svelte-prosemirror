@@ -63,14 +63,16 @@ export class Editor extends Observable<EditorEvents> {
       const cmdKey = name as keyof typeof cmds
       if (typeof cmds[cmdKey] === 'object') {
         const subCmds: any = {}
+        // @ts-expect-error cmds[cmdKey] is not an object
         for (const subName in cmds[cmdKey]) {
-          // @ts-ignore
-          subCmds[subName] = (...params: any[]) => self.cmd(cmds[cmdKey][subName](...params) as Cmd)
+          subCmds[subName] = (...params: any[]) =>
+            // @ts-expect-error cmds[cmdKey] is not an object
+            self.cmd(cmds[cmdKey][subName](...params) as Cmd)
         }
         val[cmdKey] = subCmds
       } else {
         val[name] = (...params: any[]) =>
-          // @ts-ignore
+          // @ts-expect-error cmds[name] is not an object
           self.cmd(cmds[name as keyof typeof cmds](...params) as Cmd)
       }
     }
@@ -165,8 +167,8 @@ export class Editor extends Observable<EditorEvents> {
     return this
   }
 
-  run(dom: HTMLElement, props: EditorProps = {}) {
-    const created = createExtensions(this, props)
+  async run(dom: HTMLElement, props: EditorProps = {}) {
+    const created = await createExtensions(this, props)
     const oldProps = this.data?.props
     const newState = EditorState.create({
       schema: created.schema,
@@ -175,6 +177,7 @@ export class Editor extends Observable<EditorEvents> {
     })
     let view = this._editorView
     if (view) {
+      console.log('created1')
       const self = this
       // Recreate only extensions that have changed
       if (props !== oldProps) {
@@ -197,6 +200,7 @@ export class Editor extends Observable<EditorEvents> {
       })
       view['editor'] = this
     } else {
+      console.log('created2')
       const self = this
       view = new EditorView(
         { mount: dom },
@@ -211,6 +215,8 @@ export class Editor extends Observable<EditorEvents> {
           }
         }
       )
+      console.log('created4')
+
       view['editor'] = this
     }
     this._editorView = view as EditorView
@@ -221,15 +227,17 @@ export class Editor extends Observable<EditorEvents> {
       extObj: {}
     }
     this.commands = { ...commands }
+    console.log('created3')
     props.extensions?.forEach(ext => {
       if (ext.init) ext.init(this)
-      // @ts-ignore
+      // @ts-expect-error ext.name is not a string
       this.data.extObj[ext.name] = ext
       if ('commands' in ext) {
-        // @ts-ignore
+        // @ts-expect-error ext.name is not a string
         this.commands[ext.name] = ext.commands
       }
     })
+
     this.emit('ready', this)
     return this
   }

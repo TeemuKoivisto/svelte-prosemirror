@@ -1,4 +1,4 @@
-<script lang="ts" module>
+<script lang="ts" context="module">
   import type { NodeSpec } from 'prosemirror-model'
 
   export interface EquationAttrs {

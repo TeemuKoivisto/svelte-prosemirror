@@ -14,8 +14,8 @@ export const extObj = writable<ExtObject>({} as ExtObject)
 export const activeMarks = derived(state, s => (s ? getActiveMarks(s) : []))
 
 export const editorActions = {
-  setEditor(instance: Editor) {
-    editor = instance
+  async setEditor(instance: Editor) {
+    editor = await (instance as any)
     try {
       const existing = localStorage.getItem(STATE_STORAGE_KEY)
       const yjsExt = instance.getExtension('yjs')

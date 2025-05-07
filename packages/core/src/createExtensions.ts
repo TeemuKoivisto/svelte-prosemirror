@@ -7,7 +7,10 @@ import { createNodeSpec } from './extensions/createNodeSpec'
 import type { Cmd, Editor, EditorProps, ExtensionData, Initialized } from './typings'
 import { keymap } from 'prosemirror-keymap'
 
-export function createExtensions(editor: Editor, { extensions = [] }: EditorProps): Initialized {
+export async function createExtensions(
+  editor: Editor,
+  { extensions = [] }: EditorProps
+): Initialized {
   const extData: ExtensionData = {
     commands: {},
     marks: {},
@@ -37,7 +40,7 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
       }
       const value = ext.nodes[name]
       extData.svelteNodes[name] = value
-      extData.nodes[name] = createNodeSpec(value)
+      extData.nodes[name] = await createNodeSpec(value)
       if (value.nodeView) {
         extData.nodeViews[name] = value.nodeView(editor)
       }

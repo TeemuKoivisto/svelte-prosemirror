@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from 'svelte/legacy'
 
   import { Editor } from '@my-org/core'
 
@@ -30,34 +30,36 @@
 
   // Create Yjs extension separately so that it's not destroyed if props that are not related to it change
   // Otherwise the provider is destroyed and edits stop working...
-  let yjs = $derived(YJS_URL
-    ? yjsExtension({
-        document: {
-          id: 'docId126'
-        },
-        user: {
-          id: 'id-john-123',
-          name: 'John',
-          clientID: 1,
-          color: '#ff3354'
-        },
-        ws_url: YJS_URL
-      })
-    : undefined)
+  let yjs = $derived(
+    YJS_URL
+      ? yjsExtension({
+          document: {
+            id: 'docId126'
+          },
+          user: {
+            id: 'id-john-123',
+            name: 'John',
+            clientID: 1,
+            color: '#ff3354'
+          },
+          ws_url: YJS_URL
+        })
+      : undefined
+  )
 
   run(() => {
     props = {
       extensions: [
         exampleSetupExtension({ history: !yjs }),
-        paragraphExtension(),
-        blockquoteExtension(),
-        figureExtension(),
+        // paragraphExtension(),
+        // blockquoteExtension(),
+        // figureExtension(),
         equationExtension(),
         marksExtension(),
         ...(yjs ? [yjs] : [])
       ]
     }
-  });
+  })
 
   function editor_action(dom: HTMLElement) {
     editorInstance = Editor.create(dom, props)

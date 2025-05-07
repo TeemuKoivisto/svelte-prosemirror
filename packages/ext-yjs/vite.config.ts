@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-import pkg from './package.json' assert { type: 'json' }
+import pkg from './package.json'
 
 export default defineConfig({
   build: {
