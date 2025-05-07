@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface FigcaptionAttrs {}
@@ -20,16 +20,20 @@
 <script lang="ts">
   import type { NodeProps } from '@my-org/core'
 
-  interface $$Props extends NodeProps<FigcaptionAttrs> {}
+  
 
-  export let node: PMNode | undefined,
-    attrs: FigcaptionAttrs,
-    contentDOM: (node: HTMLElement) => void
-  /** */
+  interface Props {
+    node: PMNode | undefined; /** */
+    attrs: FigcaptionAttrs; /** */
+    contentDOM: (node: HTMLElement) => void; /** */
+  }
+
+  let { node, attrs, contentDOM }: Props = $props();
+  
 </script>
 
-<!-- svelte-ignore a11y-structure -->
-<figcaption data-hole />
+<!-- svelte-ignore a11y_figcaption_parent -->
+<figcaption data-hole></figcaption>
 
 <style lang="scss">
   figcaption {

@@ -1,10 +1,10 @@
-import { MarkSpec, NodeSpec, Node as PMNode, Schema } from 'prosemirror-model'
-import { EditorView, MarkViewConstructor, NodeViewConstructor } from 'prosemirror-view'
+import { NodeSpec, Node as PMNode, Schema } from 'prosemirror-model'
+import { MarkViewConstructor, NodeViewConstructor } from 'prosemirror-view'
 import { Plugin } from 'prosemirror-state'
+import type { MarkSpec } from 'prosemirror-model'
 import type { SvelteComponent } from 'svelte'
 
 import type { Editor } from '../Editor'
-import type { EditorProps } from './editor'
 import type { Cmd } from './pm'
 
 export interface ExtensionData {

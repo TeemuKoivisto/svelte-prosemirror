@@ -30,7 +30,7 @@
     "prosemirror-state": "^1.4.3",
     "prosemirror-transform": "^1.8.0",
     "prosemirror-view": "^1.33.5",
-    "svelte": "^4.2.15",
+    "svelte": "^5.28.2",
     "tslib": "^2.6.2",
     "vitest": "^1.5.2"
   },

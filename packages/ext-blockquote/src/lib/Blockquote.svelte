@@ -1,5 +1,5 @@
-<script lang="ts" context="module">
-  import { NodeProps } from '@my-org/core'
+<script lang="ts" module>
+  import type { NodeProps } from '@my-org/core'
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface BlockquoteAttrs {}
@@ -15,15 +15,16 @@
 </script>
 
 <script lang="ts">
-  interface $$Props extends NodeProps<BlockquoteAttrs> {}
+  interface Props {
+    node: PMNode | undefined /** */
+    attrs: BlockquoteAttrs /** */
+    contentDOM: (node: HTMLElement) => void /** */
+  }
 
-  export let node: PMNode | undefined,
-    attrs: BlockquoteAttrs,
-    contentDOM: (node: HTMLElement) => void
-  /** */
+  let { node, attrs, contentDOM }: Props = $props()
 </script>
 
-<blockquote data-hole />
+<blockquote data-hole></blockquote>
 
 <style lang="scss" global>
   blockquote {

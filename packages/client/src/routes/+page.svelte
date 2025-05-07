@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { Editor } from '@my-org/core'
 
   import { editor, editorActions } from '$stores/editor'
@@ -22,13 +24,13 @@
 
   import type { EditorProps } from '@my-org/core'
 
-  let documentId = 'abcd1234'
+  let documentId = $state('abcd1234')
   let editorInstance: Editor
-  let props: EditorProps = {}
+  let props: EditorProps = $state({})
 
   // Create Yjs extension separately so that it's not destroyed if props that are not related to it change
   // Otherwise the provider is destroyed and edits stop working...
-  $: yjs = YJS_URL
+  let yjs = $derived(YJS_URL
     ? yjsExtension({
         document: {
           id: 'docId126'
@@ -41,9 +43,9 @@
         },
         ws_url: YJS_URL
       })
-    : undefined
+    : undefined)
 
-  $: {
+  run(() => {
     props = {
       extensions: [
         exampleSetupExtension({ history: !yjs }),
@@ -55,7 +57,7 @@
         ...(yjs ? [yjs] : [])
       ]
     }
-  }
+  });
 
   function editor_action(dom: HTMLElement) {
     editorInstance = Editor.create(dom, props)
@@ -110,12 +112,12 @@
       <label class="mr-4" for="documentId">Document id</label>
       <input class="bg-gray-100 rounded" bind:value={documentId} id="documentId" />
     </div>
-    <button class="btn" on:click={handleInsertFigure}>Insert figure</button>
-    <button class="btn" on:click={handleInsertEquation}>Insert equation</button>
+    <button class="btn" onclick={handleInsertFigure}>Insert figure</button>
+    <button class="btn" onclick={handleInsertEquation}>Insert equation</button>
   </fieldset>
   <div class="mt-3 bg-white rounded w-full">
     <Toolbar />
-    <div use:editor_action />
+    <div use:editor_action></div>
   </div>
 </section>
 

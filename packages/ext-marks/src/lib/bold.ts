@@ -1,4 +1,4 @@
-import { Mark, MarkSpec } from 'prosemirror-model'
+import type { MarkSpec } from 'prosemirror-model'
 
 // :: MarkSpec A strong mark. Rendered as `<strong>`, parse rules
 // also match `<b>` and `font-weight: bold`.

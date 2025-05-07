@@ -2,7 +2,7 @@ import randomColor from 'randomcolor'
 import { names, uniqueNamesGenerator } from 'unique-names-generator'
 import { v4 as uuidv4 } from 'uuid'
 
-import { YjsUser } from './types'
+import type { YjsUser } from './types'
 
 export const generateColor = () =>
   randomColor({
