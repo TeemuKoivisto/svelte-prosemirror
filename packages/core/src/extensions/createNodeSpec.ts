@@ -30,7 +30,8 @@ export async function createNodeSpec(node: SveltePMNode<any>): Promise<NodeSpec>
       //   return spec as unknown as DOMOutputSpec
       // })
       // return div
-      // Clone the static spec to avoid modifying the original
+
+      // ===== Clone the static spec to avoid modifying the original
       const clonedSpec = [...staticSpec]
 
       // If the spec has attributes (usually at index 1 if present)

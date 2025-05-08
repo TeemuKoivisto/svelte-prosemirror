@@ -27,12 +27,13 @@
     node: PMNode | undefined /** */
     attrs: FigureAttrs /** */
     contentDOM: (node: HTMLElement) => void /** */
+    ref?: HTMLElement
   }
 
-  let { node, attrs, contentDOM }: Props = $props()
+  let { node, attrs, contentDOM, ref }: Props = $props()
 </script>
 
-<figure id={attrs.id} data-hole></figure>
+<figure id={attrs.id} data-hole bind:this={ref}></figure>
 
 <style lang="scss">
   figure {

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { NodeProps } from '@my-org/core'
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
@@ -16,13 +16,14 @@
 
 <script lang="ts">
   interface Props {
-    node: PMNode | undefined /** */
-    attrs: BlockquoteAttrs /** */
-    contentDOM: (node: HTMLElement) => void /** */
+    // node: PMNode | undefined
+    // attrs: BlockquoteAttrs
+    // contentDOM: (node: HTMLElement) => void
     ref?: HTMLQuoteElement
   }
 
-  let { node, attrs, contentDOM, ref }: Props = $props()
+  // let { node, attrs, contentDOM, ref }: Props = $props()
+  let { ref }: Props = $props()
 </script>
 
 <blockquote data-hole bind:this={ref}></blockquote>

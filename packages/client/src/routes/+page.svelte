@@ -23,10 +23,13 @@
   import '@my-org/ext-yjs/yjs.css'
 
   import type { EditorProps } from '@my-org/core'
+  import { onMount } from 'svelte'
 
   let documentId = $state('abcd1234')
   let editorInstance: Editor
   let props: EditorProps = $state({})
+
+  let editorRef: HTMLDivElement = $state()
 
   // Create Yjs extension separately so that it's not destroyed if props that are not related to it change
   // Otherwise the provider is destroyed and edits stop working...
@@ -47,24 +50,25 @@
       : undefined
   )
 
-  run(() => {
+  run(() => {})
+
+  onMount(() => {
     props = {
       extensions: [
         exampleSetupExtension({ history: !yjs }),
         // paragraphExtension(),
-        blockquoteExtension(),
-        // figureExtension(),
+        // blockquoteExtension(),
+        figureExtension(),
         // equationExtension(),
         // marksExtension(),
         ...(yjs ? [yjs] : [])
       ]
     }
+    editorInstance = Editor.create(editorRef, props)
+    editorActions.setEditor(editorInstance)
   })
 
-  function editor_action(dom: HTMLElement) {
-    editorInstance = Editor.create(dom, props)
-    editorActions.setEditor(editorInstance)
-  }
+  function editor_action(dom: HTMLElement) {}
 
   function handleInsertFigure() {
     editor?.cmd((state, dispatch) => {
@@ -119,7 +123,8 @@
   </fieldset>
   <div class="mt-3 bg-white rounded w-full">
     <Toolbar />
-    <div use:editor_action></div>
+    <!-- <div use:editor_action bind:this={editorRef}></div> -->
+    <div bind:this={editorRef}></div>
   </div>
 </section>
 

@@ -24,13 +24,14 @@
     node: PMNode | undefined /** */
     attrs: FigcaptionAttrs /** */
     contentDOM: (node: HTMLElement) => void /** */
+    ref?: HTMLElement
   }
 
-  let { node, attrs, contentDOM }: Props = $props()
+  let { node, attrs, contentDOM, ref }: Props = $props()
 </script>
 
 <!-- svelte-ignore a11y_figcaption_parent -->
-<figcaption data-hole></figcaption>
+<figcaption data-hole bind:this={ref}></figcaption>
 
 <style lang="scss">
   figcaption {

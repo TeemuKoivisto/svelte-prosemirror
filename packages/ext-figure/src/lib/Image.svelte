@@ -32,12 +32,13 @@
     node: PMNode | undefined /** */
     attrs: ImageAttrs /** */
     contentDOM: (node: HTMLElement) => void /** */
+    ref?: HTMLImageElement
   }
 
-  let { node, attrs, contentDOM }: Props = $props()
+  let { node, attrs, contentDOM, ref }: Props = $props()
 </script>
 
-<img src={attrs.src} alt={attrs.alt} title={attrs.title} />
+<img src={attrs.src} alt={attrs.alt} title={attrs.title} bind:this={ref} />
 
 <style lang="scss">
   :global(img.ProseMirror-selectednode) {

@@ -170,14 +170,18 @@ export class Editor extends Observable<EditorEvents> {
   async run(dom: HTMLElement, props: EditorProps = {}) {
     const created = await createExtensions(this, props)
     const oldProps = this.data?.props
+    console.log('created0')
+    console.log(created)
+    console.log(props.doc)
     const newState = EditorState.create({
       schema: created.schema,
       plugins: created.plugins,
       doc: props.doc ? created.schema.nodeFromJSON(props.doc) : undefined
     })
+    console.log('created1')
     let view = this._editorView
     if (view) {
-      console.log('created1')
+      console.log('created2')
       const self = this
       // Recreate only extensions that have changed
       if (props !== oldProps) {
@@ -200,7 +204,7 @@ export class Editor extends Observable<EditorEvents> {
       })
       view['editor'] = this
     } else {
-      console.log('created2')
+      console.log('created3')
       const self = this
       view = new EditorView(
         { mount: dom },
@@ -227,7 +231,7 @@ export class Editor extends Observable<EditorEvents> {
       extObj: {}
     }
     this.commands = { ...commands }
-    console.log('created3')
+    console.log('created5')
     props.extensions?.forEach(ext => {
       if (ext.init) ext.init(this)
       // @ts-expect-error ext.name is not a string
@@ -261,6 +265,7 @@ export class Editor extends Observable<EditorEvents> {
   }
 
   static create(dom: HTMLElement, props?: EditorProps) {
+    console.log('custom create')
     return new Editor().run(dom, props)
   }
 }
