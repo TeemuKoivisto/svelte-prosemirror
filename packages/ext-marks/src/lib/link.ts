@@ -5,29 +5,29 @@ import type { MarkSpec } from 'prosemirror-model'
 // defaults to the empty string. Rendered and parsed as an `<a>`
 // element.
 export const link: MarkSpec = {
-  attrs: {
-    href: {},
-    title: { default: null },
-    dataTracked: { default: null }
-  },
-  inclusive: false,
-  parseDOM: [
-    {
-      tag: 'a[href]',
-      getAttrs(dom: HTMLElement | string) {
-        if (dom instanceof HTMLElement) {
-          return {
-            src: dom.getAttribute('src'),
-            title: dom.getAttribute('title'),
-            alt: dom.getAttribute('alt')
-          }
+    attrs: {
+        href: {},
+        title: { default: null },
+        dataTracked: { default: null }
+    },
+    inclusive: false,
+    parseDOM: [
+        {
+            tag: 'a[href]',
+            getAttrs(dom: HTMLElement | string) {
+                if (dom instanceof HTMLElement) {
+                    return {
+                        src: dom.getAttribute('src'),
+                        title: dom.getAttribute('title'),
+                        alt: dom.getAttribute('alt')
+                    }
+                }
+                return null
+            }
         }
-        return null
-      }
+    ],
+    toDOM(node: Mark) {
+        const { href, title } = node.attrs
+        return ['a', { href, title }, 0]
     }
-  ],
-  toDOM(node: Mark) {
-    const { href, title } = node.attrs
-    return ['a', { href, title }, 0]
-  }
 }

@@ -3,16 +3,16 @@ import type { Commands } from './typings'
 import type { Editor } from './typings'
 
 declare global {
-  interface Window {
-    editorView: EditorView
-    commands: Commands
-  }
+    interface Window {
+        editorView: EditorView
+        commands: Commands
+    }
 }
 
 declare module 'prosemirror-view' {
-  interface EditorView {
-    editor: Editor
-  }
+    interface EditorView {
+        editor: Editor
+    }
 }
 
 export * from './createExtensions'

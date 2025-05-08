@@ -12,33 +12,38 @@ https://teemukoivisto.github.io/svelte-prosemirror/
 
 ```ts
 export const equationSchema: NodeSpec = {
-  attrs: {
-    id: { default: undefined },
-    title: { default: '' },
-    latex: { default: '' }
-  },
-  content: 'inline*',
-  group: 'block',
-  atom: true,
-  parseDOM: [
-    {
-      tag: 'figure.equation',
-      getAttrs: (dom: HTMLElement | string) => {
-        if (dom instanceof HTMLElement) {
-          return {
-            id: dom.getAttribute('id'),
-            title: dom.getAttribute('title'),
-            latex: dom.getAttribute('latex')
-          }
+    attrs: {
+        id: { default: undefined },
+        title: { default: '' },
+        latex: { default: '' }
+    },
+    content: 'inline*',
+    group: 'block',
+    atom: true,
+    parseDOM: [
+        {
+            tag: 'figure.equation',
+            getAttrs: (dom: HTMLElement | string) => {
+                if (dom instanceof HTMLElement) {
+                    return {
+                        id: dom.getAttribute('id'),
+                        title: dom.getAttribute('title'),
+                        latex: dom.getAttribute('latex')
+                    }
+                }
+                return null
+            }
         }
-        return null
-      }
+    ],
+    toDOM(node: PMNode) {
+        const { id, title, latex } = node.attrs
+        return [
+            'figure',
+            { id, title, class: 'equation', latex },
+            ['pre', latex],
+            ['figcaption', 0]
+        ]
     }
-  ],
-  toDOM(node: PMNode) {
-    const { id, title, latex } = node.attrs
-    return ['figure', { id, title, class: 'equation', latex }, ['pre', latex], ['figcaption', 0]]
-  }
 }
 ```
 
@@ -76,26 +81,26 @@ import Image, { imageAttrs, imageSchema } from './Image.svelte'
 import type { Extension } from '@my-org/core'
 
 export const figureExtension = () => {
-  return {
-    name: 'figure' as const,
-    nodes: {
-      figcaption: {
-        attrs: figcaptionAttrs,
-        schema: figcaptionSchema,
-        component: Figcaption
-      },
-      figure: {
-        attrs: figureAttrs,
-        schema: figureSchema,
-        component: Figure
-      },
-      image: {
-        attrs: imageAttrs,
-        schema: imageSchema,
-        component: Image
-      }
-    }
-  } satisfies Extension
+    return {
+        name: 'figure' as const,
+        nodes: {
+            figcaption: {
+                attrs: figcaptionAttrs,
+                schema: figcaptionSchema,
+                component: Figcaption
+            },
+            figure: {
+                attrs: figureAttrs,
+                schema: figureSchema,
+                component: Figure
+            },
+            image: {
+                attrs: imageAttrs,
+                schema: imageSchema,
+                component: Image
+            }
+        }
+    } satisfies Extension
 }
 ```
 

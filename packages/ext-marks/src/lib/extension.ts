@@ -7,24 +7,24 @@ import { strikethrough } from './strikethrough'
 import type { Extension } from '@my-org/core'
 
 export const marksExtension = () => {
-  return {
-    name: 'basic-marks' as const,
-    marks: {
-      bold: {
-        schema: bold
-      },
-      code: {
-        schema: code
-      },
-      italic: {
-        schema: italic
-      },
-      link: {
-        schema: link
-      },
-      strikethrough: {
-        schema: strikethrough
-      }
-    }
-  } satisfies Extension
+    return {
+        name: 'basic-marks' as const,
+        marks: {
+            bold: {
+                schema: bold
+            },
+            code: {
+                schema: code
+            },
+            italic: {
+                schema: italic
+            },
+            link: {
+                schema: link
+            },
+            strikethrough: {
+                schema: strikethrough
+            }
+        }
+    } satisfies Extension
 }

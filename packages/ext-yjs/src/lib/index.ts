@@ -3,12 +3,12 @@ import { yjsExtensionName } from './types'
 import * as commands from './commands'
 
 declare module '@my-org/core' {
-  interface Extensions {
-    [yjsExtensionName]: ReturnType<typeof yjsExtension>
-  }
-  interface EditorCommands {
-    [yjsExtensionName]: typeof commands
-  }
+    interface Extensions {
+        [yjsExtensionName]: ReturnType<typeof yjsExtension>
+    }
+    interface EditorCommands {
+        [yjsExtensionName]: typeof commands
+    }
 }
 
 export * as yjsCommands from './commands'
