@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
 	import Toolbar from '$components/Toolbar.svelte';
 	import { YJS_URL } from '$config';
 	import { editor, editorActions } from '$stores/editor';
@@ -11,12 +10,10 @@
 	import { marksExtension } from '@my-org/ext-marks';
 	import { paragraphExtension } from '@my-org/ext-paragraph';
 	import { yjsExtension } from '@my-org/ext-yjs';
-
 	import '@my-org/ext-example-setup/gapcursor.css';
 	import '@my-org/ext-example-setup/menu.css';
 	import '@my-org/ext-example-setup/prosemirror-example-setup.css';
 	import '@my-org/ext-yjs/yjs.css';
-
 	import { onMount } from 'svelte';
 	import type { EditorProps } from '@my-org/core';
 
@@ -45,8 +42,6 @@
 			: undefined,
 	);
 
-	run(() => {});
-
 	onMount(() => {
 		props = {
 			extensions: [
@@ -65,8 +60,6 @@
 		});
 	});
 
-	function editor_action(dom: HTMLElement) {}
-
 	function handleInsertFigure() {
 		editor?.cmd((state, dispatch) => {
 			const tr = state.tr;
@@ -84,7 +77,7 @@
 					nodes.figcaption.create(undefined, schema.text('Happy trees :)')),
 				]),
 			);
-			dispatch && dispatch(tr);
+			dispatch(tr);
 		});
 	}
 
@@ -103,7 +96,7 @@
 					schema.text('Mah equation'),
 				),
 			);
-			dispatch && dispatch(tr);
+			dispatch(tr);
 		});
 	}
 </script>
@@ -115,8 +108,8 @@
 			<label class="mr-4" for="documentId">Document id</label>
 			<input class="bg-gray-100 rounded" bind:value={documentId} id="documentId" />
 		</div>
-		<button class="btn" onclick={handleInsertFigure}>Insert figure</button>
-		<button class="btn" onclick={handleInsertEquation}>Insert equation</button>
+		<button class="btn" type="button" onclick={handleInsertFigure}>Insert figure</button>
+		<button class="btn" type="button" onclick={handleInsertEquation}>Insert equation</button>
 	</fieldset>
 	<div class="mt-3 bg-white rounded w-full">
 		<Toolbar />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { activeMarks, editor, state } from '$stores/editor';
+	import { activeMarks, editor } from '$stores/editor';
 	import Icon from '@iconify/svelte/dist/OfflineIcon.svelte';
 	import bold from '@iconify-icons/mdi/format-bold.js';
 	import italic from '@iconify-icons/mdi/format-italic.js';
@@ -39,11 +39,12 @@
 </script>
 
 <div class="bg-blue-200 p-4">
-	<div>selection head: {$state?.selection.head}</div>
+	<!-- <div>selection head: {$state?.selection?.head}</div> -->
 	<ul class="flex">
-		{#each marksIcons as item}
+		{#each marksIcons as item (item.title)}
 			<li>
 				<button
+					type="button"
 					class="icon-btn"
 					class:active={$activeMarks.includes(item.title)}
 					onclick={() => handleIconClick(item.title)}

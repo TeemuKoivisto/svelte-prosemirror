@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { screens } = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */

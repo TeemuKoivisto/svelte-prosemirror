@@ -99,7 +99,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 				props: this.props,
 			}) as MountedComponent;
 		} else {
-			contentDOM && this._dom.appendChild(contentDOM);
+			this._dom.appendChild(contentDOM!);
 		}
 		return this;
 	};

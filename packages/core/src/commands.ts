@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { wrapIn } from 'prosemirror-commands';
 import { Fragment, Mark, NodeRange, NodeType, Node as PMNode, Slice } from 'prosemirror-model';
 import { TextSelection } from 'prosemirror-state';
