@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface FigcaptionAttrs {}
