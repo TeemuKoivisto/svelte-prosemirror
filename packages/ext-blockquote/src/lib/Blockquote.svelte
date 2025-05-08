@@ -15,7 +15,7 @@
 </script>
 
 <script lang="ts">
-	interface Props {
+	export interface Props {
 		// node: PMNode | undefined
 		// attrs: BlockquoteAttrs
 		// contentDOM: (node: HTMLElement) => void
@@ -24,6 +24,7 @@
 
 	// let { node, attrs, contentDOM, ref }: Props = $props()
 	let { ref }: Props = $props();
+	export { ref };
 </script>
 
 <blockquote data-hole bind:this={ref}></blockquote>

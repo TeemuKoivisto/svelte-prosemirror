@@ -7,7 +7,6 @@ export default {
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
-	compilerOptions: { compatibility: { componentApi: 4 } },
 	kit: {
 		files: {
 			routes: './src/routes',

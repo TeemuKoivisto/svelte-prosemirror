@@ -28,7 +28,7 @@
 <script lang="ts">
 	import type { NodeProps } from '@my-org/core';
 
-	interface Props {
+	export interface Props {
 		node: PMNode | undefined /** */;
 		attrs: ImageAttrs /** */;
 		contentDOM: (node: HTMLElement) => void /** */;
@@ -36,6 +36,8 @@
 	}
 
 	let { node, attrs, contentDOM, ref }: Props = $props();
+
+	export { ref };
 </script>
 
 <img src={attrs.src} alt={attrs.alt} title={attrs.title} bind:this={ref} />

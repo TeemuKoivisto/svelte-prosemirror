@@ -19,7 +19,7 @@
 </script>
 
 <script lang="ts">
-	interface Props {
+	export interface Props {
 		node: PMNode | undefined /** */;
 		attrs: ParagraphAttrs /** */;
 		contentDOM: (node: HTMLElement) => void /** */;
@@ -27,6 +27,7 @@
 	}
 
 	let { node, attrs, contentDOM, ref }: Props = $props();
+	export { ref };
 </script>
 
 <p data-indent={attrs.indent} data-hole bind:this={ref}></p>

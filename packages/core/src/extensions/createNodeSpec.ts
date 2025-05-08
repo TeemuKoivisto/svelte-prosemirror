@@ -59,6 +59,7 @@ export async function createSpec(node: SveltePMNode<any>): Promise<readonly [str
 		return [''];
 	}
 	const div = document.createElement('div');
+	console.log('creating spec for', node);
 	const comp = await mount(component, {
 		target: div,
 		props: {
