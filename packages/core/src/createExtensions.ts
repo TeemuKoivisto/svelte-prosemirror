@@ -6,8 +6,6 @@ import { createNodeSpec } from './extensions/createNodeSpec'
 
 import type { Cmd, Editor, EditorProps, ExtensionData, Initialized } from './typings'
 import { keymap } from 'prosemirror-keymap'
-import { schema } from 'prosemirror-schema-basic'
-import { addListNodes } from 'prosemirror-schema-list'
 export async function createExtensions(
   editor: Editor,
   { extensions = [] }: EditorProps
@@ -62,9 +60,7 @@ export async function createExtensions(
       extData.commands = { ...extData.commands, ...ext.commands }
     }
   }
-
-  console.log(extData.nodes)
-  const mySchema = new Schema({
+  const schema = new Schema({
     nodes: {
       doc: {
         content: 'block+'
@@ -76,15 +72,6 @@ export async function createExtensions(
     },
     marks: extData.marks
   })
-
-  // const mySchema = new Schema({
-  //   nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append(extData.nodes),
-  //   marks: schema.spec.marks.append(extData.marks)
-  // })
-
-  // mySchema.nodes['equation'] = schema.nodes['equation']
-
-  console.log('mySchema', mySchema)
 
   const keymaps = Object.keys(extData.sortedKeymaps).reduce(
     (acc, key) => {
@@ -98,10 +85,9 @@ export async function createExtensions(
   const plugins = [
     keymap(keymaps),
     ...extensions.reduce(
-      (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, mySchema)) || [])],
+      (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, schema)) || [])],
       [] as Plugin[]
     )
   ]
-  // return { ...extData, plugins, schema }
-  return { ...extData, plugins, schema: mySchema }
+  return { ...extData, plugins, schema }
 }

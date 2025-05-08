@@ -107,7 +107,6 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
   }
 
   shouldUpdate = (node: PMNode) => {
-    // console.log('should update')
     if (node.type !== this.node.type) {
       return false
     } else if (node.sameMarkup(this.node)) {
@@ -133,19 +132,17 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
   }
 
   selectNode = () => {
-    // console.log('selectNode ')
     this.selected = true
     this.render()
   }
 
   deselectNode = () => {
-    // console.log('deselectNode ')
     this.selected = false
     this.render()
   }
 
   destroy = () => {
-    this.mounted?.$destroy()
+    this.mounted?.destroy()
   }
 
   ignoreMutation = (_mutation: ViewMutationRecord) => true
