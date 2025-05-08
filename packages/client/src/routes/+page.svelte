@@ -52,10 +52,10 @@
       extensions: [
         exampleSetupExtension({ history: !yjs }),
         // paragraphExtension(),
-        // blockquoteExtension(),
+        blockquoteExtension(),
         // figureExtension(),
-        equationExtension(),
-        marksExtension(),
+        // equationExtension(),
+        // marksExtension(),
         ...(yjs ? [yjs] : [])
       ]
     }

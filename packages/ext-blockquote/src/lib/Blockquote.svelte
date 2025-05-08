@@ -19,12 +19,13 @@
     node: PMNode | undefined /** */
     attrs: BlockquoteAttrs /** */
     contentDOM: (node: HTMLElement) => void /** */
+    ref?: HTMLQuoteElement
   }
 
-  let { node, attrs, contentDOM }: Props = $props()
+  let { node, attrs, contentDOM, ref }: Props = $props()
 </script>
 
-<blockquote data-hole></blockquote>
+<blockquote data-hole bind:this={ref}></blockquote>
 
 <style lang="scss" global>
   blockquote {

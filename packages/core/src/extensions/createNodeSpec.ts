@@ -15,21 +15,38 @@ export async function createNodeSpec(node: SveltePMNode<any>): Promise<NodeSpec>
   if (component) {
     const staticSpec = await createSpec(node)
     nodeSpec.toDOM = (node: PMNode) => {
-      const div = document.createElement('div')
-      const comp = mount(component, {
-        target: div,
-        props: {
-          node,
-          attrs: node.attrs,
-          contentDOM: () => undefined
-        }
-      })
-      comp.then((comp: any) => {
-        const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
-        // console.log('spec', spec)
-        return spec as unknown as DOMOutputSpec
-      })
-      return div
+      // const div = document.createElement('div')
+      // const comp = mount(component, {
+      //   target: div,
+      //   props: {
+      //     node,
+      //     attrs: node.attrs,
+      //     contentDOM: () => undefined
+      //   }
+      // })
+      // comp.then((comp: any) => {
+      //   const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+      //   // console.log('spec', spec)
+      //   return spec as unknown as DOMOutputSpec
+      // })
+      // return div
+      // Clone the static spec to avoid modifying the original
+      const clonedSpec = [...staticSpec]
+
+      // If the spec has attributes (usually at index 1 if present)
+      if (
+        typeof clonedSpec[1] === 'object' &&
+        clonedSpec[1] !== null &&
+        !Array.isArray(clonedSpec[1])
+      ) {
+        // Merge the node's attributes with the static attributes
+        clonedSpec[1] = { ...clonedSpec[1], ...node.attrs }
+      } else if (Object.keys(node.attrs).length > 0) {
+        // If there are no attributes in the spec but the node has attributes, add them
+        clonedSpec.splice(1, 0, { ...node.attrs })
+      }
+
+      return clonedSpec as unknown as DOMOutputSpec
     }
     nodeSpec.parseDOM = [
       ...(nodeSpec.parseDOM || []),
@@ -65,7 +82,11 @@ export async function createSpec(node: SveltePMNode<any>): Promise<readonly [str
       contentDOM: () => undefined
     }
   })
-  const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+  console.log(comp)
+  console.log(comp.contentDOM)
+  console.log(comp.node)
+  // const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+  const spec = htmlToDOMOutputSpec(comp.ref)
   // console.log('spec', spec)
   // @TODO add class list for 'tag'
   return spec as [string, ...any[]]

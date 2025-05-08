@@ -7,7 +7,7 @@ import type {
   NodeViewConstructor
 } from 'prosemirror-view'
 
-import type { SvelteComponent } from 'svelte'
+import { mount, type SvelteComponent } from 'svelte'
 import type { Editor } from './typings'
 
 export interface SvelteNodeViewProps<A extends Attrs> {
@@ -79,7 +79,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
     }
   }
 
-  init = (): this => {
+  init = async (): Promise<this> => {
     const toDOM = this.node.type.spec.toDOM
     if (!toDOM) throw Error(`@my-org/core: node "${this.node.type}" was not given a toDOM method!`)
     const { dom, contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.node))
@@ -87,7 +87,10 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
     this.contentDOM = contentDOM
     this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
     if (this.component) {
-      this.mounted = new this.component({ target: this.dom, props: this.props })
+      this.mounted = await mount(this.component, {
+        target: this.dom,
+        props: this.props
+      })
     } else {
       contentDOM && this._dom.appendChild(contentDOM)
     }
