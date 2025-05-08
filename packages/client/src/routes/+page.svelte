@@ -56,16 +56,18 @@
     props = {
       extensions: [
         exampleSetupExtension({ history: !yjs }),
-        // paragraphExtension(),
-        // blockquoteExtension(),
+        paragraphExtension(),
+        blockquoteExtension(),
         figureExtension(),
-        // equationExtension(),
-        // marksExtension(),
+        equationExtension(),
+        marksExtension(),
         ...(yjs ? [yjs] : [])
       ]
     }
-    editorInstance = Editor.create(editorRef, props)
-    editorActions.setEditor(editorInstance)
+    Editor.create(editorRef, props).then(editor => {
+      editorInstance = editor
+      editorActions.setEditor(editorInstance)
+    })
   })
 
   function editor_action(dom: HTMLElement) {}

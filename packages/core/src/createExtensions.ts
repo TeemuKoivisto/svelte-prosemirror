@@ -64,39 +64,39 @@ export async function createExtensions(
   }
 
   console.log(extData.nodes)
-  // const mySchema = new Schema({
-  //   nodes: {
-  //     doc: {
-  //       content: 'block+'
-  //     },
-  //     text: {
-  //       group: 'inline'
-  //     },
-  //     ...extData.nodes
-  //   },
-  //   marks: extData.marks
-  // })
-
   const mySchema = new Schema({
-    nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append(extData.nodes),
-    marks: schema.spec.marks.append(extData.marks)
+    nodes: {
+      doc: {
+        content: 'block+'
+      },
+      text: {
+        group: 'inline'
+      },
+      ...extData.nodes
+    },
+    marks: extData.marks
   })
+
+  // const mySchema = new Schema({
+  //   nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append(extData.nodes),
+  //   marks: schema.spec.marks.append(extData.marks)
+  // })
 
   // mySchema.nodes['equation'] = schema.nodes['equation']
 
   console.log('mySchema', mySchema)
 
-  // const keymaps = Object.keys(extData.sortedKeymaps).reduce(
-  //   (acc, key) => {
-  //     // @ts-ignore
-  //     acc[key] = extData.sortedKeymaps[key][0].cmd
-  //     return acc
-  //   },
-  //   {} as { [key: string]: Command }
-  // )
+  const keymaps = Object.keys(extData.sortedKeymaps).reduce(
+    (acc, key) => {
+      // @ts-expect-error extData.sortedKeymaps[key][0].cmd is not a Command
+      acc[key] = extData.sortedKeymaps[key][0].cmd
+      return acc
+    },
+    {} as { [key: string]: Command }
+  )
 
   const plugins = [
-    // keymap(keymaps),
+    keymap(keymaps),
     ...extensions.reduce(
       (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, mySchema)) || [])],
       [] as Plugin[]

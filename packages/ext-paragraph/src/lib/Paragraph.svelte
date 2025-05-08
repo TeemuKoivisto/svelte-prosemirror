@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { NodeProps } from '@my-org/core'
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
@@ -24,12 +24,13 @@
     node: PMNode | undefined /** */
     attrs: ParagraphAttrs /** */
     contentDOM: (node: HTMLElement) => void /** */
+    ref?: HTMLParagraphElement
   }
 
-  let { node, attrs, contentDOM }: Props = $props()
+  let { node, attrs, contentDOM, ref }: Props = $props()
 </script>
 
-<p data-indent={attrs.indent} data-hole></p>
+<p data-indent={attrs.indent} data-hole bind:this={ref}></p>
 
 <style lang="scss" global>
   p {
