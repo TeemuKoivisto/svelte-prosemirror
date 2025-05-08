@@ -1,8 +1,8 @@
 import { DOMOutputSpec, Node as PMNode, NodeSpec } from 'prosemirror-model';
 
-import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec';
-import { SveltePMNode } from '../typings';
-import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec';
+import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec.js';
+import { SveltePMNode } from '../typings/index.js';
+import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec.js';
 
 import { mount } from 'svelte';
 

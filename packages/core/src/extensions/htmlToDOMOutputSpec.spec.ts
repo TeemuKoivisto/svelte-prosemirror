@@ -1,5 +1,5 @@
 // import { vi } from 'vitest'
-import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec';
+import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec.js';
 
 describe('htmlToDOMOutputSpec', () => {
 	it('should generate simple paragraph output spec', () => {

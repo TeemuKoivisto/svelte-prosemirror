@@ -1,48 +1,44 @@
 {
-  "name": "@my-org/core",
-  "version": "0.0.1",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
-  "type": "module",
-  "types": "src/index.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "require": "./src/index.ts"
+    "name": "@my-org/core",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "vite build",
+        "watch": "rimraf src && vite build --watch",
+        "testd": "vitest",
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "jsdom": "^24.0.0",
+        "prosemirror-commands": "^1.5.2",
+        "prosemirror-keymap": "^1.2.2",
+        "prosemirror-model": "^1.20.0",
+        "prosemirror-state": "^1.4.3",
+        "prosemirror-transform": "^1.8.0",
+        "prosemirror-view": "^1.33.5",
+        "svelte": "^5.28.2",
+        "tslib": "^2.6.2",
+        "vitest": "^1.5.2"
+    },
+    "dependencies": {
+        "prosemirror-commands": "^1.5.2",
+        "prosemirror-keymap": "^1.2.2",
+        "prosemirror-model": "^1.20.0",
+        "prosemirror-state": "^1.4.3",
+        "prosemirror-transform": "^1.8.0",
+        "prosemirror-view": "^1.33.5",
+        "prosemirror-schema-basic": "^1.2.4",
+        "prosemirror-schema-list": "^1.5.1"
     }
-  },
-  "files": [
-    "src"
-  ],
-  "scripts": {
-    "build": "vite build",
-    "watch": "rimraf src && vite build --watch",
-    "testd": "vitest",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "jsdom": "^24.0.0",
-    "prosemirror-commands": "^1.5.2",
-    "prosemirror-keymap": "^1.2.2",
-    "prosemirror-model": "^1.20.0",
-    "prosemirror-state": "^1.4.3",
-    "prosemirror-transform": "^1.8.0",
-    "prosemirror-view": "^1.33.5",
-    "svelte": "^5.28.2",
-    "tslib": "^2.6.2",
-    "vitest": "^1.5.2"
-  },
-  "dependencies": {
-    "prosemirror-commands": "^1.5.2",
-    "prosemirror-keymap": "^1.2.2",
-    "prosemirror-model": "^1.20.0",
-    "prosemirror-state": "^1.4.3",
-    "prosemirror-transform": "^1.8.0",
-    "prosemirror-view": "^1.33.5",
-
-    "prosemirror-schema-basic": "^1.2.4",
-    "prosemirror-schema-list": "^1.5.1"
-  }
 }

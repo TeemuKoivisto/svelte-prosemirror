@@ -9,7 +9,7 @@ import type {
 } from 'prosemirror-view';
 
 import { mount, type Component } from 'svelte';
-import type { Editor } from './typings';
+import type { Editor } from './typings/index.js';
 
 export interface SvelteNodeViewProps<A extends Attrs> {
 	node: PMNode;
@@ -91,12 +91,10 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 		if (this.component) {
 			// Mount the component synchronously but don't wait for it to complete
 			// This allows init() to return immediately while the component mounts in the background
-			Promise.resolve().then(async () => {
-				this.mounted = await mount(this.component!, {
-					target: this.dom,
-					props: this.props,
-				});
-			});
+			this.mounted = mount(this.component!, {
+				target: this.dom,
+				props: this.props,
+			}) as Component;
 		} else {
 			contentDOM && this._dom.appendChild(contentDOM);
 		}

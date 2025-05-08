@@ -2,9 +2,9 @@ import { Fragment, Mark, Node as PMNode } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
-import { createExtensions } from './createExtensions';
-import { commands } from './commands';
-import { Observable } from './Observable';
+import { createExtensions } from './createExtensions.js';
+import { commands } from './commands.js';
+import { Observable } from './Observable.js';
 
 import type {
 	Cmd,
@@ -15,7 +15,7 @@ import type {
 	EditorStateJSON,
 	Nodes,
 	EditorCommands,
-} from './typings';
+} from './typings/index.js';
 
 interface MutableData {
 	state: EditorState;

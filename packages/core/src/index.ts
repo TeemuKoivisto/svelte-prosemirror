@@ -1,6 +1,6 @@
 import type { EditorView } from 'prosemirror-view';
-import type { Commands } from './typings';
-import type { Editor } from './typings';
+import type { Commands } from './typings/index.js';
+import type { Editor } from './typings/index.js';
 
 declare global {
 	interface Window {
@@ -15,8 +15,8 @@ declare module 'prosemirror-view' {
 	}
 }
 
-export * from './createExtensions';
-export * from './Editor';
-export * from './Observable';
-export * from './SvelteNodeView';
-export * from './typings';
+export * from './createExtensions.js';
+export * from './Editor.js';
+export * from './Observable.js';
+export * from './SvelteNodeView.js';
+export * from './typings/index.js';

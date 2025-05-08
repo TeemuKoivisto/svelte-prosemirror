@@ -3,8 +3,8 @@ import { MarkViewConstructor, NodeViewConstructor } from 'prosemirror-view';
 import { Plugin } from 'prosemirror-state';
 import type { MarkSpec } from 'prosemirror-model';
 import type { Component } from 'svelte';
-import type { Editor } from '../Editor';
-import type { Cmd } from './pm';
+import type { Editor } from '../Editor.js';
+import type { Cmd } from './pm.js';
 
 export interface ExtensionData {
 	commands: { [name: string]: (...args: any[]) => Cmd };

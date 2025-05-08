@@ -44,9 +44,6 @@ importers:
       eslint-plugin-promise:
         specifier: ^6.1.1
         version: 6.6.0(eslint@8.57.1)
-      eslint-plugin-svelte3:
-        specifier: ^4.0.0
-        version: 4.0.0(eslint@8.57.1)(svelte@5.28.2)
       prettier:
         specifier: ^3.2.5
         version: 3.5.3
@@ -57,7 +54,7 @@ importers:
         specifier: ^5.0.5
         version: 5.0.10
       svelte:
-        specifier: ^5.0.0
+        specifier: ^5.28.2
         version: 5.28.2
       typescript:
         specifier: ^5.5.0
@@ -2135,12 +2132,6 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
-
-  eslint-plugin-svelte3@4.0.0:
-    resolution: {integrity: sha512-OIx9lgaNzD02+MDFNLw0GEUbuovNcglg+wnd/UY0fbZmlQSz7GlQiQ1f+yX0XvC07XPcDOnFcichqI3xCwp71g==}
-    peerDependencies:
-      eslint: '>=8.0.0'
-      svelte: ^3.2.0
 
   eslint-scope@7.2.2:
     resolution: {integrity: sha512-dOt21O7lTMhDM+X9mB4GX+DZrZtCUJPL/wlcTqxyrx5IvO0IYtILdtrQGQp+8n5S0gwSVmOf9NQrjMOgfQZlIg==}
@@ -5481,11 +5472,6 @@ snapshots:
   eslint-plugin-promise@6.6.0(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
-
-  eslint-plugin-svelte3@4.0.0(eslint@8.57.1)(svelte@5.28.2):
-    dependencies:
-      eslint: 8.57.1
-      svelte: 5.28.2
 
   eslint-scope@7.2.2:
     dependencies:

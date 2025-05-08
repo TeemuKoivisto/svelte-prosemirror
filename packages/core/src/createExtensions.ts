@@ -1,9 +1,9 @@
 import { Schema } from 'prosemirror-model';
 import { Command, Plugin } from 'prosemirror-state';
 
-import { createNodeSpec } from './extensions/createNodeSpec';
+import { createNodeSpec } from './extensions/createNodeSpec.js';
 
-import type { Editor, EditorProps, ExtensionData, Initialized } from './typings';
+import type { Editor, EditorProps, ExtensionData, Initialized } from './typings/index.js';
 import { keymap } from 'prosemirror-keymap';
 export async function createExtensions(
 	editor: Editor,

@@ -1,5 +1,5 @@
 // import { vi } from 'vitest'
-import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec';
+import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec.js';
 
 describe('getAttrsWithOutputSpec', () => {
 	it('should get attributes from simple paragraph (1)', () => {

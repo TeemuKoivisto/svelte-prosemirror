@@ -2,7 +2,7 @@ import { Fragment, Mark, NodeRange, NodeType, Node as PMNode, Slice } from 'pros
 import { TextSelection } from 'prosemirror-state';
 import { findWrapping, liftTarget } from 'prosemirror-transform';
 
-import type { Cmd } from './typings';
+import type { Cmd } from './typings/index.js';
 import { wrapIn } from 'prosemirror-commands';
 
 export const commands = {
