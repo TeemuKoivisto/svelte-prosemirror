@@ -64,5 +64,4 @@ describe('htmlToDOMOutputSpec', () => {
 			],
 		]);
 	});
-	const figure = '';
 });

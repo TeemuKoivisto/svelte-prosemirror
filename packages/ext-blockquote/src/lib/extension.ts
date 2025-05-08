@@ -1,7 +1,7 @@
 import Blockquote, { blockquoteAttrs, blockquoteSchema } from './Blockquote.svelte';
 import type { Extension } from '@my-org/core';
 
-export const blockquoteExtension = () => {
+export function blockquoteExtension() {
 	return {
 		name: 'blockquote' as const,
 		nodes: {
@@ -12,4 +12,4 @@ export const blockquoteExtension = () => {
 			},
 		},
 	} satisfies Extension;
-};
+}

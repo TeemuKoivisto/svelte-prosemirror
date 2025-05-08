@@ -11,10 +11,10 @@ export interface Commands {
 	[name: string]: (...args: any[]) => Cmd;
 }
 
-// @ts-ignore
+// eslint-disable-next-line
 export interface PMDoc extends Record<string, any> {}
 
-// @ts-ignore
+// eslint-disable-next-line
 export interface DocJSON extends Record<string, any> {}
 export interface EditorStateJSON {
 	doc: DocJSON;

@@ -1,8 +1,10 @@
 <script lang="ts" module>
-	import type { Node as PMNode, NodeSpec } from 'prosemirror-model';
+	import type { NodeSpec } from 'prosemirror-model';
 
+	// eslint-disable-next-line
 	export interface BlockquoteAttrs {}
 
+	 
 	export const blockquoteAttrs: BlockquoteAttrs = {};
 
 	export const blockquoteSchema: NodeSpec = {
@@ -15,14 +17,10 @@
 
 <script lang="ts">
 	export interface Props {
-		node: PMNode | undefined;
-		attrs: BlockquoteAttrs;
-		contentDOM: (node: HTMLElement) => void;
 		ref?: HTMLQuoteElement;
 	}
 
-	let { node, attrs, contentDOM, ref }: Props = $props();
-	// let { ref }: Props = $props();
+	let { ref }: Props = $props();
 	export { ref };
 </script>
 

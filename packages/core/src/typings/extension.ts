@@ -70,7 +70,11 @@ export interface Extension {
 export type ExtObject = { [key in keyof Extensions]: Extensions[key] };
 // This interface is augmented by all the other extensions in order to generate type-safe access to their
 // data from ExtensionProvider
+// eslint-disable-next-line
 export interface Extensions {}
+// eslint-disable-next-line
 export interface EditorCommands {}
+// eslint-disable-next-line
 export interface Nodes {}
+// eslint-disable-next-line
 export interface Marks {}
