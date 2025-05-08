@@ -80,7 +80,6 @@
 
   onMount(() => {
     if (!node || !katexEl || !codemirrorEl) return
-    console.log('mounting equation')
     popperEl = document.createElement('div')
     popperEl.classList.add('popup')
     document.body.appendChild(popperEl)
@@ -131,15 +130,7 @@
       return
     }
     const updatedLatex = v.view.state.doc.toJSON().join('\n')
-    const { tr } = view.state
-    const pos = getPos()
-    if (pos !== undefined) {
-      tr.setNodeMarkup(pos, undefined, {
-        ...attrs,
-        latex: updatedLatex
-      })
-      view.dispatch(tr)
-    }
+    latex = updatedLatex
   }
 
   function renderCodeMirror() {
@@ -167,6 +158,7 @@
   }
 
   function handleKeyDown(ev: KeyboardEvent) {
+    console.log(ev.key)
     if (ev.key === 'Enter') {
       renderCodeMirror()
     }
@@ -174,32 +166,15 @@
   let id = $derived(attrs.id)
   let latex = $derived(attrs.latex)
   let title = $derived(attrs.title)
-  // $effect(() => {
-  //   if (katexEl && latex) {
-  //     katex.render(latex, katexEl, {
-  //       throwOnError: false
-  //     })
-  //   }
-  //   // if (attrs.latex) {
-  //   //   console.log('effect', attrs.latex)
-  //   //   katexString = katex.renderToString(attrs.latex)
-  //   // }
-  // })
-  // $effect(() => {
-  //   if (selected) {
-  //     renderCodeMirror()
-  //   } else {
-  //     closePopper()
-  //   }
-  // })
-  run(() => {
+
+  $effect(() => {
     if (katexEl && latex) {
       katex.render(latex, katexEl, {
         throwOnError: false
       })
     }
   })
-  run(() => {
+  $effect(() => {
     if (selected) {
       renderCodeMirror()
     } else {
@@ -208,7 +183,7 @@
   })
 </script>
 
-<div class="equation-editor" bind:this={codemirrorEl} bind:this={ref}>
+<div class="equation-editor" bind:this={codemirrorEl}>
   <a
     class="equation-editor-info"
     href="https://en.wikibooks.org/wiki/LaTeX/Mathematics#Symbols"
