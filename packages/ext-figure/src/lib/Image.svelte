@@ -1,47 +1,47 @@
 <script lang="ts" module>
-    import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
+	import type { Node as PMNode, NodeSpec } from 'prosemirror-model';
 
-    export interface ImageAttrs {
-        title: string
-        src: string
-        alt: string
-    }
+	export interface ImageAttrs {
+		title: string;
+		src: string;
+		alt: string;
+	}
 
-    export const imageAttrs: ImageAttrs = {
-        title: '',
-        src: '',
-        alt: ''
-    }
+	export const imageAttrs: ImageAttrs = {
+		title: '',
+		src: '',
+		alt: '',
+	};
 
-    export const imageSchema: NodeSpec = {
-        attrs: Object.entries(imageAttrs).reduce(
-            (acc, [key, value]) => ({ ...acc, [key]: { default: value } }),
-            {}
-        ),
-        selectable: true,
-        // inline: true,
-        // group: 'inline',
-        draggable: true
-    }
+	export const imageSchema: NodeSpec = {
+		attrs: Object.entries(imageAttrs).reduce(
+			(acc, [key, value]) => ({ ...acc, [key]: { default: value } }),
+			{},
+		),
+		selectable: true,
+		// inline: true,
+		// group: 'inline',
+		draggable: true,
+	};
 </script>
 
 <script lang="ts">
-    import type { NodeProps } from '@my-org/core'
+	import type { NodeProps } from '@my-org/core';
 
-    interface Props {
-        node: PMNode | undefined /** */
-        attrs: ImageAttrs /** */
-        contentDOM: (node: HTMLElement) => void /** */
-        ref?: HTMLImageElement
-    }
+	interface Props {
+		node: PMNode | undefined /** */;
+		attrs: ImageAttrs /** */;
+		contentDOM: (node: HTMLElement) => void /** */;
+		ref?: HTMLImageElement;
+	}
 
-    let { node, attrs, contentDOM, ref }: Props = $props()
+	let { node, attrs, contentDOM, ref }: Props = $props();
 </script>
 
 <img src={attrs.src} alt={attrs.alt} title={attrs.title} bind:this={ref} />
 
 <style lang="scss">
-    :global(img.ProseMirror-selectednode) {
-        outline: 2px solid #8cf;
-    }
+	:global(img.ProseMirror-selectednode) {
+		outline: 2px solid #8cf;
+	}
 </style>

@@ -1,8 +1,8 @@
-import { SvelteComponent } from 'svelte'
-import type { Node as PMNode } from 'prosemirror-model'
+import { SvelteComponent } from 'svelte';
+import type { Node as PMNode } from 'prosemirror-model';
 
 type Props = { node: PMNode } & {
-    indent: number
-}
+	indent: number;
+};
 
 export class Paragraph extends SvelteComponent<Props> {}
