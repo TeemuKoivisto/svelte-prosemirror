@@ -4,7 +4,8 @@ import type {
   DecorationSource,
   EditorView,
   NodeView,
-  NodeViewConstructor
+  NodeViewConstructor,
+  ViewMutationRecord
 } from 'prosemirror-view'
 
 import { mount, type SvelteComponent } from 'svelte'
@@ -79,17 +80,21 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
     }
   }
 
-  init = async (): Promise<this> => {
+  init = (): this => {
     const toDOM = this.node.type.spec.toDOM
     if (!toDOM) throw Error(`@my-org/core: node "${this.node.type}" was not given a toDOM method!`)
-    const { dom, contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.node))
+    const { contentDOM } = DOMSerializer.renderSpec(document, toDOM(this.node))
     // this._dom = dom as HTMLElement
     this.contentDOM = contentDOM
     this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
     if (this.component) {
-      this.mounted = await mount(this.component, {
-        target: this.dom,
-        props: this.props
+      // Mount the component synchronously but don't wait for it to complete
+      // This allows init() to return immediately while the component mounts in the background
+      Promise.resolve().then(async () => {
+        this.mounted = await mount(this.component!, {
+          target: this.dom,
+          props: this.props
+        })
       })
     } else {
       contentDOM && this._dom.appendChild(contentDOM)
@@ -143,7 +148,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
     this.mounted?.$destroy()
   }
 
-  ignoreMutation = (_mutation: MutationRecord) => true
+  ignoreMutation = (_mutation: ViewMutationRecord) => true
 
   static fromComponent<A extends Attrs>(
     editor: Editor,

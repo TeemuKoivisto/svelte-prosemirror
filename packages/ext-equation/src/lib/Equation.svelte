@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { NodeSpec } from 'prosemirror-model'
 
   export interface EquationAttrs {
@@ -59,24 +59,28 @@
 
   import 'katex/dist/katex.min.css'
 
-  interface Props {
-    node?: PMNode | undefined
+  export interface Props extends SvelteNodeViewProps<EquationAttrs> {
+    node: PMNode
     attrs: EquationAttrs
     selected: boolean | undefined
     view: EditorView
     getPos: () => number | undefined
+    ref: HTMLElement
   }
 
-  let { node = undefined, attrs, selected, view, getPos }: Props = $props()
+  let { node, attrs, selected, view, getPos, ref }: Props = $props()
 
-  let codemirrorEl: HTMLElement = $state()
-  let katexEl: HTMLElement = $state()
+  let codemirrorEl: HTMLElement | undefined = $state()
+  let katexEl: HTMLElement | undefined = $state()
   let popperEl: HTMLElement
   let popperInstance: Instance | undefined
   let codemirror: CodeMirror | undefined
 
+  let katexString = $state('a^2')
+
   onMount(() => {
-    if (!node) return
+    if (!node || !katexEl || !codemirrorEl) return
+    console.log('mounting equation')
     popperEl = document.createElement('div')
     popperEl.classList.add('popup')
     document.body.appendChild(popperEl)
@@ -152,6 +156,8 @@
           ]
         })
       })
+      if (!katexEl || !codemirrorEl) return
+
       openPopper(katexEl, codemirrorEl)
 
       window.requestAnimationFrame(() => {
@@ -168,6 +174,24 @@
   let id = $derived(attrs.id)
   let latex = $derived(attrs.latex)
   let title = $derived(attrs.title)
+  // $effect(() => {
+  //   if (katexEl && latex) {
+  //     katex.render(latex, katexEl, {
+  //       throwOnError: false
+  //     })
+  //   }
+  //   // if (attrs.latex) {
+  //   //   console.log('effect', attrs.latex)
+  //   //   katexString = katex.renderToString(attrs.latex)
+  //   // }
+  // })
+  // $effect(() => {
+  //   if (selected) {
+  //     renderCodeMirror()
+  //   } else {
+  //     closePopper()
+  //   }
+  // })
   run(() => {
     if (katexEl && latex) {
       katex.render(latex, katexEl, {
@@ -184,7 +208,7 @@
   })
 </script>
 
-<div class="equation-editor" bind:this={codemirrorEl}>
+<div class="equation-editor" bind:this={codemirrorEl} bind:this={ref}>
   <a
     class="equation-editor-info"
     href="https://en.wikibooks.org/wiki/LaTeX/Mathematics#Symbols"
@@ -194,7 +218,7 @@
     ?
   </a>
 </div>
-<figure class="equation" {id}>
+<figure class="equation" {id} bind:this={ref}>
   <div
     class="equation"
     role="button"
@@ -212,11 +236,11 @@
   <figcaption data-hole></figcaption>
 </figure>
 
-<style lang="scss" global>
-  .equation {
+<style lang="scss">
+  :global(.equation) {
     text-align: center;
   }
-  .popup {
+  :global(.popup) {
     color: #353535;
     font-family: 'PT Sans', sans-serif;
     min-width: 100px;
@@ -226,25 +250,25 @@
     opacity: 1;
   }
 
-  .popup[data-show] {
+  :global(.popup[data-show]) {
     display: inline-block;
   }
 
-  .popper-arrow {
+  :global(.popper-arrow) {
     width: 0;
     height: 0;
     position: absolute;
     border: 5px solid transparent;
   }
 
-  .popup[data-popper-placement^='bottom'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='bottom']) > :global(.popper-arrow) {
     top: -5px;
     left: calc(50% - 5px);
     border-bottom-color: #e2e2e2;
     border-top-width: 0;
   }
 
-  .popup[data-popper-placement^='top'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='top']) > :global(.popper-arrow) {
     bottom: -5px;
     left: calc(50% - 5px);
     border-top-color: #e2e2e2;
@@ -252,7 +276,7 @@
     margin: 0 5px;
   }
 
-  .popup[data-popper-placement^='left'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='left']) > :global(.popper-arrow) {
     right: -5px;
     top: calc(50% - 5px);
     border-left-color: #e2e2e2;
@@ -260,7 +284,7 @@
     margin: 5px 0;
   }
 
-  .popup[data-popper-placement^='right'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='right']) > :global(.popper-arrow) {
     left: -5px;
     top: calc(50% - 5px);
     border-right-color: #e2e2e2;
@@ -268,17 +292,17 @@
     margin: 5px 0;
   }
 
-  .popup .equation-editor {
+  :global(.popup .equation-editor) {
     position: relative;
     min-width: calc(600px - 2rem);
     max-width: 800px;
   }
 
-  .popup .visible {
+  :global(.popup .visible) {
     display: block;
   }
 
-  .popup .equation-editor-info {
+  :global(.popup .equation-editor-info) {
     align-items: center;
     border: 1px solid #e2e2e2;
     border-radius: 50%;
@@ -297,34 +321,34 @@
     z-index: 2;
   }
 
-  .popup .equation-editor-info:hover {
+  :global(.popup .equation-editor-info:hover) {
     opacity: 1;
   }
 
-  .popup {
-    .cm-editor {
+  :global(.popup) {
+    :global(.cm-editor) {
       border: 1px solid #e2e2e2;
       box-shadow: 0 4px 9px 0 rgba(84, 83, 83, 0.3);
       height: auto;
       min-height: 4em;
     }
-    .cm-focused {
+    :global(.cm-focused) {
       outline: none;
     }
-    .cm-content,
-    .cm-gutter {
+    :global(.cm-content),
+    :global(.cm-gutter) {
       min-height: 62px;
     }
-    .cm-gutters {
+    :global(.cm-gutters) {
       margin: 1px;
     }
-    .cm-scroller {
+    :global(.cm-scroller) {
       overflow: auto;
     }
-    .cm-wrap {
+    :global(.cm-wrap) {
       border: 1px solid silver;
     }
-    .cm-placeholder {
+    :global(.cm-placeholder) {
       color: #999 !important;
     }
   }

@@ -224,7 +224,7 @@ export class Editor extends Observable<EditorEvents> {
       extObj: {}
     }
     this.commands = { ...commands }
-    props.extensions?.forEach(ext => {
+    props.extensions?.forEach(async ext => {
       if (ext.init) ext.init(this)
       // @ts-expect-error ext.name is not a string
       this.data.extObj[ext.name] = ext
