@@ -8,11 +8,14 @@ export type YjsActionParams = {
 	[YjsAction.createSnapshot]: boolean;
 };
 
-export const getAction = <K extends keyof YjsActionParams>(tr: Transaction, action: K) =>
-	tr.getMeta(action) as YjsActionParams[K] | undefined;
+export function getAction<K extends keyof YjsActionParams>(tr: Transaction, action: K) {
+	return tr.getMeta(action) as YjsActionParams[K] | undefined;
+}
 
-export const setAction = <K extends keyof YjsActionParams>(
+export function setAction<K extends keyof YjsActionParams>(
 	tr: Transaction,
 	action: K,
 	payload: YjsActionParams[K],
-) => tr.setMeta(action, payload);
+) {
+	return tr.setMeta(action, payload);
+}

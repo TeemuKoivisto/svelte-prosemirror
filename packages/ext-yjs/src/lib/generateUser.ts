@@ -3,10 +3,11 @@ import { names, uniqueNamesGenerator } from 'unique-names-generator';
 import { v4 as uuidv4 } from 'uuid';
 import type { YjsUser } from './types';
 
-export const generateColor = () =>
-	randomColor({
+export function generateColor() {
+	return randomColor({
 		luminosity: 'dark',
 	});
+}
 
 export function generateUser(old: Partial<YjsUser> = {}): YjsUser {
 	return {

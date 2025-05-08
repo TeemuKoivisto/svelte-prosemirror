@@ -6,7 +6,7 @@ import type { YjsOptions } from './types';
 import type { Extension } from '@my-org/core';
 import type { Plugin } from 'prosemirror-state';
 
-export const yjsExtension = (opts: YjsOptions) => {
+export function yjsExtension(opts: YjsOptions) {
 	const store = new YjsStore(opts);
 	return {
 		name: yjsExtensionName,
@@ -39,4 +39,4 @@ export const yjsExtension = (opts: YjsOptions) => {
 			store.destroy();
 		},
 	} satisfies Extension;
-};
+}
