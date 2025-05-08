@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import type { Node as PMNode, NodeSpec } from 'prosemirror-model';
+	import type { NodeSpec } from 'prosemirror-model';
 
 	export interface FigureAttrs {
 		id: string | undefined;
@@ -21,16 +21,12 @@
 </script>
 
 <script lang="ts">
-	import type { NodeProps } from '@my-org/core';
-
 	export interface Props {
-		node: PMNode | undefined /** */;
-		attrs: FigureAttrs /** */;
-		contentDOM: (node: HTMLElement) => void /** */;
+		attrs: FigureAttrs;
 		ref?: HTMLElement;
 	}
 
-	let { node, attrs, contentDOM, ref }: Props = $props();
+	let { attrs, ref }: Props = $props();
 
 	export { ref };
 </script>

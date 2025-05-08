@@ -3,7 +3,7 @@ import Figure, { figureAttrs, figureSchema } from './Figure.svelte';
 import Image, { imageAttrs, imageSchema } from './Image.svelte';
 import type { Extension } from '@my-org/core';
 
-export const figureExtension = () => {
+export function figureExtension() {
 	return {
 		name: 'figure' as const,
 		nodes: {
@@ -24,4 +24,4 @@ export const figureExtension = () => {
 			},
 		},
 	} satisfies Extension;
-};
+}

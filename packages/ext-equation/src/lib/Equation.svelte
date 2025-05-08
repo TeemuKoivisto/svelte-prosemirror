@@ -37,7 +37,7 @@
 			},
 		],
 		toDOM(node: PMNode) {
-			const { id, title, latex } = node.attrs;
+			const { id, latex } = node.attrs;
 			return ['figure', { id, class: 'equation', latex }, ['pre', latex], ['figcaption', {}]];
 		},
 	};
@@ -57,7 +57,6 @@
 	import { onMount } from 'svelte';
 	import type { SvelteNodeViewProps } from '@my-org/core';
 	import type { Instance } from '@popperjs/core';
-	import type { EditorView } from 'prosemirror-view';
 
 	import 'katex/dist/katex.min.css';
 
@@ -65,12 +64,10 @@
 		node: PMNode;
 		attrs: EquationAttrs;
 		selected: boolean | undefined;
-		view: EditorView;
-		getPos: () => number | undefined;
 		ref: HTMLElement;
 	}
 
-	let { node, attrs, selected, view, getPos, ref }: Props = $props();
+	let { node, attrs, selected, ref }: Props = $props();
 
 	let codemirrorEl: HTMLElement | undefined = $state();
 	let katexEl: HTMLElement | undefined = $state();
@@ -78,24 +75,17 @@
 	let popperInstance: Instance | undefined;
 	let codemirror: CodeMirror | undefined;
 
-	let katexString = $state('a^2');
-
 	onMount(() => {
 		if (!node || !katexEl || !codemirrorEl) return;
 		popperEl = document.createElement('div');
 		popperEl.classList.add('popup');
 		document.body.appendChild(popperEl);
 		codemirrorEl.remove();
-		if (latex) {
-			katex.render(latex, katexEl, {
+		if (attrs.latex) {
+			katex.render(attrs.latex, katexEl, {
 				throwOnError: false,
 			});
 		}
-		// return () => {
-		// 	document.body.removeChild(popperEl);
-		// 	codemirror?.destroy();
-		// 	closePopper();
-		// };
 	});
 
 	export function destroy() {
@@ -138,7 +128,7 @@
 			return;
 		}
 		const updatedLatex = v.view.state.doc.toJSON().join('\n');
-		latex = updatedLatex;
+		attrs.latex = updatedLatex;
 	}
 
 	function renderCodeMirror() {
@@ -146,7 +136,7 @@
 			codemirror = new CodeMirror({
 				parent: codemirrorEl,
 				state: EditorState.create({
-					doc: latex,
+					doc: attrs.latex,
 					extensions: [
 						placeholder('Enter LaTeX equation, e.g. "a^2 = \\sqrt{b^2 + c^2}"'),
 						lineNumbers(),
@@ -171,13 +161,10 @@
 			renderCodeMirror();
 		}
 	}
-	let id = $derived(attrs.id);
-	let latex = $derived(attrs.latex);
-	let title = $derived(attrs.title);
 
 	$effect(() => {
-		if (katexEl && latex) {
-			katex.render(latex, katexEl, {
+		if (katexEl && attrs.latex) {
+			katex.render(attrs.latex, katexEl, {
 				throwOnError: false,
 			});
 		}
@@ -201,16 +188,16 @@
 		?
 	</a>
 </div>
-<figure class="equation" {id} bind:this={ref}>
+<figure class="equation" id={attrs.id} bind:this={ref}>
 	<div
 		class="equation"
 		role="button"
 		tabindex="-1"
-		data-latex={latex}
+		data-latex={attrs.latex}
 		onclick={renderCodeMirror}
 		onkeydown={handleKeyDown}
 	>
-		{#if !latex}
+		{#if !attrs.latex}
 			<div class="equation-placeholder">e=mc^2</div>
 		{:else}
 			<div bind:this={katexEl}></div>

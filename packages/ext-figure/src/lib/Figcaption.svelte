@@ -1,8 +1,10 @@
 <script lang="ts" module>
-	import type { Node as PMNode, NodeSpec } from 'prosemirror-model';
+	import type { NodeSpec } from 'prosemirror-model';
 
+	// eslint-disable-next-line
 	export interface FigcaptionAttrs {}
 
+	 
 	export const figcaptionAttrs: FigcaptionAttrs = {};
 
 	export const figcaptionSchema: NodeSpec = {
@@ -18,16 +20,11 @@
 </script>
 
 <script lang="ts">
-	import type { NodeProps } from '@my-org/core';
-
 	export interface Props {
-		node: PMNode | undefined /** */;
-		attrs: FigcaptionAttrs /** */;
-		contentDOM: (node: HTMLElement) => void /** */;
 		ref?: HTMLElement;
 	}
 
-	let { node, attrs, contentDOM, ref }: Props = $props();
+	let { ref }: Props = $props();
 
 	export { ref };
 </script>

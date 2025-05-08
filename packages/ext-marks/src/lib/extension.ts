@@ -5,7 +5,7 @@ import { link } from './link';
 import { strikethrough } from './strikethrough';
 import type { Extension } from '@my-org/core';
 
-export const marksExtension = () => {
+export function marksExtension() {
 	return {
 		name: 'basic-marks' as const,
 		marks: {
@@ -26,4 +26,4 @@ export const marksExtension = () => {
 			},
 		},
 	} satisfies Extension;
-};
+}
