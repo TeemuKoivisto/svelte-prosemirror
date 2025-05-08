@@ -8,7 +8,7 @@ import type {
 	ViewMutationRecord,
 } from 'prosemirror-view';
 
-import { mount, type SvelteComponent } from 'svelte';
+import { mount, type Component } from 'svelte';
 import type { Editor } from './typings';
 
 export interface SvelteNodeViewProps<A extends Attrs> {
@@ -33,8 +33,8 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 
 	selected: boolean | undefined;
 	editor: Editor;
-	component?: typeof SvelteComponent<SvelteNodeViewProps<A>>;
-	mounted?: SvelteComponent;
+	component?: Component<SvelteNodeViewProps<A>>;
+	mounted?: Component;
 
 	constructor(
 		node: PMNode,
@@ -43,7 +43,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 		decorations: readonly Decoration[],
 		innerDecorations: DecorationSource,
 		editor: Editor,
-		component?: typeof SvelteComponent<SvelteNodeViewProps<A>>,
+		component?: Component<SvelteNodeViewProps<A>>,
 	) {
 		this.node = node;
 		this.view = view;
@@ -150,7 +150,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 
 	static fromComponent<A extends Attrs>(
 		editor: Editor,
-		component?: typeof SvelteComponent<SvelteNodeViewProps<A>>,
+		component?: Component<SvelteNodeViewProps<A>>,
 	): NodeViewConstructor {
 		return (
 			node: PMNode,

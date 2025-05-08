@@ -2,8 +2,7 @@ import { NodeSpec, Node as PMNode, Schema } from 'prosemirror-model';
 import { MarkViewConstructor, NodeViewConstructor } from 'prosemirror-view';
 import { Plugin } from 'prosemirror-state';
 import type { MarkSpec } from 'prosemirror-model';
-import type { SvelteComponent } from 'svelte';
-
+import type { Component } from 'svelte';
 import type { Editor } from '../Editor';
 import type { Cmd } from './pm';
 
@@ -48,7 +47,7 @@ export interface SveltePMNode<T extends NodeAttrs | undefined> {
 		attr: string,
 	) => { [attr: string]: any } | undefined;
 	nodeView?: (editor: Editor) => NodeViewConstructor;
-	component?: typeof SvelteComponent<NodeProps<T>>;
+	component?: Component<NodeProps<T>>;
 }
 
 export interface Extension {
