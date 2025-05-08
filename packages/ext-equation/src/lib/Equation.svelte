@@ -81,11 +81,16 @@
 		popperEl.classList.add('popup');
 		document.body.appendChild(popperEl);
 		codemirrorEl.remove();
-		if (attrs.latex) {
-			katex.render(attrs.latex, katexEl, {
+		if (latex) {
+			katex.render(latex, katexEl, {
 				throwOnError: false,
 			});
 		}
+		// return () => {
+		// 	document.body.removeChild(popperEl);
+		// 	codemirror?.destroy();
+		// 	closePopper();
+		// };
 	});
 
 	export function destroy() {
@@ -128,7 +133,7 @@
 			return;
 		}
 		const updatedLatex = v.view.state.doc.toJSON().join('\n');
-		attrs.latex = updatedLatex;
+		latex = updatedLatex;
 	}
 
 	function renderCodeMirror() {
@@ -136,7 +141,7 @@
 			codemirror = new CodeMirror({
 				parent: codemirrorEl,
 				state: EditorState.create({
-					doc: attrs.latex,
+					doc: latex,
 					extensions: [
 						placeholder('Enter LaTeX equation, e.g. "a^2 = \\sqrt{b^2 + c^2}"'),
 						lineNumbers(),
@@ -161,10 +166,12 @@
 			renderCodeMirror();
 		}
 	}
+	let id = $derived(attrs.id);
+	let latex = $derived(attrs.latex);
 
 	$effect(() => {
-		if (katexEl && attrs.latex) {
-			katex.render(attrs.latex, katexEl, {
+		if (katexEl && latex) {
+			katex.render(latex, katexEl, {
 				throwOnError: false,
 			});
 		}
@@ -188,16 +195,16 @@
 		?
 	</a>
 </div>
-<figure class="equation" id={attrs.id} bind:this={ref}>
+<figure class="equation" {id} bind:this={ref}>
 	<div
 		class="equation"
 		role="button"
 		tabindex="-1"
-		data-latex={attrs.latex}
+		data-latex={latex}
 		onclick={renderCodeMirror}
 		onkeydown={handleKeyDown}
 	>
-		{#if !attrs.latex}
+		{#if !latex}
 			<div class="equation-placeholder">e=mc^2</div>
 		{:else}
 			<div bind:this={katexEl}></div>
