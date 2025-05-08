@@ -1,11 +1,10 @@
 /// <reference types="vitest" />
 
-import path from 'path';
-import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import dts from 'vite-plugin-dts';
-
 import pkg from './package.json';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import path from 'path';
 
 export default defineConfig({
 	build: {

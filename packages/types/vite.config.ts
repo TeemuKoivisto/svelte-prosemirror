@@ -1,8 +1,7 @@
-import path from 'path';
+import pkg from './package.json';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-
-import pkg from './package.json';
+import path from 'path';
 
 export default defineConfig({
 	build: {

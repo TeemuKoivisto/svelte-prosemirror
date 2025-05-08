@@ -1,6 +1,6 @@
+import * as commands from './commands';
 import { yjsExtension } from './extension';
 import { yjsExtensionName } from './types';
-import * as commands from './commands';
 
 declare module '@my-org/core' {
 	interface Extensions {

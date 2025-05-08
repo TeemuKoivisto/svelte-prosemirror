@@ -1,11 +1,9 @@
+import { Observable } from './Observable.js';
+import { commands } from './commands.js';
+import { createExtensions } from './createExtensions.js';
 import { Fragment, Mark, Node as PMNode } from 'prosemirror-model';
 import { EditorState, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-
-import { createExtensions } from './createExtensions.js';
-import { commands } from './commands.js';
-import { Observable } from './Observable.js';
-
 import type {
 	Cmd,
 	DocJSON,
@@ -237,14 +235,14 @@ export class Editor extends Observable<EditorEvents> {
 		return this;
 	}
 
-	rerun(props?: EditorProps) {
+	async rerun(props?: EditorProps) {
 		const dom = this._editorView?.dom;
 		if (!dom) {
 			throw Error(
 				`@my-org/core: Can't recreate Editor, editorView.dom doesn't exist - has EditorView already been destroyed?`,
 			);
 		}
-		return this.run(dom, props);
+		return await this.run(dom, props);
 	}
 
 	destroy() {
@@ -255,7 +253,7 @@ export class Editor extends Observable<EditorEvents> {
 		this._editorView?.destroy();
 	}
 
-	static create(dom: HTMLElement, props?: EditorProps) {
-		return new Editor().run(dom, props);
+	static async create(dom: HTMLElement, props?: EditorProps) {
+		return await new Editor().run(dom, props);
 	}
 }

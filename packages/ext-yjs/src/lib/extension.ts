@@ -1,12 +1,10 @@
-import { redo, undo, yCursorPlugin, ySyncPlugin, yUndoPlugin } from 'y-prosemirror';
-
-import type { Plugin } from 'prosemirror-state';
-import type { Extension } from '@my-org/core';
-
-import * as commands from './commands';
 import { YjsStore } from './YjsStore';
+import * as commands from './commands';
 import { yjsExtensionName } from './types';
+import { redo, undo, yCursorPlugin, ySyncPlugin, yUndoPlugin } from 'y-prosemirror';
 import type { YjsOptions } from './types';
+import type { Extension } from '@my-org/core';
+import type { Plugin } from 'prosemirror-state';
 
 export const yjsExtension = (opts: YjsOptions) => {
 	const store = new YjsStore(opts);

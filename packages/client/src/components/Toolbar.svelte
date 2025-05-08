@@ -1,12 +1,10 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte/dist/OfflineIcon.svelte';
-	import type { IconifyIcon } from '@iconify/svelte/dist/OfflineIcon.svelte';
-	import { toggleMark } from 'prosemirror-commands';
-
 	import { activeMarks, editor, state } from '$stores/editor';
-
+	import Icon from '@iconify/svelte/dist/OfflineIcon.svelte';
 	import bold from '@iconify-icons/mdi/format-bold.js';
 	import italic from '@iconify-icons/mdi/format-italic.js';
+	import { toggleMark } from 'prosemirror-commands';
+	import type { IconifyIcon } from '@iconify/svelte/dist/OfflineIcon.svelte';
 
 	type IconType = 'bold' | 'italic';
 

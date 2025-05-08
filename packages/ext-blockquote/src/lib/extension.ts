@@ -1,5 +1,4 @@
 import Blockquote, { blockquoteAttrs, blockquoteSchema } from './Blockquote.svelte';
-
 import type { Extension } from '@my-org/core';
 
 export const blockquoteExtension = () => {

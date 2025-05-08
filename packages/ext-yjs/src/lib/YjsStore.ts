@@ -1,13 +1,11 @@
+import { createYjsSnapshot } from './createYjsSnapshot';
+import { derived, get, writable } from 'svelte/store';
 import { ProsemirrorBinding, ySyncPluginKey } from 'y-prosemirror';
 import { Awareness } from 'y-protocols/awareness';
 import { WebsocketProvider } from 'y-websocket';
 import * as Y from 'yjs';
-import { derived, get, writable } from 'svelte/store';
-
-import { createYjsSnapshot } from './createYjsSnapshot';
-
-import type { Editor } from '@my-org/core';
 import type { AwarenessChange, YjsOptions, YjsSnapshot, YjsUser } from './types';
+import type { Editor } from '@my-org/core';
 
 export class YjsStore {
 	#editor: Editor | undefined;

@@ -1,29 +1,24 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy';
-
-	import { Editor } from '@my-org/core';
-
+	import Toolbar from '$components/Toolbar.svelte';
+	import { YJS_URL } from '$config';
 	import { editor, editorActions } from '$stores/editor';
-
+	import { Editor } from '@my-org/core';
 	import { blockquoteExtension } from '@my-org/ext-blockquote';
-	import { paragraphExtension } from '@my-org/ext-paragraph';
-	import { figureExtension } from '@my-org/ext-figure';
 	import { equationExtension } from '@my-org/ext-equation';
 	import { exampleSetupExtension } from '@my-org/ext-example-setup';
+	import { figureExtension } from '@my-org/ext-figure';
 	import { marksExtension } from '@my-org/ext-marks';
+	import { paragraphExtension } from '@my-org/ext-paragraph';
 	import { yjsExtension } from '@my-org/ext-yjs';
-
-	import Toolbar from '$components/Toolbar.svelte';
-
-	import { YJS_URL } from '$config';
 
 	import '@my-org/ext-example-setup/gapcursor.css';
 	import '@my-org/ext-example-setup/menu.css';
 	import '@my-org/ext-example-setup/prosemirror-example-setup.css';
 	import '@my-org/ext-yjs/yjs.css';
 
-	import type { EditorProps } from '@my-org/core';
 	import { onMount } from 'svelte';
+	import type { EditorProps } from '@my-org/core';
 
 	let documentId = $state('abcd1234');
 	let editorInstance: Editor;

@@ -1,7 +1,5 @@
-import { derived, get, writable } from 'svelte/store';
-
 import { getActiveMarks } from './getActiveMarks';
-
+import { derived, get, writable } from 'svelte/store';
 import type { Editor, EditorProps, ExtObject } from '@my-org/core';
 import type { EditorState } from 'prosemirror-state';
 

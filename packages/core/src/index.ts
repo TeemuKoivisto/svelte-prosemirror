@@ -1,6 +1,6 @@
-import type { EditorView } from 'prosemirror-view';
 import type { Commands } from './typings/index.js';
 import type { Editor } from './typings/index.js';
+import type { EditorView } from 'prosemirror-view';
 
 declare global {
 	interface Window {

@@ -44,20 +44,20 @@
 </script>
 
 <script lang="ts">
+	import { EditorState } from '@codemirror/state';
 	import {
 		EditorView as CodeMirror,
 		lineNumbers,
 		placeholder,
 		ViewUpdate,
 	} from '@codemirror/view';
-	import { EditorState } from '@codemirror/state';
 	import { createPopper } from '@popperjs/core';
-	import type { Instance } from '@popperjs/core';
 	import katex from 'katex';
 	import { Node as PMNode } from 'prosemirror-model';
-	import type { EditorView } from 'prosemirror-view';
 	import { onMount } from 'svelte';
 	import type { SvelteNodeViewProps } from '@my-org/core';
+	import type { Instance } from '@popperjs/core';
+	import type { EditorView } from 'prosemirror-view';
 
 	import 'katex/dist/katex.min.css';
 

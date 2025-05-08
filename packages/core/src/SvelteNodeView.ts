@@ -1,4 +1,6 @@
 import { Attrs, DOMSerializer, Node as PMNode } from 'prosemirror-model';
+import { mount, type Component } from 'svelte';
+import type { Editor } from './typings/index.js';
 import type {
 	Decoration,
 	DecorationSource,
@@ -7,9 +9,6 @@ import type {
 	NodeViewConstructor,
 	ViewMutationRecord,
 } from 'prosemirror-view';
-
-import { mount, type Component } from 'svelte';
-import type { Editor } from './typings/index.js';
 
 export interface SvelteNodeViewProps<A extends Attrs> {
 	node: PMNode;

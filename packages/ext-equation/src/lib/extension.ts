@@ -1,7 +1,5 @@
 import Equation, { equationAttrs, equationSchema } from './Equation.svelte';
-
 import { SvelteNodeView } from '@my-org/core';
-
 import type { Extension } from '@my-org/core';
 
 export const equationExtension = () => {

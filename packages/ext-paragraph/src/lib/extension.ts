@@ -1,7 +1,7 @@
 import Paragraph, { paragraphAttrs, paragraphSchema } from './Paragraph.svelte';
 import type { Extension } from '@my-org/core';
 
-export const paragraphExtension = () => {
+export function paragraphExtension() {
 	return {
 		name: 'paragraph' as const,
 		nodes: {
@@ -12,4 +12,4 @@ export const paragraphExtension = () => {
 			},
 		},
 	} satisfies Extension;
-};
+}

@@ -1,5 +1,4 @@
 import { setAction, YjsAction } from './actions';
-
 import type { Command } from '@my-org/core';
 
 export const createSnapshot = (): Command => (state, dispatch) => {

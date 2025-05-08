@@ -1,9 +1,7 @@
-import { DOMOutputSpec, Node as PMNode, NodeSpec } from 'prosemirror-model';
-
 import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec.js';
-import { SveltePMNode } from '../typings/index.js';
 import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec.js';
-
+import { SveltePMNode } from '../typings/index.js';
+import { DOMOutputSpec, Node as PMNode, NodeSpec } from 'prosemirror-model';
 import { mount } from 'svelte';
 
 export async function createNodeSpec(node: SveltePMNode<any>): Promise<NodeSpec> {
