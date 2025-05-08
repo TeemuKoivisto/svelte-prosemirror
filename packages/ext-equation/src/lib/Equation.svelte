@@ -44,8 +44,6 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import {
 		EditorView as CodeMirror,
 		lineNumbers,
@@ -59,7 +57,6 @@
 	import { Node as PMNode } from 'prosemirror-model';
 	import type { EditorView } from 'prosemirror-view';
 	import { onMount } from 'svelte';
-	import { Editor } from '@my-org/core';
 	import type { SvelteNodeViewProps } from '@my-org/core';
 
 	import 'katex/dist/katex.min.css';
@@ -94,12 +91,18 @@
 				throwOnError: false,
 			});
 		}
-		return () => {
-			document.body.removeChild(popperEl);
-			codemirror?.destroy();
-			closePopper();
-		};
+		// return () => {
+		// 	document.body.removeChild(popperEl);
+		// 	codemirror?.destroy();
+		// 	closePopper();
+		// };
 	});
+
+	export function destroy() {
+		closePopper();
+		document.body.removeChild(popperEl);
+		codemirror?.destroy();
+	}
 
 	function openPopper(anchor: HTMLElement, content: HTMLElement) {
 		const arrow = document.createElement('div');

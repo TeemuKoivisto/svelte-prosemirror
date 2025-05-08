@@ -23,6 +23,10 @@ export interface SvelteNodeViewProps<A extends Attrs> {
 	editor: Editor;
 }
 
+export interface MountedComponent extends Component {
+	destroy(): void;
+}
+
 export class SvelteNodeView<A extends Attrs> implements NodeView {
 	protected _dom?: HTMLElement;
 	contentDOM?: HTMLElement;
@@ -34,7 +38,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 	selected: boolean | undefined;
 	editor: Editor;
 	component?: Component<SvelteNodeViewProps<A>>;
-	mounted?: Component;
+	mounted?: MountedComponent;
 
 	constructor(
 		node: PMNode,
@@ -94,16 +98,14 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
 			this.mounted = mount(this.component!, {
 				target: this.dom,
 				props: this.props,
-			}) as Component;
+			}) as MountedComponent;
 		} else {
 			contentDOM && this._dom.appendChild(contentDOM);
 		}
 		return this;
 	};
 
-	render() {
-		this.mounted?.$$set && this.mounted?.$$set(this.props);
-	}
+	render() {}
 
 	shouldUpdate = (node: PMNode) => {
 		if (node.type !== this.node.type) {

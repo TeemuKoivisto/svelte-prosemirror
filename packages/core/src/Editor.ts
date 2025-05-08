@@ -60,7 +60,6 @@ export class Editor extends Observable<EditorEvents> {
 		const cmds = this.commands;
 		// @TODO type this thing
 		const val: Record<string, (...params: any[]) => this> = {};
-		const self = this;
 		for (const name in cmds) {
 			const cmdKey = name as keyof typeof cmds;
 			if (typeof cmds[cmdKey] === 'object') {
@@ -69,13 +68,13 @@ export class Editor extends Observable<EditorEvents> {
 				for (const subName in cmds[cmdKey]) {
 					subCmds[subName] = (...params: any[]) =>
 						// @ts-expect-error cmds[cmdKey] is not an object
-						self.cmd(cmds[cmdKey][subName](...params) as Cmd);
+						this.cmd(cmds[cmdKey][subName](...params) as Cmd);
 				}
 				val[cmdKey] = subCmds;
 			} else {
 				val[name] = (...params: any[]) =>
 					// @ts-expect-error cmds[name] is not an object
-					self.cmd(cmds[name as keyof typeof cmds](...params) as Cmd);
+					this.cmd(cmds[name as keyof typeof cmds](...params) as Cmd);
 			}
 		}
 		return val;
@@ -179,7 +178,6 @@ export class Editor extends Observable<EditorEvents> {
 		});
 		let view = this._editorView;
 		if (view) {
-			const self = this;
 			// Recreate only extensions that have changed
 			if (props !== oldProps) {
 				oldProps?.extensions?.forEach(ext => {
@@ -192,26 +190,25 @@ export class Editor extends Observable<EditorEvents> {
 				state: newState,
 				markViews: created.markViews,
 				nodeViews: created.nodeViews,
-				dispatchTransaction(tr: Transaction) {
-					if (!this.state) return;
-					const oldEditorState = this.state;
+				dispatchTransaction: (tr: Transaction) => {
+					if (!view!.state) return;
+					const oldEditorState = view!.state;
 					const newState = oldEditorState.apply(tr);
-					self.setState(newState);
+					this.setState(newState);
 				},
 			});
 			view['editor'] = this;
 		} else {
-			const self = this;
 			view = new EditorView(
 				{ mount: dom },
 				{
 					state: newState,
 					markViews: created.markViews,
 					nodeViews: created.nodeViews,
-					dispatchTransaction(tr: Transaction) {
-						const oldEditorState = this.state;
+					dispatchTransaction: (tr: Transaction) => {
+						const oldEditorState = this.editorView.state;
 						const newState = oldEditorState.apply(tr);
-						self.setState(newState);
+						this.setState(newState);
 					},
 				},
 			);
