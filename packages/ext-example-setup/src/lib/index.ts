@@ -1,1 +1,1 @@
-export { exampleSetupExtension } from './extension';
+export { exampleSetupExtension } from './extension'

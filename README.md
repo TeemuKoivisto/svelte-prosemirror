@@ -12,39 +12,34 @@ https://teemukoivisto.github.io/svelte-prosemirror/
 
 ```ts
 export const equationSchema: NodeSpec = {
-	attrs: {
-		id: { default: undefined },
-		title: { default: '' },
-		latex: { default: '' },
-	},
-	content: 'inline*',
-	group: 'block',
-	atom: true,
-	parseDOM: [
-		{
-			tag: 'figure.equation',
-			getAttrs: (dom: HTMLElement | string) => {
-				if (dom instanceof HTMLElement) {
-					return {
-						id: dom.getAttribute('id'),
-						title: dom.getAttribute('title'),
-						latex: dom.getAttribute('latex'),
-					};
-				}
-				return null;
-			},
-		},
-	],
-	toDOM(node: PMNode) {
-		const { id, title, latex } = node.attrs;
-		return [
-			'figure',
-			{ id, title, class: 'equation', latex },
-			['pre', latex],
-			['figcaption', 0],
-		];
-	},
-};
+  attrs: {
+    id: { default: undefined },
+    title: { default: '' },
+    latex: { default: '' }
+  },
+  content: 'inline*',
+  group: 'block',
+  atom: true,
+  parseDOM: [
+    {
+      tag: 'figure.equation',
+      getAttrs: (dom: HTMLElement | string) => {
+        if (dom instanceof HTMLElement) {
+          return {
+            id: dom.getAttribute('id'),
+            title: dom.getAttribute('title'),
+            latex: dom.getAttribute('latex')
+          }
+        }
+        return null
+      }
+    }
+  ],
+  toDOM(node: PMNode) {
+    const { id, title, latex } = node.attrs
+    return ['figure', { id, title, class: 'equation', latex }, ['pre', latex], ['figcaption', 0]]
+  }
+}
 ```
 
 As you can see, the deserialization of the node with `parseDOM` and the serialization using `toDOM` appear pretty repetitive. You _can_ of course customize these but I find in 95% of cases you do just something very basic: parse based on a tag OR a tag+class. And next define your output as a `DOMOutputSpec` -> `['figure', ...]` where the first parameter is tag name, the second attributes and the third an optional "hole" where the content goes in.
@@ -74,34 +69,34 @@ Since I have been crunching this problem for some time now, I also wanted to com
 With TypeScript 4.9 came a new `satisfies` operator that I think fits this job perfectly. Using it I was able to ditch the `class`-based approach with inhereritance and just use plain objects:
 
 ```ts
-import Figcaption, { figcaptionAttrs, figcaptionSchema } from './Figcaption.svelte';
-import Figure, { figureAttrs, figureSchema } from './Figure.svelte';
-import Image, { imageAttrs, imageSchema } from './Image.svelte';
+import Figcaption, { figcaptionAttrs, figcaptionSchema } from './Figcaption.svelte'
+import Figure, { figureAttrs, figureSchema } from './Figure.svelte'
+import Image, { imageAttrs, imageSchema } from './Image.svelte'
 
-import type { Extension } from '@my-org/core';
+import type { Extension } from '@my-org/core'
 
 export const figureExtension = () => {
-	return {
-		name: 'figure' as const,
-		nodes: {
-			figcaption: {
-				attrs: figcaptionAttrs,
-				schema: figcaptionSchema,
-				component: Figcaption,
-			},
-			figure: {
-				attrs: figureAttrs,
-				schema: figureSchema,
-				component: Figure,
-			},
-			image: {
-				attrs: imageAttrs,
-				schema: imageSchema,
-				component: Image,
-			},
-		},
-	} satisfies Extension;
-};
+  return {
+    name: 'figure' as const,
+    nodes: {
+      figcaption: {
+        attrs: figcaptionAttrs,
+        schema: figcaptionSchema,
+        component: Figcaption
+      },
+      figure: {
+        attrs: figureAttrs,
+        schema: figureSchema,
+        component: Figure
+      },
+      image: {
+        attrs: imageAttrs,
+        schema: imageSchema,
+        component: Image
+      }
+    }
+  } satisfies Extension
+}
 ```
 
 This is pretty cool as you can maintain type-safety as well as make the extensions pretty damn simple. No inheritance - no leaky abstractions. The biggest win (in addition to more flexible format) is being able to see with intellisense the original extension in great detail:

@@ -2,17 +2,17 @@ name: build-test
 description: Build and run tests
 
 runs:
-    using: composite
-    steps:
-        - name: Build packages
-          run: |
-              pnpm --filter types build
-              pnpm --filter core build
-              pnpm --filter="@my-org/ext*" build
-              pnpm --filter=editor build
-          shell: bash
+  using: composite
+  steps:
+    - name: Build packages
+      run: |
+        pnpm --filter types build
+        pnpm --filter core build
+        pnpm --filter="@my-org/ext*" build
+        pnpm --filter=editor build
+      shell: bash
 
-        - name: Run type check and unit tests
-          run: |
-              pnpm --filter core test
-          shell: bash
+    - name: Run type check and unit tests
+      run: |
+        pnpm --filter core test
+      shell: bash
