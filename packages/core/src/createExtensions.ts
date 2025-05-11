@@ -1,5 +1,5 @@
 import { Schema } from 'prosemirror-model'
-import { Command, Plugin } from 'prosemirror-state'
+import { type Command, Plugin } from 'prosemirror-state'
 
 import { SvelteNodeView } from './SvelteNodeView'
 import { createNodeSpec } from './extensions/createNodeSpec'
@@ -7,7 +7,13 @@ import { createNodeSpec } from './extensions/createNodeSpec'
 import type { Cmd, Editor, EditorProps, ExtensionData, Initialized } from './typings'
 import { keymap } from 'prosemirror-keymap'
 
-export function createExtensions(editor: Editor, { extensions = [] }: EditorProps): Initialized {
+import { schema } from 'prosemirror-schema-basic'
+import { addListNodes } from 'prosemirror-schema-list'
+
+export async function createExtensions(
+  editor: Editor,
+  { extensions = [] }: EditorProps
+): Promise<Initialized> {
   const extData: ExtensionData = {
     commands: {},
     marks: {},
@@ -37,7 +43,7 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
       }
       const value = ext.nodes[name]
       extData.svelteNodes[name] = value
-      extData.nodes[name] = createNodeSpec(value)
+      extData.nodes[name] = await createNodeSpec(value)
       if (value.nodeView) {
         extData.nodeViews[name] = value.nodeView(editor)
       }
@@ -59,7 +65,8 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
     }
   }
 
-  const schema = new Schema({
+  const mySchema = new Schema({
+    // nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append(extData.nodes),
     nodes: {
       doc: {
         content: 'block+'
@@ -84,9 +91,9 @@ export function createExtensions(editor: Editor, { extensions = [] }: EditorProp
   const plugins = [
     keymap(keymaps),
     ...extensions.reduce(
-      (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, schema)) || [])],
+      (acc, ext) => [...acc, ...((ext.plugins && ext.plugins(editor, mySchema)) || [])],
       [] as Plugin[]
     )
   ]
-  return { ...extData, plugins, schema }
+  return { ...extData, plugins, schema: mySchema }
 }

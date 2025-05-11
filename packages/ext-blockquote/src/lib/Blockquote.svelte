@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import type { NodeProps } from '@my-org/core'
-  import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
+  import { type NodeSpec } from 'prosemirror-model'
 
   export interface BlockquoteAttrs {}
 
@@ -24,7 +24,7 @@
   /** */
 </script>
 
-<blockquote data-hole bind:this={ref} />
+<blockquote data-hole bind:this={ref}></blockquote>
 
 <style lang="scss" global>
   blockquote {

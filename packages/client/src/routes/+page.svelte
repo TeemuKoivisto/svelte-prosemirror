@@ -55,16 +55,18 @@
     props = {
       extensions: [
         exampleSetupExtension({ history: !yjs }),
-        paragraphExtension()
-        // blockquoteExtension()
-        // figureExtension(),
-        // equationExtension(),
-        // marksExtension(),
-        // ...(yjs ? [yjs] : [])
+        paragraphExtension(),
+        blockquoteExtension(),
+        figureExtension(),
+        equationExtension(),
+        marksExtension(),
+        ...(yjs ? [yjs] : [])
       ]
     }
-    editorInstance = Editor.create(editorElementRef, props)
-    editorActions.setEditor(editorInstance)
+    Editor.create(editorElementRef, props).then(editor => {
+      editorInstance = editor
+      editorActions.setEditor(editorInstance)
+    })
   })
 
   function handleInsertFigure() {
@@ -72,9 +74,9 @@
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
-      tr.insert(2, nodes.paragraph.createAndFill() as any)
+      // tr.insert(2, nodes.paragraph.createAndFill() as any)
       tr.insert(
-        1,
+        0,
         nodes.figure.create(undefined, [
           nodes.image.create({
             src: 'https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg',
@@ -93,9 +95,9 @@
       const tr = state.tr
       const { schema } = state
       const nodes = schema.nodes
-      tr.insert(2, nodes.paragraph.createAndFill() as any)
+      // tr.insert(2, nodes.paragraph.createAndFill() as any)
       tr.insert(
-        1,
+        0,
         nodes.equation.create(
           {
             latex: 'a^2 = \\sqrt{b^2 + c^2}'

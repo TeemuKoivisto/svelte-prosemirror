@@ -1,4 +1,4 @@
-import Paragraph, { paragraphAttrs, paragraphSchema } from './Paragraph.svelte'
+import { default as Paragraph, paragraphAttrs, paragraphSchema } from './Paragraph.svelte'
 
 import type { Extension } from '@my-org/core'
 
@@ -9,7 +9,7 @@ export const paragraphExtension = () => {
       paragraph: {
         attrs: paragraphAttrs,
         schema: paragraphSchema,
-        component: Paragraph
+        component: Paragraph as any
       }
     }
   } satisfies Extension

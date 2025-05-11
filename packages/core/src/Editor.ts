@@ -166,8 +166,8 @@ export class Editor extends Observable<EditorEvents> {
     return this
   }
 
-  run(dom: HTMLElement, props: EditorProps = {}) {
-    const created = createExtensions(this, props)
+  async run(dom: HTMLElement, props: EditorProps = {}) {
+    const created = await createExtensions(this, props)
     const oldProps = this.data?.props
     const newState = EditorState.create({
       schema: created.schema,
@@ -253,7 +253,8 @@ export class Editor extends Observable<EditorEvents> {
     this._editorView?.destroy()
   }
 
-  static create(dom: HTMLElement, props?: EditorProps) {
-    return new Editor().run(dom, props)
+  static async create(dom: HTMLElement, props?: EditorProps) {
+    const editor = new Editor()
+    return await editor.run(dom, props)
   }
 }

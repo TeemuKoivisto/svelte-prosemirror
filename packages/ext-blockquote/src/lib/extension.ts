@@ -1,4 +1,4 @@
-import Blockquote, { blockquoteAttrs, blockquoteSchema } from './Blockquote.svelte'
+import { default as Blockquote, blockquoteAttrs, blockquoteSchema } from './Blockquote.svelte'
 
 import type { Extension } from '@my-org/core'
 
@@ -9,7 +9,7 @@ export const blockquoteExtension = () => {
       blockquote: {
         attrs: blockquoteAttrs,
         schema: blockquoteSchema,
-        component: Blockquote
+        component: Blockquote as any
       }
     }
   } satisfies Extension

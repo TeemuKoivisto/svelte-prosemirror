@@ -66,14 +66,14 @@
 
   let { node = undefined, attrs, selected, view, getPos }: Props = $props()
 
-  let codemirrorEl: HTMLElement = $state()
-  let katexEl: HTMLElement = $state()
+  let codemirrorEl: HTMLElement | undefined = $state()
+  let katexEl: HTMLElement | undefined = $state()
   let popperEl: HTMLElement
   let popperInstance: Instance | undefined
   let codemirror: CodeMirror | undefined
 
   onMount(() => {
-    if (!node) return
+    if (!node || !codemirrorEl || !katexEl) return
     popperEl = document.createElement('div')
     popperEl.classList.add('popup')
     document.body.appendChild(popperEl)
@@ -136,6 +136,9 @@
   }
 
   function renderCodeMirror() {
+    if (!codemirror || !codemirrorEl || !katexEl) {
+      return
+    }
     if (!codemirror) {
       codemirror = new CodeMirror({
         parent: codemirrorEl,
