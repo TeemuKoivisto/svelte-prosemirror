@@ -48,7 +48,7 @@
         <button
           class="icon-btn"
           class:active={$activeMarks.includes(item.title)}
-          on:click={() => handleIconClick(item.title)}
+          onclick={() => handleIconClick(item.title)}
         >
           <Icon icon={item.icon} width={24} />
         </button>

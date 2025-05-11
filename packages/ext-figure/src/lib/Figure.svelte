@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface FigureAttrs {
@@ -23,13 +23,19 @@
 <script lang="ts">
   import type { NodeProps } from '@my-org/core'
 
-  interface $$Props extends NodeProps<FigureAttrs> {}
+  
 
-  export let node: PMNode | undefined, attrs: FigureAttrs, contentDOM: (node: HTMLElement) => void
-  /** */
+  interface Props {
+    node: PMNode | undefined; /** */
+    attrs: FigureAttrs; /** */
+    contentDOM: (node: HTMLElement) => void; /** */
+  }
+
+  let { node, attrs, contentDOM }: Props = $props();
+  
 </script>
 
-<figure id={attrs.id} data-hole />
+<figure id={attrs.id} data-hole></figure>
 
 <style lang="scss">
   figure {

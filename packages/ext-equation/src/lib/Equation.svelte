@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { NodeSpec } from 'prosemirror-model'
 
   export interface EquationAttrs {
@@ -44,6 +44,8 @@
 </script>
 
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { EditorView as CodeMirror, lineNumbers, placeholder, ViewUpdate } from '@codemirror/view'
   import { EditorState } from '@codemirror/state'
   import { createPopper } from '@popperjs/core'
@@ -56,39 +58,32 @@
 
   import 'katex/dist/katex.min.css'
 
-  interface $$Props extends SvelteNodeViewProps<EquationAttrs> {}
+  
 
-  export let node: PMNode | undefined = undefined,
-    attrs: EquationAttrs,
-    selected: boolean | undefined,
-    view: EditorView,
-    getPos: () => number | undefined
+  interface Props {
+    node?: PMNode | undefined;
+    attrs: EquationAttrs;
+    selected: boolean | undefined;
+    view: EditorView;
+    getPos: () => number | undefined;
+  }
 
-  let codemirrorEl: HTMLElement
-  let katexEl: HTMLElement
+  let {
+    node = undefined,
+    attrs,
+    selected,
+    view,
+    getPos
+  }: Props = $props();
+
+  let codemirrorEl: HTMLElement = $state()
+  let katexEl: HTMLElement = $state()
   let popperEl: HTMLElement
   let popperInstance: Instance | undefined
   let codemirror: CodeMirror | undefined
 
-  $: id = attrs.id
-  $: latex = attrs.latex
-  $: title = attrs.title
 
-  $: {
-    if (katexEl && latex) {
-      katex.render(latex, katexEl, {
-        throwOnError: false
-      })
-    }
-  }
 
-  $: {
-    if (selected) {
-      renderCodeMirror()
-    } else {
-      closePopper()
-    }
-  }
 
   onMount(() => {
     if (!node) return
@@ -180,6 +175,23 @@
       renderCodeMirror()
     }
   }
+  let id = $derived(attrs.id)
+  let latex = $derived(attrs.latex)
+  let title = $derived(attrs.title)
+  run(() => {
+    if (katexEl && latex) {
+      katex.render(latex, katexEl, {
+        throwOnError: false
+      })
+    }
+  });
+  run(() => {
+    if (selected) {
+      renderCodeMirror()
+    } else {
+      closePopper()
+    }
+  });
 </script>
 
 <div class="equation-editor" bind:this={codemirrorEl}>
@@ -198,16 +210,16 @@
     role="button"
     tabindex="-1"
     data-latex={latex}
-    on:click={renderCodeMirror}
-    on:keydown={handleKeyDown}
+    onclick={renderCodeMirror}
+    onkeydown={handleKeyDown}
   >
     {#if !latex}
       <div class="equation-placeholder">e=mc^2</div>
     {:else}
-      <div bind:this={katexEl} />
+      <div bind:this={katexEl}></div>
     {/if}
   </div>
-  <figcaption data-hole />
+  <figcaption data-hole></figcaption>
 </figure>
 
 <style lang="scss" global>
