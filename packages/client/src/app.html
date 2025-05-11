@@ -1,28 +1,28 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>svelte-prosemirror</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>svelte-prosemirror</title>
 
-    <script>
-      try {
-        if (!('theme' in localStorage)) {
-          localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light'
-        }
+        <script>
+            try {
+                if (!('theme' in localStorage)) {
+                    localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+                        ? 'dark'
+                        : 'light';
+                }
 
-        document.querySelector('html').classList.add(localStorage.theme)
-      } catch (e) {
-        console.error(e)
-      }
-    </script>
+                document.querySelector('html').classList.add(localStorage.theme);
+            } catch (e) {
+                console.error(e);
+            }
+        </script>
 
-    %sveltekit.head%
-  </head>
+        %sveltekit.head%
+    </head>
 
-  <body>
-    <div id="svelte">%sveltekit.body%</div>
-  </body>
+    <body>
+        <div id="svelte">%sveltekit.body%</div>
+    </body>
 </html>

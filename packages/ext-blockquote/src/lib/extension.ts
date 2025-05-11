@@ -1,15 +1,15 @@
-import Blockquote, { blockquoteAttrs, blockquoteSchema } from './Blockquote.svelte'
-import type { Extension } from '@my-org/core'
+import Blockquote, { blockquoteAttrs, blockquoteSchema } from './Blockquote.svelte';
+import type { Extension } from '@my-org/core';
 
 export function blockquoteExtension() {
-  return {
-    name: 'blockquote' as const,
-    nodes: {
-      blockquote: {
-        attrs: blockquoteAttrs,
-        schema: blockquoteSchema,
-        component: Blockquote
-      }
-    }
-  } satisfies Extension
+    return {
+        name: 'blockquote' as const,
+        nodes: {
+            blockquote: {
+                attrs: blockquoteAttrs,
+                schema: blockquoteSchema,
+                component: Blockquote,
+            },
+        },
+    } satisfies Extension;
 }

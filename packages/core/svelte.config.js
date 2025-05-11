@@ -1,13 +1,13 @@
 const preprocessOptions = {
-  scss: {}
-}
+    scss: {},
+};
 
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 export default {
-  preprocess: vitePreprocess(),
-  preprocessOptions,
-  compilerOptions: {
-    runes: true
-  }
-}
+    preprocess: vitePreprocess(),
+    preprocessOptions,
+    compilerOptions: {
+        runes: true,
+    },
+};

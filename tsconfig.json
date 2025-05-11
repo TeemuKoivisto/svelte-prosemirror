@@ -1,24 +1,24 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "moduleResolution": "nodenext",
-    "module": "NodeNext",
-    "lib": ["esnext"],
-    "target": "esnext",
-    "declaration": true,
-    "declarationDir": "./dist",
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "removeComments": false
-  }
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "moduleResolution": "nodenext",
+        "module": "NodeNext",
+        "lib": ["esnext"],
+        "target": "esnext",
+        "declaration": true,
+        "declarationDir": "./dist",
+        "isolatedModules": true,
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "removeComments": false
+    }
 }

@@ -1,1 +1,1 @@
-export { figureExtension } from './extension'
+export { figureExtension } from './extension';
