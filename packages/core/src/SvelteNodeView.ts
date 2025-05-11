@@ -1,4 +1,4 @@
-import { Attrs, DOMSerializer, Node as PMNode } from 'prosemirror-model'
+import { DOMSerializer, type Attrs, type Node as PMNode } from 'prosemirror-model'
 import type {
   Decoration,
   DecorationSource,
@@ -7,7 +7,7 @@ import type {
   NodeViewConstructor
 } from 'prosemirror-view'
 
-import type { SvelteComponent } from 'svelte'
+import { mount, type SvelteComponent } from 'svelte'
 import type { Editor } from './typings'
 
 export interface SvelteNodeViewProps<A extends Attrs> {
@@ -87,7 +87,7 @@ export class SvelteNodeView<A extends Attrs> implements NodeView {
     this.contentDOM = contentDOM
     this._dom = document.createElement(this.node.type.spec.inline ? 'span' : 'div')
     if (this.component) {
-      this.mounted = new this.component({ target: this.dom, props: this.props })
+      this.mounted = mount(this.component, { target: this.dom, props: this.props })
     } else {
       contentDOM && this._dom.appendChild(contentDOM)
     }

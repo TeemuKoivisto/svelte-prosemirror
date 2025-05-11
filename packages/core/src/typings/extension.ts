@@ -1,6 +1,6 @@
-import { MarkSpec, NodeSpec, Node as PMNode, Schema } from 'prosemirror-model'
-import { EditorView, MarkViewConstructor, NodeViewConstructor } from 'prosemirror-view'
-import { Plugin } from 'prosemirror-state'
+import type { MarkSpec, NodeSpec, Node as PMNode, Schema } from 'prosemirror-model'
+import type { EditorView, MarkViewConstructor, NodeViewConstructor } from 'prosemirror-view'
+import type { Plugin } from 'prosemirror-state'
 import type { SvelteComponent } from 'svelte'
 
 import type { Editor } from '../Editor'
@@ -26,6 +26,7 @@ export interface NodeProps<T> {
   node: PMNode | undefined
   attrs: T
   contentDOM: (node: HTMLElement) => void
+  ref: HTMLElement | undefined
 }
 
 export interface NodeAttrs {

@@ -23,19 +23,19 @@
 <script lang="ts">
   import type { NodeProps } from '@my-org/core'
 
-  
-
-  interface Props {
-    node: PMNode | undefined; /** */
-    attrs: FigureAttrs; /** */
-    contentDOM: (node: HTMLElement) => void; /** */
+  export interface Props {
+    node: PMNode | undefined /** */
+    attrs: FigureAttrs /** */
+    contentDOM: (node: HTMLElement) => void /** */
+    ref: HTMLElement | undefined
   }
 
-  let { node, attrs, contentDOM }: Props = $props();
-  
+  let { node, attrs, contentDOM, ref }: Props = $props()
+
+  export { ref }
 </script>
 
-<figure id={attrs.id} data-hole></figure>
+<figure id={attrs.id} data-hole bind:this={ref}></figure>
 
 <style lang="scss">
   figure {

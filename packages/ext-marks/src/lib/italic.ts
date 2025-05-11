@@ -1,4 +1,4 @@
-import { Mark, MarkSpec } from 'prosemirror-model'
+import { Mark, type MarkSpec } from 'prosemirror-model'
 
 // :: MarkSpec An emphasis mark. Rendered as an `<em>` element.
 // Has parse rules that also match `<i>` and `font-style: italic`.

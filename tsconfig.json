@@ -3,6 +3,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "module": "esnext",
+    "verbatimModuleSyntax": true,
     "lib": ["esnext"],
     "target": "esnext",
     "declaration": true,

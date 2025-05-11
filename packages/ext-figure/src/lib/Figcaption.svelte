@@ -20,20 +20,20 @@
 <script lang="ts">
   import type { NodeProps } from '@my-org/core'
 
-  
-
-  interface Props {
-    node: PMNode | undefined; /** */
-    attrs: FigcaptionAttrs; /** */
-    contentDOM: (node: HTMLElement) => void; /** */
+  export interface Props {
+    node: PMNode | undefined /** */
+    attrs: FigcaptionAttrs /** */
+    contentDOM: (node: HTMLElement) => void /** */
+    ref: HTMLElement | undefined
   }
 
-  let { node, attrs, contentDOM }: Props = $props();
-  
+  let { node, attrs, contentDOM, ref }: Props = $props()
+
+  export { ref }
 </script>
 
 <!-- svelte-ignore a11y_figcaption_parent -->
-<figcaption data-hole></figcaption>
+<figcaption data-hole bind:this={ref}></figcaption>
 
 <style lang="scss">
   figcaption {

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { NodeProps } from '@my-org/core'
+  import type { NodeProps } from '@my-org/core'
   import type { Node as PMNode, NodeSpec } from 'prosemirror-model'
 
   export interface ParagraphAttrs {
@@ -20,19 +20,19 @@
 </script>
 
 <script lang="ts">
-  
-
-  interface Props {
-    node: PMNode | undefined; /** */
-    attrs: ParagraphAttrs; /** */
-    contentDOM: (node: HTMLElement) => void; /** */
+  export interface Props {
+    node: PMNode | undefined /** */
+    attrs: ParagraphAttrs /** */
+    contentDOM: (node: HTMLElement) => void /** */
+    ref: HTMLElement | undefined
   }
 
-  let { node, attrs, contentDOM }: Props = $props();
-  
+  let { node, attrs, contentDOM, ref }: Props = $props()
+
+  export { ref }
 </script>
 
-<p data-indent={attrs.indent} data-hole></p>
+<p data-indent={attrs.indent} data-hole bind:this={ref}></p>
 
 <style lang="scss" global>
   p {

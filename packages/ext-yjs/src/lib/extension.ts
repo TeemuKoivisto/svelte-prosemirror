@@ -7,7 +7,7 @@ import type { Extension } from '@my-org/core'
 
 import * as commands from './commands'
 import { YjsStore } from './YjsStore'
-import { yjsExtensionName, YjsOptions } from './types'
+import { yjsExtensionName, type YjsOptions } from './types'
 
 export const yjsExtension = (opts: YjsOptions) => {
   const store = new YjsStore(opts)

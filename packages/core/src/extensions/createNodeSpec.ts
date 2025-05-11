@@ -3,7 +3,7 @@ import { DOMOutputSpec, Node as PMNode, NodeSpec } from 'prosemirror-model'
 import { getAttrsWithOutputSpec } from './getAttrsWithOutputSpec'
 import { SveltePMNode } from '../typings'
 import { htmlToDOMOutputSpec } from './htmlToDOMOutputSpec'
-
+import { mount } from 'svelte'
 export function createNodeSpec(node: SveltePMNode<any>): NodeSpec {
   const { schema } = node
   const nodeSpec = {
@@ -14,15 +14,18 @@ export function createNodeSpec(node: SveltePMNode<any>): NodeSpec {
     const staticSpec = createSpec(node)
     nodeSpec.toDOM = (node: PMNode) => {
       const div = document.createElement('div')
-      const comp = new component({
+      const comp = mount(component, {
         target: div,
         props: {
           node,
           attrs: node.attrs,
-          contentDOM: () => undefined
+          contentDOM: () => undefined,
+          ref: undefined
         }
       })
-      const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+      console.log(comp)
+      console.log(comp.ref)
+      const spec = htmlToDOMOutputSpec(comp.ref)
       // console.log('spec', spec)
       return spec as unknown as DOMOutputSpec
     }
@@ -52,15 +55,18 @@ export function createSpec(node: SveltePMNode<any>): readonly [string, ...any[]]
     return ['']
   }
   const div = document.createElement('div')
-  const comp = new component({
+  const comp = mount(component, {
     target: div,
     props: {
       node: undefined,
       attrs,
-      contentDOM: () => undefined
+      contentDOM: () => undefined,
+      ref: undefined
     }
   })
-  const spec = htmlToDOMOutputSpec(comp.$$.root.firstChild)
+  console.log(comp)
+  console.log(comp.ref)
+  const spec = htmlToDOMOutputSpec(comp.ref)
   // console.log('spec', spec)
   // @TODO add class list for 'tag'
   return spec as [string, ...any[]]

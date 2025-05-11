@@ -1,4 +1,4 @@
-import { Mark, MarkSpec } from 'prosemirror-model'
+import { Mark, type MarkSpec } from 'prosemirror-model'
 
 // :: MarkSpec A link. Has `href` and `title` attributes. `title`
 // defaults to the empty string. Rendered and parsed as an `<a>`

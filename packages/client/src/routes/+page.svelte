@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  // import { run } from 'svelte/legacy'
+
+  import { onMount } from 'svelte'
 
   import { Editor } from '@my-org/core'
 
@@ -28,41 +30,42 @@
   let editorInstance: Editor
   let props: EditorProps = $state({})
 
+  let editorElementRef: HTMLElement | undefined = $state()
+
   // Create Yjs extension separately so that it's not destroyed if props that are not related to it change
   // Otherwise the provider is destroyed and edits stop working...
-  let yjs = $derived(YJS_URL
-    ? yjsExtension({
-        document: {
-          id: 'docId126'
-        },
-        user: {
-          id: 'id-john-123',
-          name: 'John',
-          clientID: 1,
-          color: '#ff3354'
-        },
-        ws_url: YJS_URL
-      })
-    : undefined)
+  let yjs = $derived(
+    YJS_URL
+      ? yjsExtension({
+          document: {
+            id: 'docId126'
+          },
+          user: {
+            id: 'id-john-123',
+            name: 'John',
+            clientID: 1,
+            color: '#ff3354'
+          },
+          ws_url: YJS_URL
+        })
+      : undefined
+  )
 
-  run(() => {
+  onMount(() => {
     props = {
       extensions: [
         exampleSetupExtension({ history: !yjs }),
-        paragraphExtension(),
-        blockquoteExtension(),
-        figureExtension(),
-        equationExtension(),
-        marksExtension(),
-        ...(yjs ? [yjs] : [])
+        paragraphExtension()
+        // blockquoteExtension()
+        // figureExtension(),
+        // equationExtension(),
+        // marksExtension(),
+        // ...(yjs ? [yjs] : [])
       ]
     }
-  });
-
-  function editor_action(dom: HTMLElement) {
-    editorInstance = Editor.create(dom, props)
+    editorInstance = Editor.create(editorElementRef, props)
     editorActions.setEditor(editorInstance)
-  }
+  })
 
   function handleInsertFigure() {
     editor?.cmd((state, dispatch) => {
@@ -117,7 +120,7 @@
   </fieldset>
   <div class="mt-3 bg-white rounded w-full">
     <Toolbar />
-    <div use:editor_action></div>
+    <div bind:this={editorElementRef}></div>
   </div>
 </section>
 

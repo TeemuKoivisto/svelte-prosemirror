@@ -26,7 +26,8 @@
     "svelte": "^5.28.2",
     "svelte-check": "^4.1.7",
     "svelte-preprocess": "^6.0.3",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3"
   },
   "dependencies": {
     "@my-org/core": "workspace:*",
@@ -38,7 +39,7 @@
     "@my-org/ext-paragraph": "workspace:*",
     "@my-org/ext-yjs": "workspace:*",
     "@my-org/types": "workspace:*",
-    "@iconify/svelte": "^4.0.1",
+    "@iconify/svelte": "^5.0.0",
     "autoprefixer": "^10.4.19",
     "lodash.debounce": "^4.0.8",
     "prosemirror-commands": "^1.5.2",

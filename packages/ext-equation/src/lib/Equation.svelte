@@ -44,8 +44,6 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { EditorView as CodeMirror, lineNumbers, placeholder, ViewUpdate } from '@codemirror/view'
   import { EditorState } from '@codemirror/state'
   import { createPopper } from '@popperjs/core'
@@ -54,36 +52,25 @@
   import { Node as PMNode } from 'prosemirror-model'
   import type { EditorView } from 'prosemirror-view'
   import { onMount } from 'svelte'
-  import { Editor, SvelteNodeViewProps } from '@my-org/core'
+  import { Editor, type SvelteNodeViewProps } from '@my-org/core'
 
   import 'katex/dist/katex.min.css'
 
-  
-
   interface Props {
-    node?: PMNode | undefined;
-    attrs: EquationAttrs;
-    selected: boolean | undefined;
-    view: EditorView;
-    getPos: () => number | undefined;
+    node?: PMNode | undefined
+    attrs: EquationAttrs
+    selected: boolean | undefined
+    view: EditorView
+    getPos: () => number | undefined
   }
 
-  let {
-    node = undefined,
-    attrs,
-    selected,
-    view,
-    getPos
-  }: Props = $props();
+  let { node = undefined, attrs, selected, view, getPos }: Props = $props()
 
   let codemirrorEl: HTMLElement = $state()
   let katexEl: HTMLElement = $state()
   let popperEl: HTMLElement
   let popperInstance: Instance | undefined
   let codemirror: CodeMirror | undefined
-
-
-
 
   onMount(() => {
     if (!node) return
@@ -178,20 +165,20 @@
   let id = $derived(attrs.id)
   let latex = $derived(attrs.latex)
   let title = $derived(attrs.title)
-  run(() => {
+  $effect(() => {
     if (katexEl && latex) {
       katex.render(latex, katexEl, {
         throwOnError: false
       })
     }
-  });
-  run(() => {
+  })
+  $effect(() => {
     if (selected) {
       renderCodeMirror()
     } else {
       closePopper()
     }
-  });
+  })
 </script>
 
 <div class="equation-editor" bind:this={codemirrorEl}>
