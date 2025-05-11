@@ -62,9 +62,12 @@
     selected: boolean | undefined
     view: EditorView
     getPos: () => number | undefined
+    ref: HTMLElement | undefined
   }
 
-  let { node = undefined, attrs, selected, view, getPos }: Props = $props()
+  let { node = undefined, attrs, selected, view, getPos, ref }: Props = $props()
+
+  export { ref }
 
   let codemirrorEl: HTMLElement | undefined = $state()
   let katexEl: HTMLElement | undefined = $state()
@@ -83,12 +86,18 @@
         throwOnError: false
       })
     }
-    return () => {
-      document.body.removeChild(popperEl)
-      codemirror?.destroy()
-      closePopper()
-    }
+    // return () => {
+    //   document.body.removeChild(popperEl)
+    //   codemirror?.destroy()
+    //   closePopper()
+    // }
   })
+
+  export function destroy() {
+    closePopper()
+    document.body.removeChild(popperEl)
+    codemirror?.destroy()
+  }
 
   function openPopper(anchor: HTMLElement, content: HTMLElement) {
     const arrow = document.createElement('div')
@@ -136,9 +145,6 @@
   }
 
   function renderCodeMirror() {
-    if (!codemirror || !codemirrorEl || !katexEl) {
-      return
-    }
     if (!codemirror) {
       codemirror = new CodeMirror({
         parent: codemirrorEl,
@@ -152,6 +158,8 @@
           ]
         })
       })
+      if (!katexEl || !codemirrorEl) return
+
       openPopper(katexEl, codemirrorEl)
 
       window.requestAnimationFrame(() => {
@@ -194,7 +202,7 @@
     ?
   </a>
 </div>
-<figure class="equation" {id}>
+<figure class="equation" {id} bind:this={ref}>
   <div
     class="equation"
     role="button"
@@ -212,11 +220,11 @@
   <figcaption data-hole></figcaption>
 </figure>
 
-<style lang="scss" global>
-  .equation {
+<style lang="scss">
+  :global(.equation) {
     text-align: center;
   }
-  .popup {
+  :global(.popup) {
     color: #353535;
     font-family: 'PT Sans', sans-serif;
     min-width: 100px;
@@ -226,25 +234,25 @@
     opacity: 1;
   }
 
-  .popup[data-show] {
+  :global(.popup[data-show]) {
     display: inline-block;
   }
 
-  .popper-arrow {
+  :global(.popper-arrow) {
     width: 0;
     height: 0;
     position: absolute;
     border: 5px solid transparent;
   }
 
-  .popup[data-popper-placement^='bottom'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='bottom']) > :global(.popper-arrow) {
     top: -5px;
     left: calc(50% - 5px);
     border-bottom-color: #e2e2e2;
     border-top-width: 0;
   }
 
-  .popup[data-popper-placement^='top'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='top']) > :global(.popper-arrow) {
     bottom: -5px;
     left: calc(50% - 5px);
     border-top-color: #e2e2e2;
@@ -252,7 +260,7 @@
     margin: 0 5px;
   }
 
-  .popup[data-popper-placement^='left'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='left']) > :global(.popper-arrow) {
     right: -5px;
     top: calc(50% - 5px);
     border-left-color: #e2e2e2;
@@ -260,7 +268,7 @@
     margin: 5px 0;
   }
 
-  .popup[data-popper-placement^='right'] > .popper-arrow {
+  :global(.popup[data-popper-placement^='right']) > :global(.popper-arrow) {
     left: -5px;
     top: calc(50% - 5px);
     border-right-color: #e2e2e2;
@@ -268,17 +276,17 @@
     margin: 5px 0;
   }
 
-  .popup .equation-editor {
+  :global(.popup .equation-editor) {
     position: relative;
     min-width: calc(600px - 2rem);
     max-width: 800px;
   }
 
-  .popup .visible {
+  :global(.popup .visible) {
     display: block;
   }
 
-  .popup .equation-editor-info {
+  :global(.popup .equation-editor-info) {
     align-items: center;
     border: 1px solid #e2e2e2;
     border-radius: 50%;
@@ -297,34 +305,34 @@
     z-index: 2;
   }
 
-  .popup .equation-editor-info:hover {
+  :global(.popup .equation-editor-info:hover) {
     opacity: 1;
   }
 
-  .popup {
-    .cm-editor {
+  :global(.popup) {
+    :global(.cm-editor) {
       border: 1px solid #e2e2e2;
       box-shadow: 0 4px 9px 0 rgba(84, 83, 83, 0.3);
       height: auto;
       min-height: 4em;
     }
-    .cm-focused {
+    :global(.cm-focused) {
       outline: none;
     }
-    .cm-content,
-    .cm-gutter {
+    :global(.cm-content),
+    :global(.cm-gutter) {
       min-height: 62px;
     }
-    .cm-gutters {
+    :global(.cm-gutters) {
       margin: 1px;
     }
-    .cm-scroller {
+    :global(.cm-scroller) {
       overflow: auto;
     }
-    .cm-wrap {
+    :global(.cm-wrap) {
       border: 1px solid silver;
     }
-    .cm-placeholder {
+    :global(.cm-placeholder) {
       color: #999 !important;
     }
   }
