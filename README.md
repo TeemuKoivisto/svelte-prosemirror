@@ -6,7 +6,7 @@ I wanted to find out if I can compile Svelte components into ProseMirror nodes a
 
 https://teemukoivisto.github.io/svelte-prosemirror/
 
-DEPRECATED: I no longer think this is a good approach for generating ProseMirror schemas. It's just a lot of hassle and the schema is more or less just a serialization target, all the logic would happen in NodeView or decoration either way. I have worked on a different approach but it's not public yet.
+**DEPRECATED as of 2025**: I no longer think this is a good approach for generating ProseMirror schemas. It's just a lot of hassle and the schema is more or less just a serialization target, all the logic would happen in NodeView or decoration either way. I have worked on a different approach but it's not public yet.
 
 ## Long explanation
 
